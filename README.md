@@ -4,7 +4,7 @@ English | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md) | [�
 
 A lightweight governance template for AI-assisted coding that helps projects stay **continuable, debuggable, auditable, and less chaotic** across Codex, Claude Code, Gemini CLI, and similar agent workflows.
 
-**[Install](#60-second-start)** · **[Quick Start](#60-second-start)**
+**[Install](#install)** · **[Quick Start](#install)**
 
 ---
 
@@ -54,35 +54,35 @@ It also prevents **governance bloat** by forcing the agent to check:
 
 ---
 
-## 60-second start
+## Install
 
-Two ways to start:
+Paste this to your AI agent (Claude Code, Codex, Gemini CLI — any will work):
 
-### Path A — New project
-1. Copy `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` into the project root
-2. Create:
-   - `dev/SESSION_HANDOFF.md`
-   - `dev/SESSION_LOG.md`
-3. Optional for larger projects:
-   - `dev/PROJECT_MASTER_SPEC.md`
-4. Start every new AI session with:
-   - `Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.`
+```text
+Download the AI Session Governance template into this project.
 
-### Path B — Existing prompt / existing repo upgrade
-1. Keep your current project prompt or AGENTS file
-2. Integrate each file individually:
-   - **AGENTS.md** — If you already have one, merge in the governance sections from this template (AGENTS.md line 2 instructs AI to integrate and preserve existing content)
-   - **CLAUDE.md** — If you already have one, add `@AGENTS.md` to the **top** of your existing file. If not, copy the template's `CLAUDE.md`
-   - **GEMINI.md** — If you already have one, add `@./AGENTS.md` to the **top** of your existing file. If not, copy the template's `GEMINI.md`
-3. Add the two required dev files:
-   - `dev/SESSION_HANDOFF.md`
-   - `dev/SESSION_LOG.md`
-4. Make the new entry rule mandatory:
-   - no work starts before reading handoff + log
-5. Add the anti-accretion rules:
-   - read coverage before change
-   - consolidation before adding more rules
-   - retire stale wording when a new rule supersedes it
+Source: https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main
+
+Download these 5 files:
+1. AGENTS.md → project root
+2. CLAUDE.md → project root
+3. GEMINI.md → project root
+4. dev/SESSION_HANDOFF.md → dev/
+5. dev/SESSION_LOG.md → dev/
+
+If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
+If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
+If AGENTS.md already exists: merge governance sections into existing file.
+If dev/ files already exist: skip them.
+
+After setup, confirm what was created or modified.
+```
+
+Then start every AI session with:
+
+```text
+Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.
+```
 
 ---
 
@@ -236,16 +236,6 @@ This template exists to stop that slow degradation early.
 * `dev/SESSION_HANDOFF.md` — current baseline, blockers, start checklist, last verified state
 * `dev/SESSION_LOG.md` — session-by-session history, fixes, validation, next priorities
 * `dev/PROJECT_MASTER_SPEC.md` — optional long-term authority for larger or more complex projects
-
----
-
-## Quick Start prompt
-
-Use this at the beginning of each new AI session:
-
-```text
-Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first. If dev/PROJECT_MASTER_SPEC.md exists, read that too. Then proceed using PLAN → READ → CHANGE → QC → PERSIST.
-```
 
 ---
 

@@ -4,7 +4,7 @@
 
 一个轻量级的 AI 辅助开发治理模板，让项目在 Codex、Claude Code、Gemini CLI 等 agent 工作流中保持**可接续、可调试、可追溯、更有条理**。
 
-**[安装](#60-秒快速开始)** · **[快速开始](#60-秒快速开始)**
+**[安装](#安装)** · **[快速开始](#安装)**
 
 ---
 
@@ -54,35 +54,35 @@ Agent 必须按照以下流程工作：
 
 ---
 
-## 60 秒快速开始
+## 安装
 
-两种启动方式：
+将以下内容贴给你的 AI agent（Claude Code、Codex、Gemini CLI — 任一皆可）：
 
-### 路径 A — 新项目
-1. 将 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` 复制到项目根目录
-2. 创建：
-   - `dev/SESSION_HANDOFF.md`
-   - `dev/SESSION_LOG.md`
-3. 较大型项目可选：
-   - `dev/PROJECT_MASTER_SPEC.md`
-4. 每次新 AI session 开头使用：
-   - `Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.`
+```text
+Download the AI Session Governance template into this project.
 
-### 路径 B — 已有 prompt / 已有 repo 升级
-1. 保留当前项目 prompt 或 AGENTS 文件
-2. 逐文件整合：
-   - **AGENTS.md** — 若已有此文件，将本模板的治理章节合并进去（AGENTS.md 第 2 行指示 AI 整合并保留已有内容）
-   - **CLAUDE.md** — 若已有此文件，在已有文件**最上方**加入 `@AGENTS.md`。若无，直接复制模板的 `CLAUDE.md`
-   - **GEMINI.md** — 若已有此文件，在已有文件**最上方**加入 `@./AGENTS.md`。若无，直接复制模板的 `GEMINI.md`
-3. 新增两个必要的 dev 文件：
-   - `dev/SESSION_HANDOFF.md`
-   - `dev/SESSION_LOG.md`
-4. 将新的入口规则设为强制：
-   - 在读完 handoff + log 之前不开始工作
-5. 加入防堆积规则：
-   - 修改前先完成读取覆盖
-   - 新增更多规则前先整合
-   - 当新规则取代旧规则时，退役过时的表述
+Source: https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main
+
+Download these 5 files:
+1. AGENTS.md → project root
+2. CLAUDE.md → project root
+3. GEMINI.md → project root
+4. dev/SESSION_HANDOFF.md → dev/
+5. dev/SESSION_LOG.md → dev/
+
+If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
+If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
+If AGENTS.md already exists: merge governance sections into existing file.
+If dev/ files already exist: skip them.
+
+After setup, confirm what was created or modified.
+```
+
+然后每次 AI session 开头使用：
+
+```text
+Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.
+```
 
 ---
 
@@ -236,16 +236,6 @@ Repo 能运行，但每次修复都让规则更长、文档更嘈杂、发布更
 * `dev/SESSION_HANDOFF.md` — 当前基线、阻断点、启动检查清单、最后验证状态
 * `dev/SESSION_LOG.md` — 逐 session 的历史、修复、验证、下一步优先事项
 * `dev/PROJECT_MASTER_SPEC.md` — 为较大型或更复杂项目提供的可选长期权威规格
-
----
-
-## 快速启动 prompt
-
-在每次新 AI session 开头使用：
-
-```text
-Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first. If dev/PROJECT_MASTER_SPEC.md exists, read that too. Then proceed using PLAN → READ → CHANGE → QC → PERSIST.
-```
 
 ---
 

@@ -4,7 +4,7 @@
 
 Codex、Claude Code、Gemini CLIなどのエージェントワークフローにおいて、プロジェクトを**継続可能・デバッグ可能・追跡可能・整理された状態**に保つための軽量なAI支援開発ガバナンステンプレート。
 
-**[インストール](#60秒クイックスタート)** · **[クイックスタート](#60秒クイックスタート)**
+**[インストール](#インストール)** · **[クイックスタート](#インストール)**
 
 ---
 
@@ -54,35 +54,35 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 
 ---
 
-## 60秒クイックスタート
+## インストール
 
-2つの開始方法：
+以下をAIエージェント（Claude Code、Codex、Gemini CLI — いずれでも可）に貼り付けてください：
 
-### パス A — 新規プロジェクト
-1. `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` をプロジェクトルートにコピー
-2. 作成：
-   - `dev/SESSION_HANDOFF.md`
-   - `dev/SESSION_LOG.md`
-3. 大規模プロジェクトではオプション：
-   - `dev/PROJECT_MASTER_SPEC.md`
-4. 新しいAIセッションの開始時に以下を使用：
-   - `Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.`
+```text
+Download the AI Session Governance template into this project.
 
-### パス B — 既存のprompt / 既存リポジトリのアップグレード
-1. 現在のプロジェクトpromptまたはAGENTSファイルを保持
-2. ファイルごとに個別に統合：
-   - **AGENTS.md** — 既にある場合、このテンプレートのガバナンスセクションをマージ（AGENTS.md 2行目がAIに既存コンテンツの統合と保持を指示）
-   - **CLAUDE.md** — 既にある場合、既存ファイルの**最上部**に `@AGENTS.md` を追加。ない場合、テンプレートの `CLAUDE.md` をコピー
-   - **GEMINI.md** — 既にある場合、既存ファイルの**最上部**に `@./AGENTS.md` を追加。ない場合、テンプレートの `GEMINI.md` をコピー
-3. 2つの必須devファイルを追加：
-   - `dev/SESSION_HANDOFF.md`
-   - `dev/SESSION_LOG.md`
-4. 新しいエントリールールを必須に設定：
-   - handoff + logを読む前に作業を開始しない
-5. 蓄積防止ルールを追加：
-   - 変更前に読み取りカバレッジを完了
-   - ルール追加前に統合を実施
-   - 新しいルールが古いルールに取って代わる場合、古い表現を廃止
+Source: https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main
+
+Download these 5 files:
+1. AGENTS.md → project root
+2. CLAUDE.md → project root
+3. GEMINI.md → project root
+4. dev/SESSION_HANDOFF.md → dev/
+5. dev/SESSION_LOG.md → dev/
+
+If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
+If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
+If AGENTS.md already exists: merge governance sections into existing file.
+If dev/ files already exist: skip them.
+
+After setup, confirm what was created or modified.
+```
+
+その後、毎回のAIセッション開始時に以下を使用：
+
+```text
+Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.
+```
 
 ---
 
@@ -236,16 +236,6 @@ Codexがコードを処理し、Claudeがドキュメントをレビューし、
 * `dev/SESSION_HANDOFF.md` — 現在のベースライン、ブロッカー、開始チェックリスト、最後の検証状態
 * `dev/SESSION_LOG.md` — セッションごとの履歴、修正、検証、次の優先事項
 * `dev/PROJECT_MASTER_SPEC.md` — 大規模または複雑なプロジェクト向けのオプション長期権威仕様
-
----
-
-## クイックスタートプロンプト
-
-新しいAIセッションの開始時に使用：
-
-```text
-Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first. If dev/PROJECT_MASTER_SPEC.md exists, read that too. Then proceed using PLAN → READ → CHANGE → QC → PERSIST.
-```
 
 ---
 
