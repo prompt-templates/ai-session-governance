@@ -65,7 +65,7 @@ Agent 必须按照以下流程工作：
 然后每次 AI session 开头使用：
 
 ```text
-Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.
+Follow AGENTS.md.
 ```
 
 ---

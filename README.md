@@ -65,7 +65,7 @@ No downloads, no scripts, no terminal commands needed. The AI handles everything
 Then start every AI session with:
 
 ```text
-Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.
+Follow AGENTS.md.
 ```
 
 ---

@@ -65,7 +65,7 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 その後、毎回のAIセッション開始時に以下を使用：
 
 ```text
-Follow AGENTS.md. Read dev/SESSION_HANDOFF.md and dev/SESSION_LOG.md first, then begin.
+Follow AGENTS.md.
 ```
 
 ---

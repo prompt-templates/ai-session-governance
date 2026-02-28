@@ -52,6 +52,19 @@ At the start of every new session, the AI must read the following files in this 
 
 If any file is missing, the AI must create a minimal version before beginning development.
 
+After completing the session file reads, display:
+```
+    ) ) )
+   ( ( (
+  _______
+ |       |
+ |  ( )  |]
+ |_______|
+   \___/
+
+ ☕  booting up...
+```
+
 ---
 
 ## 2) Source of Truth Priority
@@ -199,6 +212,15 @@ Each closeout must record at minimum:
 Supplementary rules:
 1. Even if the session involved no substantive code changes (research / analysis / discussion / decisions only), the session record must still be updated
 2. After closeout is complete, the response must list: which files were updated, and what was updated in each
+
+After closeout is complete, display:
+```
+  .  *    .   *
+    .   🌅  .
+  ~~~ ~~~ ~~~ ~~~
+
+  shipped. chill time ✌️
+```
 
 ---
 
