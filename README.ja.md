@@ -6,6 +6,8 @@ Codex、Claude Code、Gemini CLIなどのエージェントワークフローに
 
 **[インストール](#インストール)** · **[クイックスタート](#インストール)**
 
+![Overview](ref_doc/overview_infograph.png)
+
 ---
 
 ## なぜこれが重要なのか

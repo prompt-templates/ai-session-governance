@@ -6,6 +6,8 @@
 
 **[安装](#安装)** · **[快速开始](#安装)**
 
+![Overview](ref_doc/overview_infograph.png)
+
 ---
 
 ## 为什么这很重要

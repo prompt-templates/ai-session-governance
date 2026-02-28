@@ -6,6 +6,8 @@ A lightweight governance template for AI-assisted coding that helps projects sta
 
 **[Install](#install)** · **[Quick Start](#install)**
 
+![Overview](ref_doc/overview_infograph.png)
+
 ---
 
 ## Why this matters
