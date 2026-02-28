@@ -56,23 +56,11 @@ It also prevents **governance bloat** by forcing the agent to check:
 
 ## Install
 
-Paste this to your AI agent (Claude Code, Codex, Gemini CLI — any will work):
+1. Open **[INIT.md](INIT.md)** → click **Raw** → select all → copy
+2. Paste into your AI agent (Claude Code, Codex, Gemini CLI — any will work)
+3. The AI creates all 5 governance files directly in your project
 
-```text
-Download these 5 files into this project:
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/AGENTS.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/CLAUDE.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/GEMINI.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_HANDOFF.md → dev/
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_LOG.md → dev/
-
-If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
-If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
-If AGENTS.md already exists: merge governance sections into existing file.
-If dev/ files already exist: skip them.
-
-After setup, confirm what was created or modified.
-```
+No downloads, no scripts, no terminal commands needed. The AI handles everything — including smart merging if you already have `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`.
 
 Then start every AI session with:
 

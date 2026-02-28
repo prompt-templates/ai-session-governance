@@ -56,23 +56,11 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 
 ## インストール
 
-以下をAIエージェント（Claude Code、Codex、Gemini CLI — いずれでも可）に貼り付けてください：
+1. **[INIT.md](INIT.md)** を開く → **Raw** をクリック → 全選択 → コピー
+2. AIエージェント（Claude Code、Codex、Gemini CLI — いずれでも可）に貼り付ける
+3. AIがプロジェクトに5つのガバナンスファイルを直接作成する
 
-```text
-Download these 5 files into this project:
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/AGENTS.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/CLAUDE.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/GEMINI.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_HANDOFF.md → dev/
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_LOG.md → dev/
-
-If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
-If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
-If AGENTS.md already exists: merge governance sections into existing file.
-If dev/ files already exist: skip them.
-
-After setup, confirm what was created or modified.
-```
+ダウンロード不要、スクリプト不要、ターミナル操作不要。既存の `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` がある場合のスマートマージも含めてAIがすべて処理します。
 
 その後、毎回のAIセッション開始時に以下を使用：
 

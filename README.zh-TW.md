@@ -56,23 +56,11 @@ Agent 必須按照以下流程工作：
 
 ## 安裝
 
-將以下內容貼給你的 AI agent（Claude Code、Codex、Gemini CLI — 任一皆可）：
+1. 開啟 **[INIT.md](INIT.md)** → 點擊 **Raw** → 全選 → 複製
+2. 貼給你的 AI agent（Claude Code、Codex、Gemini CLI — 任一皆可）
+3. AI 直接在你的專案中建立所有 5 個治理檔案
 
-```text
-Download these 5 files into this project:
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/AGENTS.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/CLAUDE.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/GEMINI.md → project root
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_HANDOFF.md → dev/
-- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_LOG.md → dev/
-
-If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
-If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
-If AGENTS.md already exists: merge governance sections into existing file.
-If dev/ files already exist: skip them.
-
-After setup, confirm what was created or modified.
-```
+不需要下載、不需要 script、不需要指令列。AI 處理一切，包括若你已有 `AGENTS.md`、`CLAUDE.md` 或 `GEMINI.md` 時的智能合併。
 
 然後每次 AI session 開頭使用：
 
