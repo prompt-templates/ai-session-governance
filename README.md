@@ -59,16 +59,12 @@ It also prevents **governance bloat** by forcing the agent to check:
 Paste this to your AI agent (Claude Code, Codex, Gemini CLI — any will work):
 
 ```text
-Download the AI Session Governance template into this project.
-
-Source: https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main
-
-Download these 5 files:
-1. AGENTS.md → project root
-2. CLAUDE.md → project root
-3. GEMINI.md → project root
-4. dev/SESSION_HANDOFF.md → dev/
-5. dev/SESSION_LOG.md → dev/
+Download these 5 files into this project:
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/AGENTS.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/CLAUDE.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/GEMINI.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_HANDOFF.md → dev/
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_LOG.md → dev/
 
 If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
 If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
@@ -276,7 +272,7 @@ Before publishing, each claim in this README was cross-checked against the actua
 | Platform | Reads governance file | Session persistence | Structured workflows | Source |
 |---|---|---|---|---|
 | Codex | `AGENTS.md` native | Client-side sessions + resume | AGENTS.md directives + Agents SDK | [OpenAI Codex Docs](https://developers.openai.com/codex/) |
-| Claude Code | `CLAUDE.md` native; `AGENTS.md` via `@` import | Auto memory + session resume | Plan Mode + custom commands | [Claude Code Docs](https://code.claude.com/docs/) |
+| Claude Code | `CLAUDE.md` native; `AGENTS.md` via `@` import | Auto memory + session resume | Plan Mode + skills | [Claude Code Docs](https://code.claude.com/docs/en/overview) |
 | Gemini CLI | `GEMINI.md` native; `AGENTS.md` via config | `/memory` + session save/resume | Skills + GEMINI.md directives | [Gemini CLI Docs](https://google-gemini.github.io/gemini-cli/) |
 
 ### What was not verified

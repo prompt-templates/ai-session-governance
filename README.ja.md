@@ -59,16 +59,12 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 以下をAIエージェント（Claude Code、Codex、Gemini CLI — いずれでも可）に貼り付けてください：
 
 ```text
-Download the AI Session Governance template into this project.
-
-Source: https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main
-
-Download these 5 files:
-1. AGENTS.md → project root
-2. CLAUDE.md → project root
-3. GEMINI.md → project root
-4. dev/SESSION_HANDOFF.md → dev/
-5. dev/SESSION_LOG.md → dev/
+Download these 5 files into this project:
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/AGENTS.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/CLAUDE.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/GEMINI.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_HANDOFF.md → dev/
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_LOG.md → dev/
 
 If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
 If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
@@ -276,7 +272,7 @@ Codexがコードを処理し、Claudeがドキュメントをレビューし、
 | プラットフォーム | ガバナンスファイルの読み込み | セッション永続化 | 構造化ワークフロー | ソース |
 |---|---|---|---|---|
 | Codex | `AGENTS.md` ネイティブ | クライアントサイドセッション + resume | AGENTS.md指示 + Agents SDK | [OpenAI Codex Docs](https://developers.openai.com/codex/) |
-| Claude Code | `CLAUDE.md` ネイティブ；`AGENTS.md` は `@` インポート経由 | 自動メモリ + session resume | Plan Mode + カスタムコマンド | [Claude Code Docs](https://code.claude.com/docs/) |
+| Claude Code | `CLAUDE.md` ネイティブ；`AGENTS.md` は `@` インポート経由 | 自動メモリ + session resume | Plan Mode + skills | [Claude Code Docs](https://code.claude.com/docs/en/overview) |
 | Gemini CLI | `GEMINI.md` ネイティブ；`AGENTS.md` は設定経由 | `/memory` + session save/resume | Skills + GEMINI.md指示 | [Gemini CLI Docs](https://google-gemini.github.io/gemini-cli/) |
 
 ### 未検証事項

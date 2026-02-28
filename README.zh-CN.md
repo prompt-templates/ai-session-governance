@@ -59,16 +59,12 @@ Agent 必须按照以下流程工作：
 将以下内容贴给你的 AI agent（Claude Code、Codex、Gemini CLI — 任一皆可）：
 
 ```text
-Download the AI Session Governance template into this project.
-
-Source: https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main
-
-Download these 5 files:
-1. AGENTS.md → project root
-2. CLAUDE.md → project root
-3. GEMINI.md → project root
-4. dev/SESSION_HANDOFF.md → dev/
-5. dev/SESSION_LOG.md → dev/
+Download these 5 files into this project:
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/AGENTS.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/CLAUDE.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/GEMINI.md → project root
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_HANDOFF.md → dev/
+- https://raw.githubusercontent.com/prompt-templates/ai-session-governance/main/dev/SESSION_LOG.md → dev/
 
 If CLAUDE.md already exists: prepend @AGENTS.md as the first line, keep existing content.
 If GEMINI.md already exists: prepend @./AGENTS.md as the first line, keep existing content.
@@ -276,7 +272,7 @@ Repo 能运行，但每次修复都让规则更长、文档更嘈杂、发布更
 | 平台 | 读取治理文件 | Session 持久化 | 结构化工作流 | 来源 |
 |---|---|---|---|---|
 | Codex | `AGENTS.md` 原生 | 客户端 session + resume | AGENTS.md 指令 + Agents SDK | [OpenAI Codex Docs](https://developers.openai.com/codex/) |
-| Claude Code | `CLAUDE.md` 原生；`AGENTS.md` 通过 `@` 导入 | 自动记忆 + session resume | Plan Mode + 自定命令 | [Claude Code Docs](https://code.claude.com/docs/) |
+| Claude Code | `CLAUDE.md` 原生；`AGENTS.md` 通过 `@` 导入 | 自动记忆 + session resume | Plan Mode + skills | [Claude Code Docs](https://code.claude.com/docs/en/overview) |
 | Gemini CLI | `GEMINI.md` 原生；`AGENTS.md` 通过配置 | `/memory` + session save/resume | Skills + GEMINI.md 指令 | [Gemini CLI Docs](https://google-gemini.github.io/gemini-cli/) |
 
 ### 尚未验证事项
