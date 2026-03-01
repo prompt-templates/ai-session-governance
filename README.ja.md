@@ -60,17 +60,23 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 
 1. **[INIT.md](INIT.md)** を開く → **Raw** をクリック → 全選択 → コピー
 2. AIエージェント（Claude Code、Codex、Gemini CLI — いずれでも可）に貼り付ける
-3. AIがプロジェクトに5つのガバナンスファイルを直接作成する
+3. AIは先にroot安全preflight（絶対パス + リスクチェック + dry-run）を自動実行し、この段階では書き込みしません
+4. プロンプトが出たら、次の確認メッセージをそのまま返信します：
+   - `INSTALL_ROOT_OK: <absolute_path>`
+   - `INSTALL_WRITE_OK`
+5. その後、AIが確認済みのプロジェクトルートに5つのガバナンスファイルを作成します
 
-ダウンロード不要、スクリプト不要、ターミナル操作不要。既存の `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` がある場合のスマートマージも含めてAIがすべて処理します。
+手動セットアップは不要です。AIが全体を自動処理し、既存の `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` の内容もスマートにマージします。
 一般的な公開ユーザーにとって、直接使うファイルは `INIT.md` だけで十分です。
 このリポジトリ全体を手動でプロジェクト直下へコピーしないでください。`INIT.md` を使って安全にマージしてください。
 
 その後、毎回のAIセッション開始時に以下を使用：
 
 ```text
-Follow AGENTS.md.
+Follow AGENTS.md
 ```
+
+`Follow AGENTS.md` は標準の短縮表現です。別言語や同義の表現でも動作します。
 
 ## クイック操作
 
@@ -79,7 +85,7 @@ Follow AGENTS.md.
 ### 1) 新しいセッションを開始
 
 ```text
-Follow AGENTS.md.
+Follow AGENTS.md
 ```
 
 ### 2) 同じセッションで作業を継続

@@ -60,17 +60,23 @@ Agent 必须按照以下流程工作：
 
 1. 打开 **[INIT.md](INIT.md)** → 点击 **Raw** → 全选 → 复制
 2. 粘贴给你的 AI agent（Claude Code、Codex、Gemini CLI — 任一皆可）
-3. AI 直接在你的项目中创建所有 5 个治理文件
+3. AI 会先自动执行 root 安全 preflight（绝对路径 + 风险检查 + dry-run），这一步不会写文件
+4. 出现提示后，回复以下确认句即可：
+   - `INSTALL_ROOT_OK: <absolute_path>`
+   - `INSTALL_WRITE_OK`
+5. AI 就会在你已确认的项目根目录创建 5 个治理文件
 
-不需要下载、不需要脚本、不需要命令行。AI 处理一切，包括若你已有 `AGENTS.md`、`CLAUDE.md` 或 `GEMINI.md` 时的智能合并。
+你无需手动设置。AI 会自动处理整个流程，并智能合并你已有的 `AGENTS.md`、`CLAUDE.md` 或 `GEMINI.md` 内容。
 对大多数公开用户而言，直接使用 `INIT.md` 就足够。
 不要把整个 repo 手动复制到项目根目录；请使用 `INIT.md` 让 agent 安全合并。
 
 然后每次 AI session 开头使用：
 
 ```text
-Follow AGENTS.md.
+Follow AGENTS.md
 ```
+
+`Follow AGENTS.md` 是标准短句；其他语言或同等语义的说法也可以。
 
 ## 快速操作
 
@@ -79,7 +85,7 @@ Follow AGENTS.md.
 ### 1) 开始新 session
 
 ```text
-Follow AGENTS.md.
+Follow AGENTS.md
 ```
 
 ### 2) 在同一个 session 持续推进

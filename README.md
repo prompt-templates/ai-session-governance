@@ -60,17 +60,23 @@ It also prevents **governance bloat** by forcing the agent to check:
 
 1. Open **[INIT.md](INIT.md)** → click **Raw** → select all → copy
 2. Paste into your AI agent (Claude Code, Codex, Gemini CLI — any will work)
-3. The AI creates all 5 governance files directly in your project
+3. The AI automatically runs a root safety preflight first (absolute path + risk checks + dry-run); no files are written yet
+4. When prompted, confirm the path by replying with the exact confirmation messages:
+   - `INSTALL_ROOT_OK: <absolute_path>`
+   - `INSTALL_WRITE_OK`
+5. The AI then creates all 5 governance files in your confirmed project root
 
-No downloads, no scripts, no terminal commands needed. The AI handles everything — including smart merging if you already have `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`.
+You do not need manual setup. The AI handles the process automatically, including smart merge of existing `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md` content.
 For most public users, `INIT.md` is the only file you need to use directly.
 Do not manually copy this entire repository into your project root; use `INIT.md` so the agent can merge safely.
 
 Then start every AI session with:
 
 ```text
-Follow AGENTS.md.
+Follow AGENTS.md
 ```
+
+`Follow AGENTS.md` is the standard short form. Equivalent meaning in other wording/languages also works.
 
 ## Quick operations
 
@@ -79,7 +85,7 @@ Use natural language. The lines below are reliable shortcuts you can copy/paste.
 ### 1) Start a session
 
 ```text
-Follow AGENTS.md.
+Follow AGENTS.md
 ```
 
 ### 2) Continue active work in the same session

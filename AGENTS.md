@@ -322,6 +322,25 @@ The AI is prohibited from executing high-risk destructive operations, including 
 7. Strictly prohibited from invoking external shells (e.g. `cmd /c`, `sh -c`, `bash -c`, `powershell -Command`) to perform file system operations; must use the current environment's native commands with direct arguments
 8. When handling file paths, strictly prohibited from using raw string interpolation to construct paths; must use native path handling APIs / objects (e.g. `Join-Path`, `path.join`, `Path.Combine`, etc.)
 
+## 5a) Root Scope Guard for Bootstrap / Multi-File Setup (Mandatory)
+Before any bootstrap/setup task that creates or modifies multiple governance files (e.g. executing `INIT.md`), the AI must complete the following preflight and must not write any file before explicit user confirmation:
+
+1. Detect and print candidate `<PROJECT_ROOT>` as an absolute path
+2. Run and print root risk checks at minimum:
+   - Whether the path appears to be a shared workspace / runtime / tool-internal directory
+   - Whether parent/sibling directories contain governance files suggesting the scope may be too high
+   - Whether the target seems to be a framework/tool runtime repo instead of the user's intended project
+3. Print a dry-run install plan:
+   - `create`: files that will be newly created
+   - `merge`: files that will be merged/prepended
+   - `skip`: files that will be left unchanged
+4. Require exact confirmation reply from user:
+   - `INSTALL_ROOT_OK: <absolute_path>`
+5. If the confirmation path does not exactly match the proposed absolute path, abort setup (no writes)
+6. After step 4 passes, require second confirmation reply before first write:
+   - `INSTALL_WRITE_OK`
+7. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly
+
 ---
 
 ## 6) No Escalation Deletion Policy
