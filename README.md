@@ -72,6 +72,39 @@ Then start every AI session with:
 Follow AGENTS.md.
 ```
 
+## Quick operations
+
+Use natural language. The lines below are reliable shortcuts you can copy/paste.
+
+### 1) Start a session
+
+```text
+Follow AGENTS.md.
+```
+
+### 2) Continue active work in the same session
+
+```text
+Continue from the current state and proceed with PLAN → READ → CHANGE → QC → PERSIST.
+```
+
+### 3) Close the session with full handoff
+
+```text
+Wrap up this session with full closeout and handover.
+```
+
+Expected closeout output includes:
+- `SESSION CLOSEOUT SUMMARY`
+- `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)`
+- `CLOSEOUT VISUAL CUE`
+
+### 4) Start the next session quickly
+
+```text
+<Paste the previous "NEXT SESSION HANDOFF PROMPT (COPY/PASTE)" block here, unchanged.>
+```
+
 ---
 
 ## Platform setup

@@ -72,6 +72,39 @@ Agent 必須按照以下流程工作：
 Follow AGENTS.md.
 ```
 
+## 快速操作
+
+可使用自然語言。以下句子是可直接複製貼上的穩定捷徑。
+
+### 1) 開始新 session
+
+```text
+Follow AGENTS.md.
+```
+
+### 2) 在同一個 session 持續推進
+
+```text
+Continue from the current state and proceed with PLAN → READ → CHANGE → QC → PERSIST.
+```
+
+### 3) 收尾並完成完整交接
+
+```text
+Wrap up this session with full closeout and handover.
+```
+
+預期的收尾輸出包含：
+- `SESSION CLOSEOUT SUMMARY`
+- `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)`
+- `CLOSEOUT VISUAL CUE`
+
+### 4) 快速開始下一個 session
+
+```text
+<Paste the previous "NEXT SESSION HANDOFF PROMPT (COPY/PASTE)" block here, unchanged.>
+```
+
 ---
 
 ## 平台設定

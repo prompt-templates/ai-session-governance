@@ -72,6 +72,39 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 Follow AGENTS.md.
 ```
 
+## クイック操作
+
+自然言語で問題ありません。以下はそのまま貼り付けて使える安定ショートカットです。
+
+### 1) 新しいセッションを開始
+
+```text
+Follow AGENTS.md.
+```
+
+### 2) 同じセッションで作業を継続
+
+```text
+Continue from the current state and proceed with PLAN → READ → CHANGE → QC → PERSIST.
+```
+
+### 3) セッションを終了して完全に引き継ぐ
+
+```text
+Wrap up this session with full closeout and handover.
+```
+
+終了時の出力には以下が含まれます：
+- `SESSION CLOSEOUT SUMMARY`
+- `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)`
+- `CLOSEOUT VISUAL CUE`
+
+### 4) 次のセッションをすぐ開始
+
+```text
+<Paste the previous "NEXT SESSION HANDOFF PROMPT (COPY/PASTE)" block here, unchanged.>
+```
+
 ---
 
 ## プラットフォーム設定
