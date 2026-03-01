@@ -4,21 +4,31 @@ Create each file below exactly as shown. If a file already exists, follow the ru
 Do not create, modify, merge, prepend, or overwrite any file until the Root Safety Check below is completed and explicitly confirmed by the user.
 
 ROOT SAFETY CHECK (MANDATORY BEFORE ANY FILE WRITE)
-1. Detect the candidate `<PROJECT_ROOT>` and print it as an absolute path.
-2. Run and print risk checks at minimum:
+1. Detect and print paths in this exact order:
+   - `pwd` absolute path
+   - `git root` absolute path (or `none`)
+2. If `pwd` and `git root` both exist and are different:
+   - Hard stop before any write
+   - Print exactly two root options in this order:
+     1) Use `pwd`
+     2) Use `git root`
+   - Require user to explicitly choose one option
+   - Strictly prohibited for AI to auto-select root in this mismatch case
+3. After root is explicitly chosen, print chosen `<PROJECT_ROOT>` as absolute path.
+4. Run and print risk checks at minimum:
    - Is this path likely a shared workspace/runtime/tool-internal directory?
    - Do parent/sibling directories contain governance files suggesting the scope may be too high?
    - Does this look like a framework/tool runtime repo instead of the user's intended project?
-3. Print a dry-run plan:
+5. Print a dry-run plan:
    - `create`: files that would be newly created
    - `merge`: files that would be merged/prepended
    - `skip`: files that would be left unchanged
-4. Ask for an exact confirmation reply:
+6. Ask for an exact confirmation reply:
    - `INSTALL_ROOT_OK: <absolute_path>`
-5. If the reply path is not an exact match, abort setup with no writes.
-6. After step 4 passes, ask for a second confirmation reply:
+7. If the reply path is not an exact match, abort setup with no writes.
+8. After step 6 passes, ask for a second confirmation reply:
    - `INSTALL_WRITE_OK`
-7. If high-risk markers are detected, default to abort and request a safer subdirectory explicitly.
+9. If high-risk markers are detected, default to abort and request a safer subdirectory explicitly.
 
 ---
 
@@ -353,21 +363,31 @@ The AI is prohibited from executing high-risk destructive operations, including 
 ## 5a) Root Scope Guard for Bootstrap / Multi-File Setup (Mandatory)
 Before any bootstrap/setup task that creates or modifies multiple governance files (e.g. executing `INIT.md`), the AI must complete the following preflight and must not write any file before explicit user confirmation:
 
-1. Detect and print candidate `<PROJECT_ROOT>` as an absolute path
-2. Run and print root risk checks at minimum:
+1. Detect and print paths in this exact order:
+   - `pwd` absolute path
+   - `git root` absolute path (or `none`)
+2. If `pwd` and `git root` both exist and are different:
+   - Hard stop before any write
+   - Print exactly two root options in this order:
+     1) Use `pwd`
+     2) Use `git root`
+   - Require user to explicitly choose one option
+   - Strictly prohibited for AI to auto-select root in this mismatch case
+3. After root is explicitly chosen, print chosen `<PROJECT_ROOT>` as absolute path
+4. Run and print root risk checks at minimum:
    - Whether the path appears to be a shared workspace / runtime / tool-internal directory
    - Whether parent/sibling directories contain governance files suggesting the scope may be too high
    - Whether the target seems to be a framework/tool runtime repo instead of the user's intended project
-3. Print a dry-run install plan:
+5. Print a dry-run install plan:
    - `create`: files that will be newly created
    - `merge`: files that will be merged/prepended
    - `skip`: files that will be left unchanged
-4. Require exact confirmation reply from user:
+6. Require exact confirmation reply from user:
    - `INSTALL_ROOT_OK: <absolute_path>`
-5. If the confirmation path does not exactly match the proposed absolute path, abort setup (no writes)
-6. After step 4 passes, require second confirmation reply before first write:
+7. If the confirmation path does not exactly match the proposed absolute path, abort setup (no writes)
+8. After step 6 passes, require second confirmation reply before first write:
    - `INSTALL_WRITE_OK`
-7. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly
+9. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly
 
 ---
 

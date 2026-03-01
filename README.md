@@ -60,11 +60,13 @@ It also prevents **governance bloat** by forcing the agent to check:
 
 1. Open **[INIT.md](INIT.md)** → click **Raw** → select all → copy
 2. Paste into your AI agent (Claude Code, Codex, Gemini CLI — any will work)
-3. The AI automatically runs a root safety preflight first (absolute path + risk checks + dry-run); no files are written yet
-4. When prompted, confirm the path by replying with the exact confirmation messages:
+3. The AI automatically runs a root safety preflight first and prints paths in this order: `pwd`, then `git root`
+4. If `pwd` and `git root` are different, the AI must stop and ask you to choose one root (1: use `pwd`, 2: use `git root`); it must not auto-select
+5. The AI then shows risk checks + dry-run (`create` / `merge` / `skip`) for the selected root, with no file writes yet
+6. When prompted, confirm the selected path by replying with:
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
-5. The AI then creates all 5 governance files in your confirmed project root
+7. The AI then creates all 5 governance files in your confirmed project root
 
 You do not need manual setup. The AI handles the process automatically, including smart merge of existing `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md` content.
 For most public users, `INIT.md` is the only file you need to use directly.

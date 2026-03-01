@@ -60,11 +60,13 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 
 1. **[INIT.md](INIT.md)** を開く → **Raw** をクリック → 全選択 → コピー
 2. AIエージェント（Claude Code、Codex、Gemini CLI — いずれでも可）に貼り付ける
-3. AIは先にroot安全preflight（絶対パス + リスクチェック + dry-run）を自動実行し、この段階では書き込みしません
-4. プロンプトが出たら、次の確認メッセージをそのまま返信します：
+3. AIは先にroot安全preflightを自動実行し、次の順でパスを表示します：`pwd`、`git root`
+4. `pwd` と `git root` が一致しない場合、AIは必ず停止し、root選択を求めます（1: `pwd` を使う、2: `git root` を使う）。AIが自動決定してはいけません
+5. その後、選択したrootに対してリスクチェック + dry-run（`create` / `merge` / `skip`）を表示し、この時点ではまだ書き込みしません
+6. プロンプトが出たら、次の確認メッセージをそのまま返信します：
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
-5. その後、AIが確認済みのプロジェクトルートに5つのガバナンスファイルを作成します
+7. その後、AIが確認済みのプロジェクトルートに5つのガバナンスファイルを作成します
 
 手動セットアップは不要です。AIが全体を自動処理し、既存の `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` の内容もスマートにマージします。
 一般的な公開ユーザーにとって、直接使うファイルは `INIT.md` だけで十分です。
@@ -73,10 +75,10 @@ AIがコーディング、デバッグ、リファクタリング、リリース
 その後、毎回のAIセッション開始時に以下を使用：
 
 ```text
-Follow AGENTS.md
+AGENTS.md に従ってこのセッションを開始してください
 ```
 
-`Follow AGENTS.md` は標準の短縮表現です。別言語や同義の表現でも動作します。
+`Follow AGENTS.md` は標準の短縮表現です。上記の日本語文や同義の表現でも動作します。
 
 ## クイック操作
 
@@ -85,19 +87,19 @@ Follow AGENTS.md
 ### 1) 新しいセッションを開始
 
 ```text
-Follow AGENTS.md
+AGENTS.md に従ってこのセッションを開始してください
 ```
 
 ### 2) 同じセッションで作業を継続
 
 ```text
-Continue from the current state and proceed with PLAN → READ → CHANGE → QC → PERSIST.
+現在の状態から継続し、PLAN → READ → CHANGE → QC → PERSIST に従って進めてください。
 ```
 
 ### 3) セッションを終了して完全に引き継ぐ
 
 ```text
-Wrap up this session with full closeout and handover.
+このセッションを収束し、完全な引き継ぎまで実行してください。
 ```
 
 終了時の出力には以下が含まれます：
@@ -108,7 +110,7 @@ Wrap up this session with full closeout and handover.
 ### 4) 次のセッションをすぐ開始
 
 ```text
-<Paste the previous "NEXT SESSION HANDOFF PROMPT (COPY/PASTE)" block here, unchanged.>
+<前回出力の「NEXT SESSION HANDOFF PROMPT (COPY/PASTE)」ブロックをそのまま貼り付けてください。>
 ```
 
 ---

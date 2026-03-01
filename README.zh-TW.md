@@ -60,11 +60,13 @@ Agent 必須按照以下流程工作：
 
 1. 開啟 **[INIT.md](INIT.md)** → 點擊 **Raw** → 全選 → 複製
 2. 貼給你的 AI agent（Claude Code、Codex、Gemini CLI — 任一皆可）
-3. AI 會先自動執行 root 安全 preflight（絕對路徑 + 風險檢查 + dry-run），這一步不會寫檔
-4. 出現提示後，回覆以下確認句即可：
+3. AI 會先自動執行 root 安全 preflight，並按此順序顯示路徑：`pwd`、`git root`
+4. 若 `pwd` 與 `git root` 不一致，AI 必須停下，讓你選擇 root（1：使用 `pwd`，2：使用 `git root`）；AI 不可自行決定
+5. AI 會針對你選的 root 顯示風險檢查 + dry-run（`create` / `merge` / `skip`），此時仍不會寫檔
+6. 出現提示後，回覆以下確認句即可：
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
-5. AI 便會在你已確認的專案根目錄建立 5 個治理檔案
+7. AI 便會在你已確認的專案根目錄建立 5 個治理檔案
 
 你無須手動設置。AI 會自動處理整個流程，並智能合併你已有的 `AGENTS.md`、`CLAUDE.md` 或 `GEMINI.md` 內容。
 對大多數公開使用者而言，直接使用 `INIT.md` 就足夠。
@@ -73,10 +75,10 @@ Agent 必須按照以下流程工作：
 然後每次 AI session 開頭使用：
 
 ```text
-Follow AGENTS.md
+請依 AGENTS.md 開始本次 session
 ```
 
-`Follow AGENTS.md` 是標準短句；其他語言或同等語義的說法也可。
+`Follow AGENTS.md` 是標準短句；上面的中文句與其他同等語義說法也可。
 
 ## 快速操作
 
@@ -85,19 +87,19 @@ Follow AGENTS.md
 ### 1) 開始新 session
 
 ```text
-Follow AGENTS.md
+請依 AGENTS.md 開始本次 session
 ```
 
 ### 2) 在同一個 session 持續推進
 
 ```text
-Continue from the current state and proceed with PLAN → READ → CHANGE → QC → PERSIST.
+請依目前狀態繼續，並按照 PLAN → READ → CHANGE → QC → PERSIST 推進。
 ```
 
 ### 3) 收尾並完成完整交接
 
 ```text
-Wrap up this session with full closeout and handover.
+請為本次 session 完成收尾與完整交接。
 ```
 
 預期的收尾輸出包含：
@@ -108,7 +110,7 @@ Wrap up this session with full closeout and handover.
 ### 4) 快速開始下一個 session
 
 ```text
-<Paste the previous "NEXT SESSION HANDOFF PROMPT (COPY/PASTE)" block here, unchanged.>
+<請貼上上一輪輸出的「NEXT SESSION HANDOFF PROMPT (COPY/PASTE)」區塊（原文不改）。>
 ```
 
 ---
