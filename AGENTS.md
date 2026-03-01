@@ -52,17 +52,45 @@ At the start of every new session, the AI must read the following files in this 
 
 If any file is missing, the AI must create a minimal version before beginning development.
 
-After completing the session file reads, display:
-```
+After completing the session file reads, display exactly one random "Boot Visual Cue" style from the set below.
+Selection rule: randomize across styles; if the previous style is known, prefer a different style instead of repeating.
+
+Boot Visual Cue - Style A
+```text
     ) ) )
    ( ( (
   _______
  |       |
- |  ( )  |]
+ |  ( )  |
  |_______|
    \___/
 
  ☕  booting up...
+```
+
+Boot Visual Cue - Style B
+```text
+   .-.
+  (   )
+   `-'
+  /___\
+  |   |
+  |___|
+
+ [boot sequence...]
+```
+
+Boot Visual Cue - Style C
+```text
+  _____________
+ |  _________  |
+ | |         | |
+ | |  READY  | |
+ | |_________| |
+ |_____________|
+    /_/   \_\
+
+ [context loaded]
 ```
 
 ---
@@ -212,14 +240,71 @@ Each closeout must record at minimum:
 Supplementary rules:
 1. Even if the session involved no substantive code changes (research / analysis / discussion / decisions only), the session record must still be updated
 2. After closeout is complete, the response must list: which files were updated, and what was updated in each
+3. After closeout is complete, the response must include a copy-paste-ready "Next Session Handoff Prompt" for the next agent
+4. The "Next Session Handoff Prompt" must be generated from the project's actual current state; fixed or hardcoded handoff sentences are prohibited
+5. The "Next Session Handoff Prompt" must include at minimum:
+   - Current objective and progress state
+   - Pending tasks in priority order
+   - Key files changed in this session
+   - Known risks / blockers / cautions
+   - Validation status and the first concrete next action
+6. After closeout is complete, the response must be formatted in exactly three sections in this order:
+   - Section 1: `SESSION CLOSEOUT SUMMARY`
+   - Section 2: `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)`
+   - Section 3: `CLOSEOUT VISUAL CUE`
+7. Section 2 must be a single fenced `text` block so the user can copy/paste directly without cleanup.
+8. Section 3 must display exactly one random closeout style from the set below.
+9. Randomization rule: if the previous closeout style is known, prefer a different style instead of repeating.
+10. Use separator lines between sections for visual alignment. Required separators:
+    - Major separator: `========================================`
+    - Minor separator: `----------------------------------------`
+11. Closeout output skeleton must follow this layout:
+```text
+========================================
+SESSION CLOSEOUT SUMMARY
+========================================
+<summary bullets>
 
-After closeout is complete, display:
+----------------------------------------
+NEXT SESSION HANDOFF PROMPT (COPY/PASTE)
+----------------------------------------
+<single fenced text block>
+
+----------------------------------------
+CLOSEOUT VISUAL CUE
+----------------------------------------
+<one random style from A/B/C>
 ```
+
+Closeout Visual Cue - Style A
+```text
   .  *    .   *
     .   🌅  .
   ~~~ ~~~ ~~~ ~~~
 
   shipped. chill time ✌️
+```
+
+Closeout Visual Cue - Style B
+```text
+      .      *
+   *     .      .
+       .-.
+      (   )
+       `-'
+  ~~~~~~~~~~~~~~~~
+
+   shipped. good night.
+```
+
+Closeout Visual Cue - Style C
+```text
+  \o/   \o/   \o/
+   |     |     |
+  / \   / \   / \
+ ------------------
+
+  shipped. next up.
 ```
 
 ---

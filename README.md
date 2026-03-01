@@ -235,6 +235,8 @@ This repo is built around a few non-negotiables:
 4. **Verify before claiming done**
 5. **Persist before leaving**
 
+At session close, the agent must output a copy-paste-ready handoff prompt generated from the real current state (not a fixed sentence).
+
 If those five hold, AI sessions remain usable over time.
 
 ---
