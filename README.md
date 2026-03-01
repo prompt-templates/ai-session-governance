@@ -63,6 +63,8 @@ It also prevents **governance bloat** by forcing the agent to check:
 3. The AI creates all 5 governance files directly in your project
 
 No downloads, no scripts, no terminal commands needed. The AI handles everything — including smart merging if you already have `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`.
+For most public users, `INIT.md` is the only file you need to use directly.
+Do not manually copy this entire repository into your project root; use `INIT.md` so the agent can merge safely.
 
 Then start every AI session with:
 
@@ -201,10 +203,11 @@ This template exists to stop that slow degradation early.
 
 ---
 
-## File overview
+## Repository source layout
 
 ```text
 <PROJECT_ROOT>/
+├─ INIT.md                ← bootstrap prompt (public entry point)
 ├─ AGENTS.md              ← governance rules (SSOT)
 ├─ CLAUDE.md              ← pointer for Claude Code
 ├─ GEMINI.md              ← pointer for Gemini CLI
@@ -216,6 +219,7 @@ This template exists to stop that slow degradation early.
 
 ### Core files
 
+* `INIT.md` — bootstrap prompt that creates/merges governance files into your project (the primary entry for most users)
 * `AGENTS.md` — the standing operating rules for AI work in the repo (single source of truth)
 * `CLAUDE.md` — pointer file that bridges Claude Code auto-discovery to `AGENTS.md`
 * `GEMINI.md` — pointer file that bridges Gemini CLI auto-discovery to `AGENTS.md`

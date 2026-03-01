@@ -80,14 +80,15 @@ Boot Visual Cue - Style A
 
 Boot Visual Cue - Style B
 ```text
-   .-.
-  (   )
-   `-'
-  /___\
-  |   |
-  |___|
+      /^\
+     /___\
+    |=   =|
+    |  ^  |
+    |_____|
+     / | \
+    /  |  \
 
- [boot sequence...]
+ 🚀  launch checks complete...
 ```
 
 Boot Visual Cue - Style C
@@ -100,7 +101,7 @@ Boot Visual Cue - Style C
  |_____________|
     /_/   \_\
 
- [context loaded]
+ 🧠  context loaded.
 ```
 
 ---
@@ -304,7 +305,7 @@ Closeout Visual Cue - Style B
        `-'
   ~~~~~~~~~~~~~~~~
 
-   shipped. good night.
+   🌙  shipped. good night.
 ```
 
 Closeout Visual Cue - Style C
@@ -314,7 +315,7 @@ Closeout Visual Cue - Style C
   / \   / \   / \
  ------------------
 
-  shipped. next up.
+  🧭  shipped. next up.
 ```
 
 ---

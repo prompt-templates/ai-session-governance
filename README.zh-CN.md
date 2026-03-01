@@ -63,6 +63,8 @@ Agent 必须按照以下流程工作：
 3. AI 直接在你的项目中创建所有 5 个治理文件
 
 不需要下载、不需要脚本、不需要命令行。AI 处理一切，包括若你已有 `AGENTS.md`、`CLAUDE.md` 或 `GEMINI.md` 时的智能合并。
+对大多数公开用户而言，直接使用 `INIT.md` 就足够。
+不要把整个 repo 手动复制到项目根目录；请使用 `INIT.md` 让 agent 安全合并。
 
 然后每次 AI session 开头使用：
 
@@ -201,10 +203,11 @@ Repo 能运行，但每次修复都让规则更长、文档更嘈杂、发布更
 
 ---
 
-## 文件概览
+## 此 repo 源布局
 
 ```text
 <PROJECT_ROOT>/
+├─ INIT.md                ← bootstrap prompt（公开入口）
 ├─ AGENTS.md              ← 治理规则（SSOT）
 ├─ CLAUDE.md              ← Claude Code 指针文件
 ├─ GEMINI.md              ← Gemini CLI 指针文件
@@ -216,6 +219,7 @@ Repo 能运行，但每次修复都让规则更长、文档更嘈杂、发布更
 
 ### 核心文件
 
+* `INIT.md` — 在你的项目中创建/合并治理文件的 bootstrap prompt（大多数用户的主要入口）
 * `AGENTS.md` — repo 中 AI 工作的常规操作规则（唯一真实来源）
 * `CLAUDE.md` — 将 Claude Code 自动发现桥接到 `AGENTS.md` 的指针文件
 * `GEMINI.md` — 将 Gemini CLI 自动发现桥接到 `AGENTS.md` 的指针文件
