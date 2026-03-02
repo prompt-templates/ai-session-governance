@@ -10,7 +10,7 @@ If your Codex / Claude / Gemini hourly or weekly token quota runs out, this temp
 
 **[30-second Quick Start](#quickstart)** · **[Install](#install)** · **[Quick Operations](#quick-operations)**
 
-![Overview](ref_doc/overview_infograph.png)
+![Overview](ref_doc/overview_infograph_en.png)
 
 ---
 
@@ -85,6 +85,23 @@ Follow AGENTS.md
       <img src="ref_doc/install_step_4.png" alt="Install step 4" width="92%" />
       <br />
       <sub>Step 4: Confirm `INSTALL_WRITE_OK`</sub>
+    </td>
+  </tr>
+</table>
+
+### :small_blue_diamond: Real run snapshots
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="ref_doc/launch.png" alt="Launch screen" width="92%" />
+      <br />
+      <sub>Launch: session boot and context loading</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="ref_doc/closesession.png" alt="Close session screen" width="92%" />
+      <br />
+      <sub>Closeout: session summary and handoff output</sub>
     </td>
   </tr>
 </table>

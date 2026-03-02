@@ -10,7 +10,7 @@
 
 **[30 秒快速开始](#quickstart)** · **[安装](#install)** · **[快速操作](#quick-operations)**
 
-![Overview](ref_doc/overview_infograph.png)
+![Overview](ref_doc/overview_infograph_cn.png)
 
 ---
 
@@ -85,6 +85,23 @@
       <img src="ref_doc/install_step_4.png" alt="安装流程步骤 4" width="92%" />
       <br />
       <sub>步骤 4：回复 `INSTALL_WRITE_OK`</sub>
+    </td>
+  </tr>
+</table>
+
+### :small_blue_diamond: 实际执行界面
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="ref_doc/launch.png" alt="启动界面" width="92%" />
+      <br />
+      <sub>启动：工作阶段开机与上下文加载</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="ref_doc/closesession.png" alt="完工收尾界面" width="92%" />
+      <br />
+      <sub>收尾：工作阶段摘要与交接输出</sub>
     </td>
   </tr>
 </table>
