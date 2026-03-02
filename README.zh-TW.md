@@ -58,7 +58,8 @@
 6. 出現提示後，請回覆以下確認句：
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
-7. AI 會在你確認的專案根目錄中建立或合併 5 個治理檔案
+7. 在首次寫入前，AI 會於 `<PROJECT_ROOT>/dev/init_backup/<UTC_TIMESTAMP>/` 自動建立輕量備份快照，保存既有治理目標檔案
+8. AI 會在你確認的專案根目錄中建立或合併 5 個治理檔案
 
 ### :small_blue_diamond: 安裝流程畫面
 
@@ -88,6 +89,8 @@
     </td>
   </tr>
 </table>
+
+完成步驟 4 的確認後，AI 會先自動建立備份快照，再進行首次寫入。
 
 ### :small_blue_diamond: 實際執行畫面
 

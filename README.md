@@ -58,7 +58,8 @@ Follow AGENTS.md
 6. You confirm:
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
-7. AI creates/merges 5 governance files in the confirmed project root
+7. Before first write, AI creates a lightweight backup snapshot at `<PROJECT_ROOT>/dev/init_backup/<UTC_TIMESTAMP>/` for existing target governance files
+8. AI creates/merges 5 governance files in the confirmed project root
 
 ### :small_blue_diamond: Install UI walkthrough
 
@@ -88,6 +89,8 @@ Follow AGENTS.md
     </td>
   </tr>
 </table>
+
+After step 4 confirmation, AI automatically creates the backup snapshot before the first file write.
 
 ### :small_blue_diamond: Real run snapshots
 
