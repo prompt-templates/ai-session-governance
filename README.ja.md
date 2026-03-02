@@ -245,6 +245,7 @@ AGENTS.md に従ってこのセッションを開始してください
 
 詳細な主張対応表とプラットフォーム検証は次に集約しています。
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
+- 最新のQA回帰検証レポート: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
 2026-02-27時点の要約：
 - AGENTS/INIT 規則整合：検証済み

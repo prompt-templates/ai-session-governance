@@ -245,6 +245,7 @@
 
 完整聲明對照與平台驗證請見：
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
+- 最新 QA 回歸驗收報告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
 截至 2026-02-27 的摘要如下：
 - AGENTS/INIT 規則同步：已驗證

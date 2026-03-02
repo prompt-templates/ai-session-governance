@@ -245,6 +245,7 @@
 
 完整声明对照与平台验证请见：
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
+- 最新 QA 回归验收报告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
 截至 2026-02-27 的摘要如下：
 - AGENTS/INIT 规则同步：已验证

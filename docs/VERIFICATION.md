@@ -26,6 +26,12 @@ Verification date baseline: 2026-02-27 (UTC)
 | Claude Code | `CLAUDE.md` native; `AGENTS.md` via `@` import | Auto memory + session resume | Plan mode + skills | Claude Code docs |
 | Gemini CLI | `GEMINI.md` native; `AGENTS.md` via config/import | `/memory` + session save/resume | Skills + GEMINI.md directives | Gemini CLI docs |
 
+## Regression evidence
+
+- Latest QA pointer: [docs/qa/LATEST.md](qa/LATEST.md)
+- Current detailed report: [docs/qa/QA_REGRESSION_REPORT.md](qa/QA_REGRESSION_REPORT.md)
+- Latest run snapshot (UTC): 2026-03-02, 29 checks, 29 pass, 0 fail
+
 ## Not yet verified
 
 - Longitudinal effectiveness across 50+ sessions

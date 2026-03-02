@@ -95,6 +95,8 @@ At the start of every new session, the AI must read the following files in this 
 
 If any file is missing, the AI must create a minimal version before beginning development.
 
+After reading `dev/SESSION_LOG.md`, the AI must locate the latest `### Next Session Handoff Prompt (Verbatim)` block (if present) and use that block as startup execution seed context for PLAN.
+
 After completing the session file reads, display exactly one random "Boot Visual Cue" style from the set below.
 Selection rule: randomize across styles; if the previous style is known, prefer a different style instead of repeating.
 
@@ -152,6 +154,7 @@ Supplementary rules:
 1. `SESSION_HANDOFF.md` and `SESSION_LOG.md` represent the "current state".
 2. `PROJECT_MASTER_SPEC.md` represents "long-term stable rules and the complete authoritative reference".
 3. If the current state is inconsistent with an older specification, defer to the handoff/log first, and remediate specification drift during the PERSIST phase.
+4. If `SESSION_LOG.md` contains a latest `Next Session Handoff Prompt (Verbatim)` block, treat it as operational seed context, but do not let it override higher-priority current-state facts in `SESSION_HANDOFF.md` / latest log facts.
 
 ---
 
@@ -319,6 +322,10 @@ CLOSEOUT VISUAL CUE
 ----------------------------------------
 <one random style from A/B/C>
 ```
+12. After generating Section 2, write the exact same fenced `text` block verbatim into the current session entry in `dev/SESSION_LOG.md` under:
+    - `### Next Session Handoff Prompt (Verbatim)`
+13. If that subsection already exists in the current session entry, replace it with the latest block instead of appending duplicates.
+14. The block persisted in `SESSION_LOG.md` must be the same content as Section 2 output (no paraphrase, no truncation, no reformatting).
 
 Closeout Visual Cue - Style A
 ```text
@@ -667,6 +674,9 @@ Rule if exists: skip, do not overwrite.
 3. What was merged:
 4. What was retired / superseded:
 5. Why consolidation was needed:
+
+### Next Session Handoff Prompt (Verbatim)
+<paste the exact closeout Section 2 block content here, including its fenced text block>
 ```
 
 ---

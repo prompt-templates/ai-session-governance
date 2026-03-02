@@ -239,6 +239,7 @@ Yes. This template is designed to merge into existing project material, not repl
 
 Detailed claim mapping and platform validation are maintained in:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
+- Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
 Snapshot status (as of 2026-02-27):
 - AGENTS/INIT rule parity: verified
