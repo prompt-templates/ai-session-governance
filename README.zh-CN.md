@@ -1,58 +1,48 @@
 [English](README.md) | [繁體中文](README.zh-TW.md) | 简体中文 | [日本語](README.ja.md)
 
-# :rocket: 别再每次开新 session 都重复交代一遍
+# :rocket: 当一个 AI 工具配额用尽时，立即切换并延续开发
 
-一个轻量级的 AI 辅助开发治理模板，让项目在 Codex、Claude Code、Gemini CLI 等 agent 工作流中保持**可接续、可调试、可追溯、更有条理**。
+当你在 Codex、Claude 或 Gemini 的每小时或每周令牌配额用尽时，本模板可让下一个 AI 工具直接承接同一项目状态，无须重新交代背景。
 
-**[安装](#install)** · **[快速开始](#install)**
+- 支持跨命令行工具的持久交接
+- 统一工作流程：`PLAN -> READ -> CHANGE -> QC -> PERSIST`
+- 内建防漂移治理机制（而非仅持续新增规则）
+
+**[30 秒快速开始](#quickstart)** · **[安装](#install)** · **[快速操作](#quick-operations)**
 
 ![Overview](ref_doc/overview_infograph.png)
 
 ---
 
-## :bookmark_tabs: 为什么这很重要
+## :bookmark_tabs: 为什么要做这个
 
-如果 AI 正在协助写代码、调试、重构、发布、或更新文档，真正的问题通常不是"模型太弱"。
+在多 AI 工具协作的开发场景中，最常失效的通常不是模型生成能力，而是交接流程。
 
-真正的问题是项目**没有持久的操作记忆**。
+常见失败模式如下：
+- 每次切换工具都要从零开始
+- 修复持续叠加在旧修复之上
+- 说明文档、交接文档与工作日志逐步失去一致性
 
-那就是团队开始反复遇到同样失败模式的时候：
+本模板通过规则确保以下三件事：
+1. 每个工作阶段只有一条重入路径
+2. 每项任务遵循同一套工作流程
+3. 每次收尾都会落地为可追溯的持久化记录
 
-### :small_blue_diamond: 痛点 1 — 每次新 session 都从零开始
-Agent 不知道当前基线是什么、哪些已修好、哪些还没做、哪些绝不能再碰。
+---
 
-### :small_blue_diamond: 痛点 2 — 修复一直叠在旧修复上面
-每次 session 多加一个 patch、一条备注、一个例外、一条规则——直到项目变得更难改而不是更容易。
+<a id="quickstart"></a>
 
-### :small_blue_diamond: 痛点 3 — Bug 在局部修好了，治理却在全局恶化
-代码可能能编译，但 repo 在漂移：
-- README 说一套
-- handoff 说另一套
-- log 说第三套
-- 没人知道哪个版本才是真的
+## :bookmark_tabs: 30 秒快速开始
 
-### :small_blue_diamond: 这个模板带来什么
+1. 打开 **[INIT.md](INIT.md)**，并粘贴到你的 AI 命令行工具中。
+2. 按提示精确回复：
+   - `INSTALL_ROOT_OK: <absolute_path>`
+   - `INSTALL_WRITE_OK`
+3. 之后每次新工作阶段开始时，输入：
 
-#### :small_orange_diamond: 1) 接续性
-每次新 session 都有强制入口路径：
-- 读 handoff
-- 读 log
-- 从最后一次验证过的状态继续
-
-#### :small_orange_diamond: 2) 控制力
-Agent 必须按照以下流程工作：
-**PLAN → READ → CHANGE → QC → PERSIST**
-
-意味着更少冲动修改、更好的可追溯性、更安全的变更。
-
-#### :small_orange_diamond: 3) 防混乱护栏
-这个模板不只防止鲁莽修改。
-它还通过强制 agent 自我检查来防止**治理膨胀**：
-
-- 这真的是一条新规则吗？
-- 还是应该更新旧规则？
-- 这是一个修复？
-- 还是应该做一次整合 pass？
+```text
+请按 AGENTS.md 开始本次工作阶段
+```
 
 ---
 
@@ -60,200 +50,149 @@ Agent 必须按照以下流程工作：
 
 ## :bookmark_tabs: 安装
 
-1. 打开 **[INIT.md](INIT.md)** → 点击 **Raw** → 全选 → 复制
-2. 粘贴给你的 AI agent（Claude Code、Codex、Gemini CLI — 任一皆可）
-3. AI 会先自动执行 root 安全 preflight，并按此顺序显示路径：`pwd`、`git root`
-4. 若 `pwd` 与 `git root` 不一致，AI 必须停下，让你选择 root（1：使用 `pwd`，2：使用 `git root`）；AI 不可自行决定
-5. AI 会针对你选择的 root 显示风险检查 + dry-run（`create` / `merge` / `skip`），此时仍不会写文件
-6. 出现提示后，回复以下确认句即可：
+1. 打开 **[INIT.md](INIT.md)** -> 点击 **Raw** -> 全选 -> 复制
+2. 粘贴到你的 AI 命令行工具（Claude Code、Codex、Gemini CLI 均可）
+3. AI 会先执行根目录安全预检，并按顺序显示路径：`pwd`、`git root`
+4. 若 `pwd` 与 `git root` 不一致，AI 必须先停止，并要求你选择根目录（1：使用 `pwd`，2：使用 `git root`）；AI 不可自行决定
+5. AI 会针对你选择的根目录显示风险检查与演练规划（`create` / `merge` / `skip`），此时仍不会写入文件
+6. 出现提示后，请回复以下确认句：
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
-7. AI 就会在你已确认的项目根目录创建 5 个治理文件
+7. AI 会在你确认的项目根目录中创建或合并 5 个治理文件
 
-你无需手动设置。AI 会自动处理整个流程，并智能合并你已有的 `AGENTS.md`、`CLAUDE.md` 或 `GEMINI.md` 内容。
-对大多数公开用户而言，直接使用 `INIT.md` 就足够。
-不要把整个 repo 手动复制到项目根目录；请使用 `INIT.md` 让 agent 安全合并。
+### :small_blue_diamond: 安装流程界面
 
-然后每次 AI session 开头使用：
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="ref_doc/install_step_1.png" alt="安装流程步骤 1" width="92%" />
+      <br />
+      <sub>步骤 1：将 `INIT.md` 粘贴到 AI 命令行工具</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="ref_doc/install_step_2.png" alt="安装流程步骤 2" width="92%" />
+      <br />
+      <sub>步骤 2：确认检测到的根目录</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="ref_doc/install_step_3.png" alt="安装流程步骤 3" width="92%" />
+      <br />
+      <sub>步骤 3：回复 `INSTALL_ROOT_OK`</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="ref_doc/install_step_4.png" alt="安装流程步骤 4" width="92%" />
+      <br />
+      <sub>步骤 4：回复 `INSTALL_WRITE_OK`</sub>
+    </td>
+  </tr>
+</table>
 
-```text
-请按 AGENTS.md 开始本次 session
-```
+你无须手动设置。AI 会自动处理整个流程，并智能合并已有 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` 内容。
+对多数公开用户而言，直接使用 `INIT.md` 即可。
+请勿手动将整个仓库复制到项目根目录；请使用 `INIT.md` 以确保合并流程安全且可预期。
 
-`Follow AGENTS.md` 是标准短句；上面的中文句与其他同等语义说法也可以。
+---
+
+<a id="quick-operations"></a>
 
 ## :bookmark_tabs: 快速操作
 
-可使用自然语言。以下句子是可直接复制粘贴的稳定捷径。
+可使用自然语言。以下句子可直接复制粘贴。
 
-### :small_blue_diamond: 1) 开始新 session
+### :small_blue_diamond: 1) 开始新工作阶段
 
 ```text
-请按 AGENTS.md 开始本次 session
+请按 AGENTS.md 开始本次工作阶段
 ```
 
-### :small_blue_diamond: 2) 在同一个 session 持续推进
+### :small_blue_diamond: 2) 在同一工作阶段持续推进
 
 ```text
-请按当前状态继续，并按 PLAN → READ → CHANGE → QC → PERSIST 推进。
+请按当前状态继续，并按 PLAN -> READ -> CHANGE -> QC -> PERSIST 推进。
 ```
 
 ### :small_blue_diamond: 3) 收尾并完成完整交接
 
 ```text
-请为本次 session 完成收尾并输出完整交接。
+请为本次工作阶段完成收尾与完整交接。
 ```
 
-预期的收尾输出包含：
-- `SESSION CLOSEOUT SUMMARY`
-- `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)`
-- `CLOSEOUT VISUAL CUE`
-
-### :small_blue_diamond: 4) 快速开始下一个 session
+### :small_blue_diamond: 4) 快速开始下一个工作阶段
 
 ```text
-<请粘贴上一轮输出的 “NEXT SESSION HANDOFF PROMPT (COPY/PASTE)” 区块（保持原文）。>
+<请粘贴上一轮输出的“NEXT SESSION HANDOFF PROMPT (COPY/PASTE)”区块（保持原文）。>
 ```
+
+---
+
+## :bookmark_tabs: 配额切换交接流程
+
+1. 在命令行工具 A 的配额即将耗尽前，先完成本次收尾
+2. 复制 `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)` 区块
+3. 在命令行工具 B 原文粘贴，不要改动内容
+4. 工具 B 会依据 `SESSION_HANDOFF.md` 与 `SESSION_LOG.md` 接续执行
+
+这是本仓库的核心设计目标。
 
 ---
 
 ## :bookmark_tabs: 平台设置
 
-`AGENTS.md` 是唯一的真实来源（SSOT）。本模板附带薄型指针文件（`CLAUDE.md` 和 `GEMINI.md`），让每个平台都能从同一来源自动发现治理规则。
+`AGENTS.md` 为单一真实来源（SSOT）；`CLAUDE.md` 与 `GEMINI.md` 为薄型指针文件。
 
-| 平台 | 原生文件 | 模板提供的内容 | 若你已有该文件 |
+| 平台 | 原生文件 | 预设提供 | 若你已有该文件 |
 |---|---|---|---|
 | **Codex** | `AGENTS.md` | `AGENTS.md`（完整规则） | 将治理章节合并到已有文件 |
 | **Claude Code** | `CLAUDE.md` | 指针文件：`@AGENTS.md` | 在已有 `CLAUDE.md` **最上方**加入 `@AGENTS.md` |
 | **Gemini CLI** | `GEMINI.md` | 指针文件：`@./AGENTS.md` | 在已有 `GEMINI.md` **最上方**加入 `@./AGENTS.md` |
 
-一旦 agent 能读取指令，治理规则、工作流和 dev/ 模板在所有平台上的运作完全一致。
-
----
-
-## :bookmark_tabs: 这个模板有什么不同
-
-大多数 AI 编码 prompt 着重于：
-- 语气
-- 格式
-- 编码风格
-- 工具使用
-
-这个模板着重的是对长期工作更重要的事情：
-
-### :small_blue_diamond: 1) Session 接续性
-下一次 session 不应依赖用户记忆。
-
-### :small_blue_diamond: 2) 层级分离
-Agent 不得混淆：
-- 产品行为
-- 开发治理
-- 外部平台行为
-- 环境 / 运行时问题
-
-### :small_blue_diamond: 3) 修改前先阅读
-不允许"看一个片段、改一个片段"的工作方式。
-
-### :small_blue_diamond: 4) 新增前先整合
-不允许无止尽地堆叠新规则和例外。
-
-### :small_blue_diamond: 5) 正确地结束 session
-Agent 必须在离开前更新 handoff / log。
-
 ---
 
 ## :bookmark_tabs: 3 种场景
 
-### :small_blue_diamond: 场景 1 — 每天用 AI 出货的独立开发者
-日常进度很快，但 session 之间的上下文会断。
-这个模板为每次 session 提供稳定的重新进入点，减少重复解释。
-它还防止"小修复"演变成长期治理混乱。
-适合产品开发者、独立创业者和技术创始人。
+### :small_blue_diamond: 场景 1 — 一个 AI 工具用尽配额，切换另一个工具续做
+当你在某个命令行工具用尽配额时，可能需要立即切换到另一个工具。  
+本模板可保留基线、待办、风险与验证状态，避免重述上下文。
 
-### :small_blue_diamond: 场景 2 — 一个 repo，多个 AI agent
-Codex 处理代码、Claude 审查文档、Gemini 协助调试基础设施。
-没有共同的 handoff 和 session log，每个 agent 从不同的现实出发。
-这个模板建立共享操作记忆和一致的 session ID 标准。
-适合多 agent 工作流。
+### :small_blue_diamond: 场景 2 — 一个仓库，多个 AI 工具协作
+例如由 Codex 编写代码、Claude 处理文档、Gemini 协助调试基础设施。  
+通过共用交接文档与工作日志，可避免各工具对项目状态产生分歧。
 
-### :small_blue_diamond: 场景 3 — 已有项目已经感觉很乱
-Repo 能运行，但每次修复都让规则更长、文档更嘈杂、发布更危险。
-这个模板加入防堆积纪律：先搜索、先整合、退役过时规则。
-它的设计是减少治理漂移，而不只是增加更多治理。
-适合需要清理但不需要全面重写的长期 repo。
+### :small_blue_diamond: 场景 3 — 长期项目治理开始漂移
+修复逐步累积、规则持续扩张、文档彼此矛盾。  
+“先整合、后新增”可降低 SOP 膨胀与长期维护成本。
 
 ---
 
 ## :bookmark_tabs: 常见问题
 
 ### :small_blue_diamond: 1) 这只适合大型项目吗？
-不是。
-小型项目立即受益于 session 接续性。
-大型项目受益更多，因为漂移随时间复合加速。
+不是。小型项目可立即受益于交接连续性；大型项目的长期效益通常更明显。
 
 ### :small_blue_diamond: 2) 第一天就需要 `PROJECT_MASTER_SPEC.md` 吗？
-不一定。
-小型 repo 用 `AGENTS.md` + `SESSION_HANDOFF.md` + `SESSION_LOG.md` 就足够。
-当规则、发布标准或工作流变得太大而无法非正式管理时，再加入 master spec。
+不一定。先使用 `AGENTS.md` + `SESSION_HANDOFF.md` + `SESSION_LOG.md` 即可。
 
 ### :small_blue_diamond: 3) 这是编码标准吗？
-主要不是。
-这是 AI 在 repo 内工作方式的**治理标准**：
-- 如何阅读
-- 如何修改
-- 如何验证
-- 如何交接
+不是。它是 AI 在仓库内运作的治理标准，规范如何阅读、修改、验证与交接。
 
-### :small_blue_diamond: 4) 为什么不把所有东西放在一个大 prompt 里？
-因为大型 prompt 会衰退。
-它们更难更新、更难信任、下一次 session 也更难一致地应用。
-这个模板将稳定的治理规则与每次 session 的状态分开。
+### :small_blue_diamond: 4) 这会拖慢 AI 吗？
+每次工作阶段开始时会增加少量前置读取时间，但通常远低于重复交代与返工造成的整体成本。
 
-### :small_blue_diamond: 5) 这会拖慢 agent 吗？
-每次 session 开头会稍微慢一点。
-通常远少于因重复解释、误诊、重复修复和过时文档而浪费的时间。
-重点是减少总返工量，而不是优化单次快但健忘的回合。
-
-### :small_blue_diamond: 6) "新增前先整合"解决什么问题？
-防止治理膨胀。
-没有这条规则，每个修复都变成额外备注、每个事件都变成额外 SOP、每次 session 都留下更多杂乱。
-这个模板强制 agent 思考规则应该被合并，而不仅是新增。
-
-### :small_blue_diamond: 7) 什么时候一个问题应该变成永久规则？
-只有当它是重复发生的、高影响的、阻断发布的、有风险的、或系统性的。
-如果问题小且局部，修正根因、加入回归、更新 log，然后继续。
-不是每个错误都值得立一条新法。
-
-### :small_blue_diamond: 8) 这对调试有帮助，还是只对文档有用？
-两者都有。
-它通过强制先做问题分类来改善调试：
-- 代码问题？
-- 配置问题？
-- 运行时问题？
-- 外部平台问题？
-- 过时文档？
-这减少了"修错方向"的调试。
-
-### :small_blue_diamond: 9) 如果我的项目已经有 README、docs 和内部规则呢？
-保留它们。
-这个模板旨在与已有项目资料整合，而不是盲目取代有用的内容。
-唯一的硬性要求是：可靠的入口路径和持久的 session 记录。
-
-### :small_blue_diamond: 10) 这个模板旨在防止的最大错误是什么？
-那个安静的错误：
-一个仍然"能运行"的项目，但在每次 AI session 之后变得更难理解、更难修改、更难信任。
-这个模板的存在就是为了尽早阻止那种缓慢的退化。
+### :small_blue_diamond: 5) 我已经有 README、既有文档与内部规则，仍然适用吗？
+适用，而且建议保留既有内容。本模板的设计目标是整合，而非覆盖。
 
 ---
 
-## :bookmark_tabs: 此 repo 源布局
+## :bookmark_tabs: 此仓库原始布局
 
 ```text
 <PROJECT_ROOT>/
-├─ INIT.md                ← bootstrap prompt（公开入口）
-├─ AGENTS.md              ← 治理规则（SSOT）
-├─ CLAUDE.md              ← Claude Code 指针文件
-├─ GEMINI.md              ← Gemini CLI 指针文件
+├─ INIT.md
+├─ AGENTS.md
+├─ CLAUDE.md
+├─ GEMINI.md
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
@@ -262,99 +201,55 @@ Repo 能运行，但每次修复都让规则更长、文档更嘈杂、发布更
 
 ### :small_blue_diamond: 核心文件
 
-* `INIT.md` — 在你的项目中创建/合并治理文件的 bootstrap prompt（大多数用户的主要入口）
-* `AGENTS.md` — repo 中 AI 工作的常规操作规则（唯一真实来源）
-* `CLAUDE.md` — 将 Claude Code 自动发现桥接到 `AGENTS.md` 的指针文件
-* `GEMINI.md` — 将 Gemini CLI 自动发现桥接到 `AGENTS.md` 的指针文件
-* `dev/SESSION_HANDOFF.md` — 当前基线、阻断点、启动检查清单、最后验证状态
-* `dev/SESSION_LOG.md` — 逐 session 的历史、修复、验证、下一步优先事项
-* `dev/PROJECT_MASTER_SPEC.md` — 为较大型或更复杂项目提供的可选长期权威规格
+- `INIT.md` - 创建/合并治理文件的启动提示（公开入口）
+- `AGENTS.md` - 治理单一真实来源（SSOT）
+- `CLAUDE.md` - Claude 指针文件
+- `GEMINI.md` - Gemini 指针文件
+- `dev/SESSION_HANDOFF.md` - 当前基线与下一步优先事项
+- `dev/SESSION_LOG.md` - 逐工作阶段历史与验证结果
+- `dev/PROJECT_MASTER_SPEC.md` - 可选的长期权威规格
 
 ---
 
 ## :bookmark_tabs: 本模板背后的治理原则
 
-这个 repo 围绕几个不可妥协的原则建立：
-
-1. **修改前先阅读**
-2. **调试前先分类**
-3. **新增前先整合**
-4. **宣称完成前先验证**
-5. **离开前先持久化**
-
-在 session 收尾时，agent 必须输出可直接复制粘贴的交接指令，且内容必须按当前真实状态动态生成（不可使用固定句）。
-
-如果这五条成立，AI session 随时间仍然可用。
+1. 修改前先阅读
+2. 调试前先分类
+3. 新增前先整合
+4. 宣称完成前先验证
+5. 离开前先持久化
 
 ---
 
 ## :bookmark_tabs: 验证记录
 
-发布前，本 README 的每项声明均已与实际的 AGENTS.md 规则和 dev/ 模板交叉核对，并依据各平台官方文档进行验证（截至 2026 年 2 月）。
+完整声明对照与平台验证请见：
+- [docs/VERIFICATION.md](docs/VERIFICATION.md)
 
-### :small_blue_diamond: 声明与机制对照
-
-| README 声明 | 支撑依据 | 已验证 |
-|---|---|---|
-| Session 接续性 | AGENTS.md §1 单一入口、§4 Session 收尾、SESSION_HANDOFF.md、SESSION_LOG.md | 是 |
-| PLAN → READ → CHANGE → QC → PERSIST | AGENTS.md §3 标准工作流 | 是 |
-| 防治理膨胀 | AGENTS.md §3b 整合纪律、§8b 规则升格门槛 | 是 |
-| 层级分离 | AGENTS.md §0a — 4 条硬规则 | 是 |
-| 修改前先阅读 | AGENTS.md §2c — 4 项最低读取、3 条硬规则 | 是 |
-| 调试前先分类 | AGENTS.md §2b — 6 种分类、3 条硬规则 | 是 |
-| 多 Agent Session ID | AGENTS.md §12 — 格式标准与示例 | 是 |
-| 文件安全治理 | AGENTS.md §5 — 8 项禁令、§6 — 禁止提权 + 手动回退 | 是 |
-| 与已有项目整合 | AGENTS.md 第 2 行 — 明确的合并/保留指示 | 是 |
-
-### :small_blue_diamond: 平台兼容性验证
-
-| 平台 | 读取治理文件 | Session 持久化 | 结构化工作流 | 来源 |
-|---|---|---|---|---|
-| Codex | `AGENTS.md` 原生 | 客户端 session + resume | AGENTS.md 指令 + Agents SDK | [OpenAI Codex Docs](https://developers.openai.com/codex/) |
-| Claude Code | `CLAUDE.md` 原生；`AGENTS.md` 通过 `@` 导入 | 自动记忆 + session resume | Plan Mode + skills | [Claude Code Docs](https://code.claude.com/docs/en/overview) |
-| Gemini CLI | `GEMINI.md` 原生；`AGENTS.md` 通过配置 | `/memory` + session save/resume | Skills + GEMINI.md 指令 | [Gemini CLI Docs](https://google-gemini.github.io/gemini-cli/) |
-
-### :small_blue_diamond: 尚未验证事项
-
-- 跨 50+ session 的长期有效性（尚无纵向数据）
-- 不同模型世代的遵循率（治理基于指令，非技术强制）
-- 每次 session 开头读取 handoff + log 的性能影响（预期轻微但未做基准测试）
-
-本验证于 2026-02-27 依据各平台官方文档完成。
+截至 2026-02-27 的摘要如下：
+- AGENTS/INIT 规则同步：已验证
+- 多平台指针文件行为：已验证
+- 50+ 工作阶段的长期纵向效果：尚未验证
 
 ---
 
 ## :bookmark_tabs: 深度文档
 
-如果本 repo 后续成长，建议的深度文档为：
+若本仓库后续扩大，建议补充以下文档：
 
-* `dev/PROJECT_MASTER_SPEC.md` — 完整架构、工作流、发布、runbook 权威
-* `docs/OPERATIONS.md` — 面向操作者的使用与维护程序
-* `docs/POSITIONING.md` — 本模板的用途、非用途、以及定位
+- `dev/PROJECT_MASTER_SPEC.md` — 完整架构、工作流程、发布、操作手册权威
+- `docs/OPERATIONS.md` — 面向操作者的使用与维护程序
+- `docs/POSITIONING.md` — 本模板的用途、非用途与定位
 
-如果这些文件尚不存在，当前的最小需求仍为：
+若上述文件尚不存在，当前最小需求仍为：
 
-* `AGENTS.md`
-* `dev/SESSION_HANDOFF.md`
-* `dev/SESSION_LOG.md`
-
----
-
-## :bookmark_tabs: 适用对象
-
-这个模板最适合以下人群：
-
-* 每周都用 AI 写代码
-* 在多个模型或 agent 工具之间切换
-* 长期维护 repo，不只是一次性脚本
-* 想减少重复解释
-* 重视持久的、可追溯的进度
-
-如果这听起来很熟悉，这个模板旨在成为一个实用的起点。
+- `AGENTS.md`
+- `dev/SESSION_HANDOFF.md`
+- `dev/SESSION_LOG.md`
 
 ---
 
 ## :bookmark_tabs: 许可
 
-可自由使用、改编和扩展到你的工作流中。
-如果你改进了它，欢迎回馈能减少漂移而不增加复杂度的模式。
+可自由使用、改编与扩展到你的工作流程中。
+若你有改进，欢迎回馈可降低漂移且不增加复杂度的做法。
