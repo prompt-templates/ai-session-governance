@@ -1,6 +1,6 @@
 [English](README.md) | [繁體中文](README.zh-TW.md) | 简体中文 | [日本語](README.ja.md)
 
-# :rocket: 当一个 AI 工具配额用尽时，立即切换并延续开发
+# :rocket: 支持跨 AI 工具交接的开发治理模板
 
 当你在 Codex、Claude 或 Gemini 的每小时或每周令牌配额用尽时，本模板可让下一个 AI 工具直接承接同一项目状态，无须重新交代背景。
 

@@ -1,6 +1,6 @@
 English | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-# :rocket: Keep shipping when one AI CLI hits quota
+# :rocket: Governance Template for Cross-AI Handoff Workflows
 
 If your Codex / Claude / Gemini hourly or weekly token quota runs out, this template lets the next AI continue from the same project state without re-briefing.
 
