@@ -1,12 +1,12 @@
 # QA Regression Report
 
-Date: 2026-03-02 (UTC)  
-Scope: Governance-flow updates for startup seed context + closeout verbatim persistence + backup/install/readme consistency
+Date: 2026-03-16 (UTC)
+Scope: CODEBASE_CONTEXT + External API Code Safety + PROJECT_MASTER_SPEC active trigger additions; full regression of all prior checks
 
 ## Summary
 
-- Total checks: 29
-- Pass: 29
+- Total checks: 42
+- Pass: 42
 - Fail: 0
 
 ## What was validated
@@ -52,7 +52,26 @@ Scope: Governance-flow updates for startup seed context + closeout verbatim pers
 | Referenced image assets exist and non-zero | PASS |
 | Markdown fence sanity (`AGENTS.md`, `INIT.md`) | PASS |
 
+## Feature round 2 (2026-03-16): CODEBASE_CONTEXT + External API Code Safety + §10 active trigger
+
+| Check | Result |
+|---|---|
+| (30) External API Code Safety subsection present in AGENTS.md §0b | PASS |
+| (31) External API Code Safety subsection present in INIT.md FILE 1 §0b | PASS |
+| (32) Doc-reviewed field defined in block format (both files) | PASS |
+| (33) Test-verified field defined in block format (both files) | PASS |
+| (34) Verification ritual (4 steps) present | PASS |
+| (35) Staleness / re-verification rules (5 items) present | PASS |
+| (36) "Cannot fetch docs → do not write code" rule present | PASS |
+| (37) AGENTS.md / INIT.md parity for §0b key term count | PASS |
+| (38) §1 startup sequence order unchanged (HANDOFF → LOG → CODEBASE_CONTEXT → MASTER_SPEC) | PASS |
+| (39) §10 intent-based trigger present (not mechanical session count) | PASS |
+| (40) §5a + INIT.md backup lists include CODEBASE_CONTEXT (AGENTS: 1, INIT: 2) | PASS |
+| (41) Fence counts even (AGENTS.md: 16, INIT.md: 26) | PASS |
+| (42) No "key architectural" terminology residue | PASS |
+
 ## Notes
 
 - This report validates document and governance consistency at repository level.
 - It does not execute external platform runtime integration tests.
+- Feature round 2 adds: CODEBASE_CONTEXT governance integration, External API Code Safety §0b subsection, PROJECT_MASTER_SPEC §10 intent-based active trigger with filename enforcement.

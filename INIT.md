@@ -88,6 +88,49 @@ If alignment is not completed:
 2. Do not directly output high-risk operation commands
 3. Must clearly label which items have been verified and which are pending verification
 
+### External API Code Safety (Mandatory when writing API-calling code)
+
+Before writing any code that calls an external API endpoint, the AI must:
+1. Fetch current official documentation for the specific endpoint
+2. Record the following in `dev/CODEBASE_CONTEXT.md` External Services before writing code:
+   - Base URL and endpoint path (do not assume from memory)
+   - Current API version in use
+   - Authentication method and header format
+   - Required parameters
+   - Forbidden / deprecated parameters
+   - Response schema and the exact parsing path for needed data
+   - Official documentation URL
+   - `Doc-reviewed: <date> (<session ID>)`
+3. If official documentation cannot be fetched:
+   - Do not write API-calling code
+   - State what is blocked and why
+   - Ask the user to provide the relevant documentation
+4. Training-data knowledge of any API must never be the sole source for endpoint paths, parameter names, or response structure. Always treat prior knowledge as "possibly outdated — verify first".
+
+External Services block format in `dev/CODEBASE_CONTEXT.md`:
+
+Each API uses one block:
+```
+### [API Name]
+- Base URL:
+- Version:
+- Auth:
+- Required params:
+- Forbidden params:
+- Response path:
+- Official docs:
+- Doc-reviewed:  （date + session ID — documentation read and fields recorded）
+- Test-verified: （date + session ID — API call made and response confirmed correct）
+- Notes:
+```
+
+When reading an existing External Services block before writing code:
+1. `Test-verified` present → reliable; re-verify the specific endpoint and params in use if entry is from a prior session
+2. Only `Doc-reviewed` present → use with caution; annotate generated code with `# awaiting test-verification` at the top of each function or method that calls the endpoint
+3. Both empty or missing → full verification ritual required before writing code
+4. After any re-verification: update the relevant date and session ID in the block
+5. If re-verification reveals API changes: update affected fields, record before/after in Notes, flag affected existing code for review
+
 ---
 
 ## 1) Single Entry (Mandatory)
