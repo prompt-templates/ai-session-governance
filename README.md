@@ -210,6 +210,7 @@ Yes. This template is designed to merge into existing project material, not repl
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
+   ├─ CODEBASE_CONTEXT.md      # auto-generated first session
    └─ PROJECT_MASTER_SPEC.md   # optional
 ```
 
@@ -221,6 +222,7 @@ Yes. This template is designed to merge into existing project material, not repl
 - `GEMINI.md` - Gemini pointer to SSOT
 - `dev/SESSION_HANDOFF.md` - current baseline and next priorities
 - `dev/SESSION_LOG.md` - session-by-session history and validation
+- `dev/CODEBASE_CONTEXT.md` - tech stack, external services, key decisions (auto-generated first session)
 - `dev/PROJECT_MASTER_SPEC.md` - optional long-term authority
 
 ---

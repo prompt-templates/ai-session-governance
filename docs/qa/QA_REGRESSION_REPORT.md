@@ -75,3 +75,13 @@ Scope: CODEBASE_CONTEXT + External API Code Safety + PROJECT_MASTER_SPEC active 
 - This report validates document and governance consistency at repository level.
 - It does not execute external platform runtime integration tests.
 - Feature round 2 adds: CODEBASE_CONTEXT governance integration, External API Code Safety §0b subsection, PROJECT_MASTER_SPEC §10 intent-based active trigger with filename enforcement.
+
+## Manual governance checks (cannot be automated with grep)
+
+These require human or live-session verification:
+
+| Check | Type | Notes |
+|---|---|---|
+| §10 suppression: if SESSION_HANDOFF contains "PROJECT_MASTER_SPEC suggestion issued: [session ID] [date]", AI must NOT re-suggest in subsequent sessions unless new arch decisions were made | Behavioral | Verify in live session after §10 suggestion is issued |
+| §0b step 0: if CODEBASE_CONTEXT does not exist, AI generates it before recording External Services | Behavioral | Verify in first-session scenario with API-calling code |
+| §1 generation scan: AI scans README → docs/ARCHITECTURE → package manifests without modifying source files | Behavioral | Verify in first-session scenario |

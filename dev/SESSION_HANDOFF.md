@@ -4,7 +4,7 @@
 1. Version: Post CODEBASE_CONTEXT + External API Code Safety + PROJECT_MASTER_SPEC §10 active trigger additions
 2. Core commands / features: `AGENTS.md` SSOT, `INIT.md` bootstrap parity, session continuity (HANDOFF+LOG+CODEBASE_CONTEXT), External API Code Safety §0b (Doc-reviewed/Test-verified tracking), PROJECT_MASTER_SPEC §10 intent-based active trigger + filename enforcement, dynamic closeout with 3-section layout + random ASCII cues
 3. Regression baseline: 42 checks PASS (QA_REGRESSION_REPORT.md 2026-03-16)
-4. Release / merge status: 4 commits ahead of `origin/main`; not yet pushed
+4. Release / merge status: 8 commits ahead of `origin/main`; not yet pushed
 5. Active branch / environment: `main` @ `D:\_Adam_Projects\KnowledgeDB\_Prompt_Template\ai-session-governance`
 6. External platforms / dependencies in scope: GitHub remote `prompt-templates/ai-session-governance`
 
@@ -59,7 +59,9 @@ If the session's fix involves adding a new rule, first check whether the existin
    - Refactored §10 from mechanical session-count trigger to intent-based trigger
    - Added External API Code Safety §0b subsection: 4-step verification ritual, Doc-reviewed/Test-verified two-status tracking, External Services block format as SSOT in CODEBASE_CONTEXT, 5-item staleness rules, cannot-fetch-docs → stop rule — mirrored to INIT.md FILE 1
    - Updated QA_REGRESSION_REPORT.md from 29 to 42 checks; LATEST.md updated
-   - 4 commits: `37edf88`, `e79a1b8`, `0e0d4df`, `81225c9`
+   - 4 feature commits: `37edf88`, `e79a1b8`, `0e0d4df`, `81225c9`
+   - Code review fixes: `8cd3d1d` (6 issues: §0a External Services, §2 numbering, §10 inline+persistence, annotation language-agnostic, ASCII brackets)
+   - Audit fixes: C1/C2/I3/M1/M2/M3 (§0a External Services, §2 numbering, §0b step 0, re-install strategy, QA manual checks, 4 README CODEBASE_CONTEXT entries)
 4. Pending:
    - Push 4 commits to `origin/main`
 5. Next priorities (max 3):

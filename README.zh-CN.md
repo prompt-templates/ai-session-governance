@@ -216,6 +216,7 @@
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
+   ├─ CODEBASE_CONTEXT.md      # 首次工作阶段自动生成
    └─ PROJECT_MASTER_SPEC.md   # 可选
 ```
 
@@ -227,6 +228,7 @@
 - `GEMINI.md` - Gemini 指针文件
 - `dev/SESSION_HANDOFF.md` - 当前基线与下一步优先事项
 - `dev/SESSION_LOG.md` - 逐工作阶段历史与验证结果
+- `dev/CODEBASE_CONTEXT.md` - 技术栈、外部服务、关键决策（首次工作阶段自动生成）
 - `dev/PROJECT_MASTER_SPEC.md` - 可选的长期权威规格
 
 ---

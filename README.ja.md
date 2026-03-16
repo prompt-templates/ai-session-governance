@@ -216,6 +216,7 @@ AGENTS.md に従ってこのセッションを開始してください
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
+   ├─ CODEBASE_CONTEXT.md      # 初回セッション自動生成
    └─ PROJECT_MASTER_SPEC.md   # optional
 ```
 
@@ -227,6 +228,7 @@ AGENTS.md に従ってこのセッションを開始してください
 - `GEMINI.md` - Gemini用ポインター
 - `dev/SESSION_HANDOFF.md` - 現在基線と次優先事項
 - `dev/SESSION_LOG.md` - セッション履歴と検証記録
+- `dev/CODEBASE_CONTEXT.md` - 技術スタック・外部サービス・主要決定（初回セッション自動生成）
 - `dev/PROJECT_MASTER_SPEC.md` - 任意の長期権威仕様
 
 ---

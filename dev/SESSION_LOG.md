@@ -148,27 +148,30 @@
 Follow AGENTS.md.
 
 Project: ai-session-governance (cross-AI CLI session handoff governance template)
-Branch: main — 4 commits ahead of origin/main (not yet pushed)
+Branch: main — 8 commits ahead of origin/main (not yet pushed)
 Last session: Claude_20260316
 
 Completed this session:
-- CODEBASE_CONTEXT.md governance integration (§0a/§1/§4/§5a, AGENTS+INIT parity)
-- PROJECT_MASTER_SPEC §10 intent-based active trigger + filename enforcement
-- External API Code Safety §0b: 4-step ritual + Doc-reviewed/Test-verified tracking + External Services block format + 5 staleness rules + cannot-fetch-docs stop rule
-- QA regression: 29 → 42 checks, all PASS
-- Commits: 37edf88, e79a1b8, 0e0d4df, 81225c9
+- CODEBASE_CONTEXT.md governance integration (§0a/§1/§2/§4/§5a, AGENTS+INIT parity)
+- PROJECT_MASTER_SPEC §10 intent-based active trigger + filename enforcement + suppression persistence
+- External API Code Safety §0b: step 0 (generate CODEBASE_CONTEXT first if absent) + 4-step ritual + Doc-reviewed/Test-verified tracking + External Services block format + 5 staleness rules + cannot-fetch-docs stop rule
+- Code review: 6 issues fixed (§0a External Services, §2 numbering, §10 inline+persistence, annotation language-agnostic, ASCII brackets)
+- Audit fixes: C1/C2/I3/M1/M2/M3 — §0b step 0, §0a consistency, §2 parity, QA manual checks, 4 README CODEBASE_CONTEXT entries
+- QA regression: 29 → 42 checks + manual governance checks added; all PASS after fixes
+- All commits: 37edf88, e79a1b8, 0e0d4df, 81225c9, 0dd5c2a, 8cd3d1d (+ audit-fix TBD)
 
 Pending:
-1. Push 4 commits to origin/main when ready to publish
+1. Push all commits to origin/main when ready to publish
 2. (Optional) Generate dev/CODEBASE_CONTEXT.md for this governance repo by scanning README + docs/
 
-Key files changed: AGENTS.md, INIT.md, docs/qa/QA_REGRESSION_REPORT.md, docs/qa/LATEST.md, docs/plans/2026-03-16-*.md
+Key files changed: AGENTS.md, INIT.md, README*.md (×4), docs/qa/QA_REGRESSION_REPORT.md, docs/qa/LATEST.md, docs/plans/2026-03-16-*.md
 
 Cautions:
 - Every AGENTS.md governance rule change must be mirrored to INIT.md FILE 1 embedded copy
 - Fence counts must remain even after any edit (AGENTS: 16, INIT: 26)
+- §0b step 0: if CODEBASE_CONTEXT doesn't exist, generate it before recording External Services
 
-First action: git status, confirm working tree clean (only SESSION files unstaged), then ask user what to do next.
+First action: git status, confirm working tree, then ask user what to do next.
 ```
 
 ---

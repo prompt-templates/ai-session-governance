@@ -26,7 +26,7 @@ Hard rules:
 4. Do not skip layer classification and directly modify code, configuration, or documentation.
 
 Note:
-`dev/CODEBASE_CONTEXT.md` contains Product / System Layer content (tech stack, directory map, build commands, Key Decisions).
+`dev/CODEBASE_CONTEXT.md` contains Product / System Layer content (tech stack, directory map, build commands, External Services, and Key Decisions).
 It is stored in `dev/` by path convention (so session tooling can locate it predictably), not because it belongs to the Development Governance Layer.
 
 ---
@@ -48,6 +48,7 @@ If alignment is not completed:
 ### External API Code Safety (Mandatory when writing API-calling code)
 
 Before writing any code that calls an external API endpoint, the AI must:
+0. If `dev/CODEBASE_CONTEXT.md` does not yet exist, generate it first per §1 rules before proceeding — the External Services section is required to record API facts.
 1. Fetch current official documentation for the specific endpoint
 2. Record the following in `dev/CODEBASE_CONTEXT.md` External Services before writing code:
    - Base URL and endpoint path (do not assume from memory)
@@ -166,8 +167,8 @@ Supplementary rules:
 1. `SESSION_HANDOFF.md` and `SESSION_LOG.md` represent the "current state".
 2. `CODEBASE_CONTEXT.md` represents stable project facts that change only when the tech stack, External Services, or Key Decisions change.
 3. `PROJECT_MASTER_SPEC.md` represents "long-term stable rules and the complete authoritative reference".
-3. If the current state is inconsistent with an older specification, defer to the handoff/log first, and remediate specification drift during the PERSIST phase.
-4. If `SESSION_LOG.md` contains a latest `Next Session Handoff Prompt (Verbatim)` block, treat it as operational seed context, but do not let it override higher-priority current-state facts in `SESSION_HANDOFF.md` / latest log facts.
+4. If the current state is inconsistent with an older specification, defer to the handoff/log first, and remediate specification drift during the PERSIST phase.
+5. If `SESSION_LOG.md` contains a latest `Next Session Handoff Prompt (Verbatim)` block, treat it as operational seed context, but do not let it override higher-priority current-state facts in `SESSION_HANDOFF.md` / latest log facts.
 
 ---
 
