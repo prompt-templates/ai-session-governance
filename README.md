@@ -30,6 +30,19 @@ This template enforces:
 
 ---
 
+## :bookmark_tabs: Built-in safeguards
+
+Beyond session handoff, the template enforces safeguards for recurring AI failure modes:
+
+| Safeguard | What it prevents |
+|---|---|
+| **External API Code Safety** | Writing API-calling code from hallucinated endpoint / schema memory; requires doc-verified baseline before coding |
+| **Codebase context snapshot** | Relearning tech stack, external services, and key decisions from scratch every session |
+| **Test plan governance** | Merging changes without a scenario matrix — expected vs. actual outcomes untracked |
+| **Consolidation discipline** | Rule accumulation without checking whether existing rules should be updated first |
+
+---
+
 <a id="quickstart"></a>
 
 ## :bookmark_tabs: 30-second Quick Start
@@ -243,8 +256,8 @@ Detailed claim mapping and platform validation are maintained in:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-Snapshot status (as of 2026-02-27):
-- AGENTS/INIT rule parity: verified
+Snapshot status (as of 2026-03-16):
+- AGENTS/INIT rule parity: verified (51-check regression suite)
 - Multi-platform pointer behavior: verified
 - Longitudinal 50+ session durability: not yet verified
 
