@@ -210,6 +210,7 @@ Every task must follow this workflow and clearly label each phase in the respons
 
 1. PLAN
    - Objective, scope, risks, acceptance criteria
+   - If task meets §3d trigger conditions: define test scenario matrix before proceeding to READ
 
 2. READ
    - Read necessary files, verify current state, classify sources, check for duplicates and confirm impact scope
@@ -219,6 +220,7 @@ Every task must follow this workflow and clearly label each phase in the respons
 
 4. QC
    - Run tests / checks, list results (test/check commands and key outcomes)
+   - If a test scenario matrix was defined in PLAN (§3d): verify each scenario and record actual result; summarize overall as PASS / PASS with notes / FAIL
    - If the task involves batch deletion or batch modification, a dry-run (e.g. `ls` / `find` preview, PowerShell `-WhatIf`, etc.) with a "blast radius" list must be provided for confirmation first
 
 5. PERSIST
@@ -272,6 +274,42 @@ Whenever a task involves a merge, release, deploy, publish, GA, or hotfix comple
 
 4. Failure Rule
    - If any critical check fails, do not claim ready / release / GA
+
+---
+
+## 3d) Test Plan Design (Mandatory when applicable)
+
+### Trigger conditions
+Apply §3d when the task involves any of the following:
+1. New user-facing features, commands, or behaviors
+2. Changes to existing behavior (including governance rule changes)
+3. External API or service integrations
+4. Multi-step user flows (install, onboarding, upgrade paths)
+
+Not required for: session log updates, whitespace / formatting only, comment-only changes.
+
+### Scenario categories
+For every applicable task, identify at least one scenario per relevant category:
+1. Normal flow — expected inputs, happy path
+2. Boundary / edge conditions — limits, empty inputs, first-run vs. repeat-run
+3. Error / failure path — what happens when something is unavailable or wrong
+4. Regression — existing behavior that must remain unchanged
+
+Adapt categories to project type:
+- Code projects: unit, integration, or E2E as appropriate
+- Governance / documentation projects: rule presence checks, parity checks, grep-verifiable assertions
+- Prompt engineering projects: output format checks, behavioral assertions
+
+### Scenario format (fill Actual column at QC phase)
+
+| Scenario | Precondition | Action / input | Expected | Actual | Result |
+|---|---|---|---|---|---|
+| [name] | [starting state] | [what happens] | [expected outcome] | [fill at QC] | PASS/FAIL |
+
+### Recording location
+- ≤5 scenarios: inline in current SESSION_LOG entry under `### Test Scenarios`
+- >5 scenarios or spanning multiple sessions: reference in SESSION_HANDOFF `Regression / Verification Notes`; full matrix in SESSION_LOG
+- At QC phase: fill in Actual column; summarize overall result in SESSION_LOG
 
 ---
 
