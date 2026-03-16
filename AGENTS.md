@@ -489,6 +489,18 @@ Positioning:
 2. `SESSION_LOG.md`: session-by-session historical decisions and verifications
 3. `PROJECT_MASTER_SPEC.md`: complete, stable, long-term authoritative specification
 
+Active trigger rule:
+At the PERSIST phase of any session, if all of the following are true, the AI must suggest creating `dev/PROJECT_MASTER_SPEC.md`:
+1. `dev/PROJECT_MASTER_SPEC.md` does not yet exist
+2. `dev/SESSION_LOG.md` contains 2 or more completed session entries (counted by `## YYYY-MM-DD` date headings that have body content below them)
+3. At least one condition from the list above is met
+
+The suggestion must state: which condition was triggered, what content from `SESSION_LOG.md` is ready to consolidate, and a ready-to-use prompt the user can paste to initiate creation.
+
+Filename enforcement:
+If creating this file, the path must be exactly `dev/PROJECT_MASTER_SPEC.md`.
+Do not use alternative names such as `SPEC.md`, `MASTER_SPEC.md`, `ARCHITECTURE.md`, or `PROJECT_SPEC.md`.
+
 ---
 
 ## 11) Output Contract
