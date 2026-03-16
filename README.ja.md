@@ -140,19 +140,13 @@ AGENTS.md に従ってこのセッションを開始してください
 AGENTS.md に従ってこのセッションを開始してください
 ```
 
-### :small_blue_diamond: 2) 同一セッションで作業を継続
-
-```text
-現在の状態から継続し、PLAN -> READ -> CHANGE -> QC -> PERSIST に従って進めてください。
-```
-
-### :small_blue_diamond: 3) セッションを収束して完全引き継ぎを実施
+### :small_blue_diamond: 2) セッションを収束して完全引き継ぎを実施
 
 ```text
 このセッションを収束し、完全な引き継ぎまで実行してください。
 ```
 
-### :small_blue_diamond: 4) 次のセッションをすぐ開始
+### :small_blue_diamond: 3) 次のセッションをすぐ開始
 
 ```text
 <前回出力の「NEXT SESSION HANDOFF PROMPT (COPY/PASTE)」ブロックを原文のまま貼り付けてください。>

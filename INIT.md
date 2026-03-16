@@ -818,15 +818,11 @@ Then say: "Governance setup complete.
    ────────────────────
    Follow AGENTS.md
 
-2) Continue work in the same session
-   ────────────────────────────────────
-   Continue from the current state and proceed with PLAN → READ → CHANGE → QC → PERSIST.
-
-3) Close session with full handoff
+2) Close session with full handoff
    ────────────────────────────────
    Wrap up this session with full closeout and handover.
 
-4) Resume in another AI tool (after quota switch)
+3) Resume in another AI tool (after quota switch)
    ──────────────────────────────────────────────────
    <Paste the NEXT SESSION HANDOFF PROMPT (COPY/PASTE) block from the previous session, unchanged.>
 

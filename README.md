@@ -134,19 +134,13 @@ Do not copy this repository manually into another project root. Use `INIT.md` so
 Follow AGENTS.md
 ```
 
-### :small_blue_diamond: 2) Continue current work
-
-```text
-Continue from the current state and proceed with PLAN -> READ -> CHANGE -> QC -> PERSIST.
-```
-
-### :small_blue_diamond: 3) Close with full handoff
+### :small_blue_diamond: 2) Close with full handoff
 
 ```text
 Wrap up this session with full closeout and handover.
 ```
 
-### :small_blue_diamond: 4) Resume in another AI CLI
+### :small_blue_diamond: 3) Resume in another AI CLI
 
 ```text
 <Paste the previous "NEXT SESSION HANDOFF PROMPT (COPY/PASTE)" block here, unchanged.>

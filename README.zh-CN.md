@@ -140,19 +140,13 @@
 请按 AGENTS.md 开始本次工作阶段
 ```
 
-### :small_blue_diamond: 2) 在同一工作阶段持续推进
-
-```text
-请按当前状态继续，并按 PLAN -> READ -> CHANGE -> QC -> PERSIST 推进。
-```
-
-### :small_blue_diamond: 3) 收尾并完成完整交接
+### :small_blue_diamond: 2) 收尾并完成完整交接
 
 ```text
 请为本次工作阶段完成收尾与完整交接。
 ```
 
-### :small_blue_diamond: 4) 快速开始下一个工作阶段
+### :small_blue_diamond: 3) 快速开始下一个工作阶段
 
 ```text
 <请粘贴上一轮输出的“NEXT SESSION HANDOFF PROMPT (COPY/PASTE)”区块（保持原文）。>
