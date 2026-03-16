@@ -73,6 +73,7 @@
    - `INSTALL_WRITE_OK`
 7. 在首次写入前，AI 会在 `<PROJECT_ROOT>/dev/init_backup/<UTC_TIMESTAMP>/` 自动创建轻量备份快照，保存已有治理目标文件
 8. AI 会在你确认的项目根目录中创建或合并 5 个治理文件
+9. AI 自动输出 **Quick Start** 区块，含可直接复制粘贴的操作指令 — 无须另行记忆
 
 ### :small_blue_diamond: 安装流程界面
 

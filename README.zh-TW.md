@@ -73,6 +73,7 @@
    - `INSTALL_WRITE_OK`
 7. 在首次寫入前，AI 會於 `<PROJECT_ROOT>/dev/init_backup/<UTC_TIMESTAMP>/` 自動建立輕量備份快照，保存既有治理目標檔案
 8. AI 會在你確認的專案根目錄中建立或合併 5 個治理檔案
+9. AI 自動輸出 **Quick Start** 區塊，含可直接複製貼上的操作指令 — 無須另行記憶
 
 ### :small_blue_diamond: 安裝流程畫面
 

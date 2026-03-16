@@ -73,6 +73,7 @@ Follow AGENTS.md
    - `INSTALL_WRITE_OK`
 7. Before first write, AI creates a lightweight backup snapshot at `<PROJECT_ROOT>/dev/init_backup/<UTC_TIMESTAMP>/` for existing target governance files
 8. AI creates/merges 5 governance files in the confirmed project root
+9. AI prints a **Quick Start** block with copy-paste commands — no need to memorize session commands
 
 ### :small_blue_diamond: Install UI walkthrough
 
