@@ -349,6 +349,8 @@ Adapt categories to project type:
 |---|---|---|---|---|---|
 | [name] | [starting state] | [what happens] | [expected outcome] | [fill at QC] | PASS/FAIL |
 
+Result values: PASS, PASS with notes (minor gaps but does not block), or FAIL.
+
 ### Recording location
 - ≤5 scenarios: inline in current SESSION_LOG entry under `### Test Scenarios`
 - >5 scenarios or spanning multiple sessions: reference in SESSION_HANDOFF `Regression / Verification Notes`; full matrix in SESSION_LOG
@@ -784,6 +786,13 @@ Rule if exists: skip, do not overwrite.
 3. What was merged:
 4. What was retired / superseded:
 5. Why consolidation was needed:
+
+### Test Scenarios (if §3d applies)
+| Scenario | Precondition | Action / input | Expected | Actual | Result |
+|---|---|---|---|---|---|
+| | | | | | |
+
+Overall: PASS / PASS with notes / FAIL
 
 ### Next Session Handoff Prompt (Verbatim)
 <paste the exact closeout Section 2 block content here, including its fenced text block>

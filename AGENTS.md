@@ -306,6 +306,8 @@ Adapt categories to project type:
 |---|---|---|---|---|---|
 | [name] | [starting state] | [what happens] | [expected outcome] | [fill at QC] | PASS/FAIL |
 
+Result values: PASS, PASS with notes (minor gaps but does not block), or FAIL.
+
 ### Recording location
 - ≤5 scenarios: inline in current SESSION_LOG entry under `### Test Scenarios`
 - >5 scenarios or spanning multiple sessions: reference in SESSION_HANDOFF `Regression / Verification Notes`; full matrix in SESSION_LOG

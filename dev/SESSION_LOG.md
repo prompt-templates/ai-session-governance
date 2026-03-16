@@ -203,3 +203,10 @@ First action: git status, confirm working tree, then ask user what to do next.
 3. What was merged:
 4. What was retired / superseded:
 5. Why consolidation was needed:
+
+### Test Scenarios (if §3d applies)
+| Scenario | Precondition | Action / input | Expected | Actual | Result |
+|---|---|---|---|---|---|
+| | | | | | |
+
+Overall: PASS / PASS with notes / FAIL
