@@ -119,14 +119,14 @@ Each API uses one block:
 - Forbidden params:
 - Response path:
 - Official docs:
-- Doc-reviewed:  （date + session ID — documentation read and fields recorded）
-- Test-verified: （date + session ID — API call made and response confirmed correct）
+- Doc-reviewed:  (date + session ID — documentation read and fields recorded)
+- Test-verified: (date + session ID — API call made and response confirmed correct)
 - Notes:
 ```
 
 When reading an existing External Services block before writing code:
 1. `Test-verified` present → reliable; re-verify the specific endpoint and params in use if entry is from a prior session
-2. Only `Doc-reviewed` present → use with caution; annotate generated code with `# awaiting test-verification` at the top of each function or method that calls the endpoint
+2. Only `Doc-reviewed` present → use with caution; annotate generated code with a comment `awaiting test-verification` (using the target language's comment syntax) at the top of each function or method that calls the endpoint
 3. Both empty or missing → full verification ritual required before writing code
 4. After any re-verification: update the relevant date and session ID in the block
 5. If re-verification reveals API changes: update affected fields, record before/after in Notes, flag affected existing code for review
@@ -138,7 +138,7 @@ At the start of every new session, the AI must read the following files in this 
 
 1. `dev/SESSION_HANDOFF.md`
 2. `dev/SESSION_LOG.md`
-3. `dev/CODEBASE_CONTEXT.md` (if it exists; provides tech stack, directory map, build commands, and Key Decisions)
+3. `dev/CODEBASE_CONTEXT.md` (if it exists; provides tech stack, directory map, build commands, External Services, and Key Decisions)
 4. `dev/PROJECT_MASTER_SPEC.md` (if it exists; serves as the advanced authoritative specification)
 
 If `dev/SESSION_HANDOFF.md` or `dev/SESSION_LOG.md` is missing, the AI must create a minimal version before beginning development.
@@ -200,15 +200,17 @@ When documents conflict, the priority order is as follows:
 
 1. `dev/SESSION_HANDOFF.md` (current baseline, execution thresholds, open items, current state)
 2. `dev/SESSION_LOG.md` (latest changes, historical decisions, most recent fixes and verifications)
-3. `dev/PROJECT_MASTER_SPEC.md` (if it exists; long-term stable specifications, architecture, runbook, release rules)
-4. Other README / docs / comments / tests
-5. Verbal memory and speculation (must not be used as a basis for decisions)
+3. `dev/CODEBASE_CONTEXT.md` (if it exists; stable project facts — tech stack, External Services, Key Decisions)
+4. `dev/PROJECT_MASTER_SPEC.md` (if it exists; long-term stable specifications, architecture, runbook, release rules)
+5. Other README / docs / comments / tests
+6. Verbal memory and speculation (must not be used as a basis for decisions)
 
 Supplementary rules:
 1. `SESSION_HANDOFF.md` and `SESSION_LOG.md` represent the "current state".
-2. `PROJECT_MASTER_SPEC.md` represents "long-term stable rules and the complete authoritative reference".
-3. If the current state is inconsistent with an older specification, defer to the handoff/log first, and remediate specification drift during the PERSIST phase.
-4. If `SESSION_LOG.md` contains a latest `Next Session Handoff Prompt (Verbatim)` block, treat it as operational seed context, but do not let it override higher-priority current-state facts in `SESSION_HANDOFF.md` / latest log facts.
+2. `CODEBASE_CONTEXT.md` represents stable project facts that change only when the tech stack, External Services, or Key Decisions change.
+3. `PROJECT_MASTER_SPEC.md` represents "long-term stable rules and the complete authoritative reference".
+4. If the current state is inconsistent with an older specification, defer to the handoff/log first, and remediate specification drift during the PERSIST phase.
+5. If `SESSION_LOG.md` contains a latest `Next Session Handoff Prompt (Verbatim)` block, treat it as operational seed context, but do not let it override higher-priority current-state facts in `SESSION_HANDOFF.md` / latest log facts.
 
 ---
 
@@ -578,10 +580,11 @@ Positioning:
 Active trigger rule:
 At the PERSIST phase, if `dev/PROJECT_MASTER_SPEC.md` does not yet exist, the AI must suggest creating it when either of the following applies:
 1. The user explicitly requested it during this session
-2. This session involved the user and AI establishing architecture decisions, tech stack choices, or core feature requirements, AND at least one condition from the list above is met
+2. This session involved the user and AI establishing architecture decisions, tech stack choices, or core feature requirements, AND at least one condition from the list above is met (i.e., the project qualifies as multi-module, long-term, has a release lifecycle, or has complex spec/runbook needs)
 
 The suggestion must state: which trigger applied, what decisions from this session are ready to consolidate, and a ready-to-use prompt the user can paste to initiate creation.
-Do not repeat the suggestion in subsequent sessions unless new major architecture or requirement decisions were made in that session.
+When the suggestion is made, record a line in `dev/SESSION_HANDOFF.md` under Open Priorities or Known Risks: `PROJECT_MASTER_SPEC suggestion issued: [session ID] [date].`
+Do not repeat the suggestion in subsequent sessions unless new major architecture or requirement decisions were made after that recorded date.
 
 Filename enforcement:
 If creating this file, the path must be exactly `dev/PROJECT_MASTER_SPEC.md`.
