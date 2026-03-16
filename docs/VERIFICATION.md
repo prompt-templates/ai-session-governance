@@ -2,7 +2,7 @@
 
 This document keeps the detailed claim mapping and platform compatibility checks referenced by README files.
 
-Verification date baseline: 2026-02-27 (UTC)
+Verification date baseline: 2026-03-16 (UTC)
 
 ## Claim-to-mechanism mapping
 
@@ -17,6 +17,8 @@ Verification date baseline: 2026-02-27 (UTC)
 | Multi-agent session ID standard | AGENTS.md section 12 | Yes |
 | File safety governance | AGENTS.md section 5, section 6 | Yes |
 | Integration with existing project docs | AGENTS.md line 2 merge/preserve instruction | Yes |
+| External API code safety | AGENTS.md section 0b External API Code Safety | Yes |
+| Test plan governance | AGENTS.md section 3d Test Plan Design | Yes |
 
 ## Platform compatibility verified
 
@@ -30,7 +32,7 @@ Verification date baseline: 2026-02-27 (UTC)
 
 - Latest QA pointer: [docs/qa/LATEST.md](qa/LATEST.md)
 - Current detailed report: [docs/qa/QA_REGRESSION_REPORT.md](qa/QA_REGRESSION_REPORT.md)
-- Latest run snapshot (UTC): 2026-03-02, 29 checks, 29 pass, 0 fail
+- Latest run snapshot (UTC): 2026-03-16, 51 checks, 51 pass, 0 fail
 
 ## Not yet verified
 

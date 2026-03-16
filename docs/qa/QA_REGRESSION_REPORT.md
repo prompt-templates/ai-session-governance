@@ -1,12 +1,12 @@
 # QA Regression Report
 
 Date: 2026-03-16 (UTC)
-Scope: CODEBASE_CONTEXT + External API Code Safety + PROJECT_MASTER_SPEC active trigger additions; full regression of all prior checks
+Scope: CODEBASE_CONTEXT + External API Code Safety + PROJECT_MASTER_SPEC active trigger + §3d Test Plan Design additions; full regression of all prior checks
 
 ## Summary
 
-- Total checks: 42
-- Pass: 42
+- Total checks: 51
+- Pass: 51
 - Fail: 0
 
 ## What was validated
@@ -70,11 +70,26 @@ Scope: CODEBASE_CONTEXT + External API Code Safety + PROJECT_MASTER_SPEC active 
 | (41) Fence counts even (AGENTS.md: 16, INIT.md: 26) | PASS |
 | (42) No "key architectural" terminology residue | PASS |
 
+## Feature round 3 (2026-03-16): §3d Test Plan Design governance
+
+| Check | Result |
+|---|---|
+| (43) §3d Test Plan Design heading present in AGENTS.md | PASS |
+| (44) §3d Test Plan Design heading present in INIT.md FILE 1 | PASS |
+| (45) §3 PLAN bullet references `test scenario matrix` in AGENTS.md (≥1) | PASS |
+| (46) §3 PLAN bullet references `test scenario matrix` in INIT.md (≥1) | PASS |
+| (47) §3 QC bullet: `verify each scenario` present in AGENTS.md | PASS |
+| (48) §3 QC bullet: `verify each scenario` present in INIT.md | PASS |
+| (49) §3d `Result values: PASS, PASS with notes` note present in AGENTS.md + INIT.md (1 each) | PASS |
+| (50) `### Test Scenarios (if §3d applies)` template present in INIT.md | PASS |
+| (51) `### Test Scenarios (if §3d applies)` template present in `dev/SESSION_LOG.md` | PASS |
+
 ## Notes
 
 - This report validates document and governance consistency at repository level.
 - It does not execute external platform runtime integration tests.
 - Feature round 2 adds: CODEBASE_CONTEXT governance integration, External API Code Safety §0b subsection, PROJECT_MASTER_SPEC §10 intent-based active trigger with filename enforcement.
+- Feature round 3 adds: §3d Test Plan Design conditional subsection (4 trigger conditions, 4 scenario categories, project-type adaptations, table format, recording location rules).
 
 ## Manual governance checks (cannot be automated with grep)
 
