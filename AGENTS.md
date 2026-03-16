@@ -102,10 +102,15 @@ At the start of every new session, the AI must read the following files in this 
 If `dev/SESSION_HANDOFF.md` or `dev/SESSION_LOG.md` is missing, the AI must create a minimal version before beginning development.
 
 If `dev/CODEBASE_CONTEXT.md` does not exist, the AI must generate it during the first session:
-1. Scan existing project files in this order: `README.md`, `docs/ARCHITECTURE.md`, `package.json` / `pyproject.toml` / `go.mod` / `Cargo.toml` (whichever apply), any other architecture or design docs found in `docs/`
-2. Extract relevant information into the following sections: Stack, Directory Map, Key Entry Points, Build & Run, External Services, Key Decisions (leave blank if none), AI Maintenance Log
-3. Record source files scanned in the `AI Maintenance Log` section
-4. Never modify the source files during this scan
+0. If the file already exists for any reason, back it up to `dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/` before making any changes
+1. Scan existing project files — include all of the following that are present (do not limit to this list):
+   - Documentation: `README*.md`, `CONTRIBUTING.md`, `DEVELOPMENT.md`, `docs/**/*.md` (architecture, design, API, integration docs)
+   - Package manifests: `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `Gemfile`, `requirements.txt`, `composer.json`
+   - Service / environment clues: `.env.example`, `docker-compose*.yml`, `*.yaml` / `*.yml` config files in root or `config/` (for external service names and env vars)
+2. Extract and integrate — if the same service, dependency, or decision appears in multiple files, consolidate into one entry; do not duplicate
+3. Fill in sections: Stack, Directory Map, Key Entry Points, Build & Run, External Services, Key Decisions (leave blank if none), AI Maintenance Log
+4. Record all source files scanned in the `AI Maintenance Log` section
+5. Never modify the source files during this scan — read only
 
 After reading `dev/SESSION_LOG.md`, the AI must locate the latest `### Next Session Handoff Prompt (Verbatim)` block (if present) and use that block as startup execution seed context for PLAN.
 
