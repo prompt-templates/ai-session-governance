@@ -1,10 +1,10 @@
 # Session Handoff
 
 ## Current Baseline
-1. Version: Post CODEBASE_CONTEXT + External API Code Safety + PROJECT_MASTER_SPEC §10 active trigger additions
-2. Core commands / features: `AGENTS.md` SSOT, `INIT.md` bootstrap parity, session continuity (HANDOFF+LOG+CODEBASE_CONTEXT), External API Code Safety §0b (Doc-reviewed/Test-verified tracking), PROJECT_MASTER_SPEC §10 intent-based active trigger + filename enforcement, dynamic closeout with 3-section layout + random ASCII cues
+1. Version: Post §3d Test Plan Design governance addition
+2. Core commands / features: `AGENTS.md` SSOT, `INIT.md` bootstrap parity, session continuity (HANDOFF+LOG+CODEBASE_CONTEXT), External API Code Safety §0b (Doc-reviewed/Test-verified tracking), PROJECT_MASTER_SPEC §10 intent-based active trigger + filename enforcement, §3d Test Plan Design (4 trigger conditions, 4 scenario categories, table format, recording rules), dynamic closeout with 3-section layout + random ASCII cues
 3. Regression baseline: 42 checks PASS (QA_REGRESSION_REPORT.md 2026-03-16)
-4. Release / merge status: 8 commits ahead of `origin/main`; not yet pushed
+4. Release / merge status: 10 commits ahead of `origin/main`; not yet pushed
 5. Active branch / environment: `main` @ `D:\_Adam_Projects\KnowledgeDB\_Prompt_Template\ai-session-governance`
 6. External platforms / dependencies in scope: GitHub remote `prompt-templates/ai-session-governance`
 
@@ -25,7 +25,7 @@
 8. Search for related SSOT / spec / runbook before change: `AGENTS.md` and matching `INIT.md` blocks
 
 ## Open Priorities
-1. Push 4 commits to `origin/main` when ready to publish
+1. Push 10 commits to `origin/main` when ready to publish
 2. Monitor AGENTS.md / INIT.md parity on any future governance-rule changes
 3. Monitor multilingual README drift when future heading edits occur
 
@@ -52,18 +52,16 @@ If the session's fix involves adding a new rule, first check whether the existin
 
 ## Last Session Record
 1. UTC date: 2026-03-16
-2. Session ID: Claude_20260316
+2. Session ID: Claude_20260316b
 3. Completed:
-   - Added `dev/CODEBASE_CONTEXT.md` governance integration: §0a layer note, §1 startup sequence (position 3), first-session auto-generation rule, §4 closeout update condition, §5a backup list — mirrored to INIT.md FILE 1
-   - Added PROJECT_MASTER_SPEC §10 active trigger rule (intent-based: user explicitly requested OR session established arch/requirements decisions) + Filename enforcement (`dev/PROJECT_MASTER_SPEC.md` only)
-   - Refactored §10 from mechanical session-count trigger to intent-based trigger
-   - Added External API Code Safety §0b subsection: 4-step verification ritual, Doc-reviewed/Test-verified two-status tracking, External Services block format as SSOT in CODEBASE_CONTEXT, 5-item staleness rules, cannot-fetch-docs → stop rule — mirrored to INIT.md FILE 1
-   - Updated QA_REGRESSION_REPORT.md from 29 to 42 checks; LATEST.md updated
-   - 4 feature commits: `37edf88`, `e79a1b8`, `0e0d4df`, `81225c9`
-   - Code review fixes: `8cd3d1d` (6 issues: §0a External Services, §2 numbering, §10 inline+persistence, annotation language-agnostic, ASCII brackets)
-   - Audit fixes: C1/C2/I3/M1/M2/M3 (§0a External Services, §2 numbering, §0b step 0, re-install strategy, QA manual checks, 4 README CODEBASE_CONTEXT entries)
+   - Added §3d Test Plan Design governance subsection: 4 trigger conditions (new features, behavior changes, API integrations, multi-step flows), 4 scenario categories (Normal/Boundary/Error/Regression), project-type adaptations (Code/Governance+docs/Prompt), markdown table format, recording location rules (≤5 inline / >5 HANDOFF reference) — mirrored to INIT.md FILE 1
+   - Added §3 PLAN bullet: define test scenario matrix when §3d triggers apply
+   - Added §3 QC bullet: verify each scenario; summarize as PASS / PASS with notes / FAIL
+   - Fixed code review issues: Result values note in §3d Scenario format (PASS / PASS with notes / FAIL); `### Test Scenarios (if §3d applies)` template in INIT.md + SESSION_LOG.md
+   - Implementation plan archived: `docs/plans/2026-03-16-test-plan-governance-impl.md`
+   - Commits: `9a4d706` (§3d feat), `350fcd9` (code review fixes)
 4. Pending:
-   - Push 4 commits to `origin/main`
+   - Push 10 commits to `origin/main`
 5. Next priorities (max 3):
    (1) Push commits to remote when ready to publish
    (2) Consider creating `dev/CODEBASE_CONTEXT.md` for this governance repo itself (scan README, docs/)
@@ -71,13 +69,11 @@ If the session's fix involves adding a new rule, first check whether the existin
 6. Risks / blockers:
    - No technical blocker
 7. Files materially changed:
-   - `AGENTS.md`, `INIT.md`, `docs/qa/QA_REGRESSION_REPORT.md`, `docs/qa/LATEST.md`, `docs/plans/2026-03-16-codebase-context-design.md`, `docs/plans/2026-03-16-codebase-context-impl.md`, `docs/plans/2026-03-16-external-api-safety-design.md`, `docs/plans/2026-03-16-external-api-safety-impl.md`
+   - `AGENTS.md`, `INIT.md`, `dev/SESSION_LOG.md`, `docs/plans/2026-03-16-test-plan-governance-impl.md`
 8. Validation summary:
-   - All 42 QA regression checks PASS
+   - All 42 QA regression checks PASS (no new checks added this session — §3d is governance doc only)
    - AGENTS.md fence count: 16 (even) PASS
    - INIT.md fence count: 26 (even) PASS
-   - AGENTS/INIT §0b key term parity: 6 each PASS
+   - AGENTS/INIT §3d key term parity: matching PASS
 9. Consolidation actions taken:
-   - Replaced mechanical §10 trigger (session-count based) with intent-based trigger — retired old wording
-   - Fixed "key architectural decisions" → "Key Decisions" consistently across §0a/§1/§4
-   - Fixed "governance tooling predictability" → "by path convention (so session tooling can locate it predictably)"
+   - §3d is new conditional subsection (not a duplicate); no retirement needed

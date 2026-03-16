@@ -176,6 +176,100 @@ First action: git status, confirm working tree, then ask user what to do next.
 
 ---
 
+## 2026-03-16
+1. Agent & Session ID: Claude_20260316b
+2. Task summary: Added §3d Test Plan Design governance subsection — scenario matrix, trigger conditions, scenario categories, project-type adaptations, recording rules; fixed code review issues (Result values, Test Scenarios template)
+3. Layer classification: Product / System Layer (governance rule addition)
+4. Source triage: Governance documentation extension; no runtime code changes
+5. Files read: `AGENTS.md`, `INIT.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `docs/plans/2026-03-16-test-plan-governance-impl.md`
+6. Files changed: `AGENTS.md`, `INIT.md`, `dev/SESSION_LOG.md`, `dev/SESSION_HANDOFF.md`, `docs/plans/2026-03-16-test-plan-governance-impl.md`
+7. Completed:
+   - §3 PLAN bullet: `If task meets §3d trigger conditions: define test scenario matrix before proceeding to READ`
+   - §3 QC bullet: `If a test scenario matrix was defined in PLAN (§3d): verify each scenario and record actual result; summarize overall as PASS / PASS with notes / FAIL`
+   - §3d new subsection: 4 trigger conditions (new features, behavior changes, API integrations, multi-step flows); 4 scenario categories (Normal/Boundary/Error/Regression); project-type adaptations (Code/Governance+docs/Prompt); markdown table format; recording location rules (≤5 inline / >5 HANDOFF reference)
+   - §3d Scenario format note: `Result values: PASS, PASS with notes (minor gaps but does not block), or FAIL`
+   - `### Test Scenarios (if §3d applies)` template in INIT.md + SESSION_LOG.md blank template
+   - All changes mirrored to INIT.md FILE 1 for bootstrap parity
+   - Commits: `9a4d706` (§3d feat), `350fcd9` (code review fixes)
+8. Validation / QC:
+   - §3d key terms in both AGENTS.md + INIT.md: PASS
+   - §3 PLAN + QC bullets updated: PASS
+   - `Result values` note in §3d Scenario format: PASS
+   - `### Test Scenarios` template in INIT.md + SESSION_LOG.md: PASS
+   - AGENTS.md fence count: 16 (even) PASS
+   - INIT.md fence count: 26 (even) PASS
+   - All 42 regression checks: PASS (no new checks; §3d is governance doc only)
+9. Pending:
+   - Push 10 commits to `origin/main` when ready to publish
+10. Next priorities:
+   (1) Push commits to remote when ready to publish
+   (2) Consider generating `dev/CODEBASE_CONTEXT.md` for this governance repo
+   (3) Maintain AGENTS/INIT parity on any future governance-rule changes
+11. Risks / blockers:
+   - No technical blocker
+12. Notes:
+   - §3d is a conditional subsection — only applies when trigger conditions are met; not required for every task
+   - Subagent-Driven Development used (implementer → spec reviewer → code quality reviewer)
+
+### Problem -> Root Cause -> Fix -> Verification
+1. Problem: No governance guidance for designing and tracking test/verification scenarios during development
+2. Root Cause: §3 workflow had QC phase but no upfront test planning discipline; led to ad-hoc verification
+3. Fix: Added §3d conditional subsection with trigger conditions, scenario categories, table format, and recording location rules; referenced from §3 PLAN and QC phases
+4. Verification: Key term parity checks PASS; fence counts even PASS; all 42 regression checks PASS
+5. Regression / rule update: QA report not extended (§3d is governance doc; no grep-checkable regression added this session)
+
+### Consolidation / Retirement Record
+1. Duplicate / drift found: No duplicate; §3d is entirely new content
+2. Single source of truth chosen: `AGENTS.md` §3d (then mirrored to INIT.md FILE 1)
+3. What was merged: N/A
+4. What was retired / superseded: N/A
+5. Why consolidation was needed: N/A
+
+### Test Scenarios (if §3d applies)
+| Scenario | Precondition | Action / input | Expected | Actual | Result |
+|---|---|---|---|---|---|
+| §3d present in AGENTS.md | Clean repo | `grep -c "3d) Test Plan Design" AGENTS.md` | 1 | 1 | PASS |
+| §3d present in INIT.md | Clean repo | `grep -c "3d) Test Plan Design" INIT.md` | 1 | 1 | PASS |
+| Result values note present | §3d added | `grep -c "Result values: PASS, PASS with notes" AGENTS.md INIT.md` | 1 each | 1 each | PASS |
+| Test Scenarios template in INIT.md | §3d code review fix | `grep -c "Test Scenarios (if §3d applies)" INIT.md` | 1 | 1 | PASS |
+| Fence counts even | After all edits | `grep -c "^\`\`\`" AGENTS.md INIT.md` | 16, 26 | 16, 26 | PASS |
+
+Overall: PASS
+
+### Next Session Handoff Prompt (Verbatim)
+
+```text
+Follow AGENTS.md.
+
+Project: ai-session-governance (cross-AI CLI session handoff governance template)
+Branch: main — 10 commits ahead of origin/main (not yet pushed)
+Last session: Claude_20260316b
+
+Completed this session:
+- §3d Test Plan Design: 4 trigger conditions, 4 scenario categories (Normal/Boundary/Error/Regression),
+  project-type adaptations (Code/Governance+docs/Prompt), markdown table format, recording location rules
+- §3 PLAN bullet: define test scenario matrix when §3d triggers apply
+- §3 QC bullet: verify each scenario; summarize PASS / PASS with notes / FAIL
+- Code review fixes: Result values note in §3d; ### Test Scenarios template in INIT.md + SESSION_LOG.md
+- All mirrored to INIT.md FILE 1; fence counts 16/26 (even); 42 regression checks PASS
+- Commits: 9a4d706 (§3d feat), 350fcd9 (code review fixes)
+
+Pending:
+1. Push all 10 commits to origin/main when ready to publish
+2. (Optional) Generate dev/CODEBASE_CONTEXT.md for this governance repo by scanning README + docs/
+
+Key files changed: AGENTS.md, INIT.md, dev/SESSION_LOG.md
+
+Cautions:
+- Every AGENTS.md governance rule change must be mirrored to INIT.md FILE 1 embedded copy
+- Fence counts must remain even after any edit (AGENTS: 16, INIT: 26)
+- §3d is conditional — only applies when trigger conditions are met; do not require it for every task
+
+First action: git status, confirm working tree clean, then ask user what to do next.
+```
+
+---
+
 ## <YYYY-MM-DD>
 1. Agent & Session ID:
 2. Task summary:
