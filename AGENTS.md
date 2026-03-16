@@ -490,12 +490,12 @@ Positioning:
 3. `PROJECT_MASTER_SPEC.md`: complete, stable, long-term authoritative specification
 
 Active trigger rule:
-At the PERSIST phase of any session, if all of the following are true, the AI must suggest creating `dev/PROJECT_MASTER_SPEC.md`:
-1. `dev/PROJECT_MASTER_SPEC.md` does not yet exist
-2. `dev/SESSION_LOG.md` contains 2 or more completed session entries (counted by `## YYYY-MM-DD` date headings that have body content below them)
-3. At least one condition from the list above is met
+At the PERSIST phase, if `dev/PROJECT_MASTER_SPEC.md` does not yet exist, the AI must suggest creating it when either of the following applies:
+1. The user explicitly requested it during this session
+2. This session involved the user and AI establishing architecture decisions, tech stack choices, or core feature requirements, AND at least one condition from the list above is met
 
-The suggestion must state: which condition was triggered, what content from `SESSION_LOG.md` is ready to consolidate, and a ready-to-use prompt the user can paste to initiate creation.
+The suggestion must state: which trigger applied, what decisions from this session are ready to consolidate, and a ready-to-use prompt the user can paste to initiate creation.
+Do not repeat the suggestion in subsequent sessions unless new major architecture or requirement decisions were made in that session.
 
 Filename enforcement:
 If creating this file, the path must be exactly `dev/PROJECT_MASTER_SPEC.md`.
