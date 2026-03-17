@@ -43,6 +43,16 @@ Beyond session handoff, the template enforces safeguards for recurring AI failur
 
 ---
 
+## :bookmark_tabs: Recent releases
+
+| Version | What changed | Why it matters |
+|---|---|---|
+| **v1.7.0** | Handoff prompt now opens with an explicit instruction to read `AGENTS.md` first, then follow the §1 startup sequence | Cross-tool handoffs (e.g. Codex → Claude Code → Gemini CLI) now work reliably even when the receiving tool does not auto-load governance files |
+| **v1.6.0** | Post-install Quick Start output auto-printed after setup; `CODEBASE_CONTEXT.md` generation backs up existing files and scans a wider set of sources (docs/, yaml, .env) | No need to look up commands after install — copy-paste block is printed automatically; first-session context capture is more complete |
+| **v1.5.0** | External API Code Safety rule (§0b) — AI must fetch live docs before writing API-calling code; Test Plan Design governance (§3d) — scenario matrix required before merging features | Prevents hallucinated API calls and untested merges without adding manual steps |
+
+---
+
 <a id="quickstart"></a>
 
 ## :bookmark_tabs: 30-second Quick Start
