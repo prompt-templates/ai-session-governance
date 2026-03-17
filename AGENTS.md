@@ -351,6 +351,7 @@ Supplementary rules:
 3. After closeout is complete, the response must include a copy-paste-ready "Next Session Handoff Prompt" for the next agent
 4. The "Next Session Handoff Prompt" must be generated from the project's actual current state; fixed or hardcoded handoff sentences are prohibited
 5. The "Next Session Handoff Prompt" must include at minimum:
+   - Opening line: instruct the receiving AI to read `AGENTS.md` first (governance SSOT), then follow the §1 startup sequence (`dev/SESSION_HANDOFF.md` → `dev/SESSION_LOG.md` → `dev/CODEBASE_CONTEXT.md` if exists) — this ensures cross-tool handoffs work even when the receiving tool does not auto-load `AGENTS.md`
    - Current objective and progress state
    - Pending tasks in priority order
    - Key files changed in this session
