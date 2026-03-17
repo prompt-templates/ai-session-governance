@@ -290,6 +290,12 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ---
 
+## :bookmark_tabs: 设计者
+
+> 由 **[Adam Chan](https://www.facebook.com/chan.adam)** 设计 · [i.adamchan@gmail.com](mailto:i.adamchan@gmail.com)
+
+---
+
 ## :bookmark_tabs: 许可
 
 可自由使用、改编与扩展到你的工作流程中。

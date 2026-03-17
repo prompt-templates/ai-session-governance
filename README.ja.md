@@ -288,6 +288,12 @@ AGENTS.md に従ってこのセッションを開始してください
 
 ---
 
+## :bookmark_tabs: デザイナー
+
+> **[Adam Chan](https://www.facebook.com/chan.adam)** によりデザインされました · [i.adamchan@gmail.com](mailto:i.adamchan@gmail.com)
+
+---
+
 ## :bookmark_tabs: ライセンス
 
 各自のワークフローに合わせて自由に利用・改変・拡張できます。

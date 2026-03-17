@@ -282,6 +282,12 @@ Current minimum:
 
 ---
 
+## :bookmark_tabs: Designer
+
+> Designed by **[Adam Chan](https://www.facebook.com/chan.adam)** · [i.adamchan@gmail.com](mailto:i.adamchan@gmail.com)
+
+---
+
 ## :bookmark_tabs: License
 
 Use, adapt, and extend for your workflows.
