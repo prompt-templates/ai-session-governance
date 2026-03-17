@@ -291,6 +291,8 @@ AGENTS.md に従ってこのセッションを開始してください
 ## :bookmark_tabs: デザイナー
 
 > **[Adam Chan](https://www.facebook.com/chan.adam)** によりデザインされました · [i.adamchan@gmail.com](mailto:i.adamchan@gmail.com)
+>
+> *Vibe Coding の時代、誰もが自分だけの AI 世界をつくれる。*
 
 ---
 

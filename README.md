@@ -285,6 +285,8 @@ Current minimum:
 ## :bookmark_tabs: Designer
 
 > Designed by **[Adam Chan](https://www.facebook.com/chan.adam)** · [i.adamchan@gmail.com](mailto:i.adamchan@gmail.com)
+>
+> *Built for the Vibe Coding era — everyone deserves to shape their own AI-powered world.*
 
 ---
 

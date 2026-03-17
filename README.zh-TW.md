@@ -293,6 +293,8 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 ## :bookmark_tabs: 設計者
 
 > 由 **[Adam Chan](https://www.facebook.com/chan.adam)** 設計 · [i.adamchan@gmail.com](mailto:i.adamchan@gmail.com)
+>
+> *Vibe Coding 的時代，人人都能打造屬於自己的 AI 世界。*
 
 ---
 
