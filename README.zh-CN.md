@@ -257,8 +257,8 @@
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新 QA 回归验收报告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-截至 2026-03-16 的摘要如下：
-- AGENTS/INIT 规则同步：已验证（51 项回归测试）
+截至 2026-03-17 的摘要如下：
+- AGENTS/INIT 规则同步：已验证（57 项回归测试）
 - 多平台指针文件行为：已验证
 - 50+ 工作阶段的长期纵向效果：尚未验证
 

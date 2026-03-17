@@ -251,8 +251,8 @@ Detailed claim mapping and platform validation are maintained in:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-Snapshot status (as of 2026-03-16):
-- AGENTS/INIT rule parity: verified (51-check regression suite)
+Snapshot status (as of 2026-03-17):
+- AGENTS/INIT rule parity: verified (57-check regression suite)
 - Multi-platform pointer behavior: verified
 - Longitudinal 50+ session durability: not yet verified
 

@@ -257,8 +257,8 @@
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新 QA 回歸驗收報告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-截至 2026-03-16 的摘要如下：
-- AGENTS/INIT 規則同步：已驗證（51 項回歸測試）
+截至 2026-03-17 的摘要如下：
+- AGENTS/INIT 規則同步：已驗證（57 項回歸測試）
 - 多平台指標檔行為：已驗證
 - 50+ 工作階段的長期縱向效果：尚未驗證
 

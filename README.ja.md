@@ -257,8 +257,8 @@ AGENTS.md に従ってこのセッションを開始してください
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新のQA回帰検証レポート: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-2026-03-16時点の要約：
-- AGENTS/INIT 規則整合：検証済み（51 項回帰テスト）
+2026-03-17時点の要約：
+- AGENTS/INIT 規則整合：検証済み（57 項回帰テスト）
 - マルチプラットフォーム指針動作：検証済み
 - 50+セッションの縦断耐久性：未検証
 
