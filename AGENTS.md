@@ -99,6 +99,8 @@ At the start of every new session, the AI must read the following files in this 
 3. `dev/CODEBASE_CONTEXT.md` (if it exists; provides tech stack, directory map, build commands, External Services, and Key Decisions)
 4. `dev/PROJECT_MASTER_SPEC.md` (if it exists; serves as the advanced authoritative specification)
 
+Context compaction recovery (additional §1 trigger): If the AI detects that its current session context has been compacted — that is, the conversation history has been compressed into a summary by the platform — it must re-execute the §1 startup sequence before resuming any pending tasks listed in the summary. The compaction summary is not an authoritative source for project state, pending tasks, risks, or open items. The actual governance files (`dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`) always take priority per §2.
+
 If `dev/SESSION_HANDOFF.md` or `dev/SESSION_LOG.md` is missing, the AI must create a minimal version before beginning development.
 
 If `dev/CODEBASE_CONTEXT.md` does not exist, the AI must generate it during the first session:
