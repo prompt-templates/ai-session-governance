@@ -47,9 +47,9 @@ It also catches a few common AI mistakes:
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v1.8.0** | Context compaction recovery added to §1 — AI must re-run the startup sequence after compaction instead of trusting the summary's pending tasks | Prevents silent task drift when Claude Code auto-compacts mid-session context |
 | **v1.7.0** | Handoff prompt now opens with an explicit instruction to read `AGENTS.md` first, then follow the §1 startup sequence | Handoffs work even if the receiving tool doesn't auto-load governance files |
 | **v1.6.0** | Post-install Quick Start printed after setup; `CODEBASE_CONTEXT.md` generation backs up and scans more sources (docs/, yaml, .env) | Commands are ready to copy right after install; first-session context is more complete |
-| **v1.5.0** | External API Code Safety (§0b) — AI must read live docs before writing API calls; Test Plan Design (§3d) — scenario matrix before merging | Stops AI from guessing at API schemas; catches missing tests before merge |
 
 ---
 
