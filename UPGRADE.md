@@ -22,7 +22,7 @@ For each check: grep detects whether the behavior is already present → skip if
 2. Never modify `dev/SESSION_HANDOFF.md` or `dev/SESSION_LOG.md`
 3. Every check is idempotent — if the target behavior is already present, skip it and report **SKIP**
 4. Never remove user custom content — only add or replace governance text that originated from the standard template
-5. After any change to AGENTS.md, mirror the identical change to `INIT.md` FILE 1 (the fenced block after `## FILE 1: AGENTS.md`)
+5. If `INIT.md` exists in the project root: after any change to AGENTS.md, mirror the identical change to `INIT.md` FILE 1 (the fenced block after `## FILE 1: AGENTS.md`). If `INIT.md` does not exist: skip parity — this is expected for most installs.
 6. Report each check result as: **SKIP** (already present) / **APPLIED** (change made) / **BLOCKED** (anchor not found — do not guess)
 
 ---
@@ -198,14 +198,19 @@ Replace that phrase with:
 
 ---
 
-## INIT.md Parity
+## INIT.md Parity (conditional)
+
+**First: check whether `INIT.md` exists in the project root.**
+
+- **If `INIT.md` does not exist** → skip this section entirely. This is normal for projects where the template was installed by pasting INIT.md as a prompt (the AI never writes INIT.md into the project). Report: `INIT.md not present — parity step skipped`.
+- **If `INIT.md` exists** (e.g. this is a fork/clone of the template repo) → apply parity below.
 
 For each BU check above:
 
 - If **APPLIED** to AGENTS.md → open `INIT.md`, locate the FILE 1 block (the fenced block after `## FILE 1: AGENTS.md`), apply the identical change to the same governance section inside that block.
 - If **SKIP** for AGENTS.md → verify the same behavior is also present inside INIT.md FILE 1. If it is absent from INIT.md FILE 1 but present in AGENTS.md: apply the same change to INIT.md FILE 1.
 
-**Fence count check after all changes:**
+**Fence count check (only if INIT.md exists):**
 Count the number of lines that are exactly three backticks (opening/closing code fences) in each file:
 - AGENTS.md fence count must be **even** (clean install baseline: 16; yours may be higher if custom code fences were added)
 - INIT.md fence count must be **even** (clean install baseline: 26; yours may be higher if custom code fences were added)
@@ -216,22 +221,24 @@ If either count is odd, review your edits and correct before reporting done.
 
 ## Final Verification
 
-After all changes, run all 6 detection greps against both files and fill the table:
+After all changes, run all 6 detection greps against AGENTS.md and fill the table.
+If INIT.md exists, verify FILE 1 as well; if not, mark the column N/A.
 
 | Check | Grep pattern | AGENTS.md | INIT.md FILE 1 |
 |---|---|---|---|
-| BU-01 | `Definition of "new session"` | ? | ? |
-| BU-02 | `Apply the same cross-document sync conditions` | ? | ? |
-| BU-03 | `Open Priorities regeneration` | ? | ? |
-| BU-04 | `SESSION_LOG summary field only` | ? | ? |
-| BU-05 | `not Open Priorities — that section is regenerated` | ? | ? |
-| BU-06 | `file system modification operations` | ? | ? |
+| BU-01 | `Definition of "new session"` | ? | ? / N/A |
+| BU-02 | `Apply the same cross-document sync conditions` | ? | ? / N/A |
+| BU-03 | `Open Priorities regeneration` | ? | ? / N/A |
+| BU-04 | `SESSION_LOG summary field only` | ? | ? / N/A |
+| BU-05 | `not Open Priorities — that section is regenerated` | ? | ? / N/A |
+| BU-06 | `file system modification operations` | ? | ? / N/A |
 
 Report the following:
 - Checks APPLIED: [list BU numbers]
 - Checks SKIP (already present): [list BU numbers]
 - Checks BLOCKED (anchor not found — explain): [list BU numbers]
-- Fence counts: AGENTS.md = [n] (even ✓/✗), INIT.md = [n] (even ✓/✗)
+- INIT.md: present (parity applied) / not present (parity skipped)
+- Fence counts: AGENTS.md = [n] (even ✓/✗), INIT.md = [n if present] (even ✓/✗)
 - **Upgrade complete: YES / NO**
 
 ---
