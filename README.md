@@ -143,16 +143,16 @@ Don't copy the repo manually. Use `INIT.md` — it handles merging safely into y
 
 ## :bookmark_tabs: Upgrading from a previous version
 
-Already installed and want v1.9.0 behaviors?
+Already installed and want the latest behaviors?
 
 1. Open **[UPGRADE.md](UPGRADE.md)** → click **Raw** → copy all
 2. Paste into your AI CLI (Claude Code, Codex, or Gemini CLI)
-3. The AI checks each v1.9.0 behavior — applies what is missing, skips what is already present
+3. The AI checks each behavior — applies what is missing, skips what is already present
 4. Confirm the final report — each check returns **SKIP** / **APPLIED** / **BLOCKED**
 
-`UPGRADE.md` is version-agnostic and idempotent: it works from any previously installed version and is safe to run more than once.
+`UPGRADE.md` is idempotent and safe to run more than once.
 
-> **If Part 1 detects a missing section** (pre-v1.5.0 install), the prompt tells you to re-run `INIT.md` instead — it handles the full install safely.
+> **If a major section is missing entirely**, the prompt tells you to re-run `INIT.md` instead — it handles the full install safely.
 
 ---
 
