@@ -47,9 +47,11 @@
 
 | 版本 | 變更內容 | 對你的意義 |
 |---|---|---|
+| **v1.9.0** | 六項治理修正：§1 三觸發新工作階段定義、§3 PERSIST 顯式跨文件同步、§4 Open Priorities 再生機制（replace not append）、§4 max-3 說明、§10 Known Risks 記錄位置、§5.7 修改操作精確化 | 修正從實際應用中發現的 AI 行為缺口 — 過期清單、遺漏文件同步、範圍歧義 |
 | **v1.8.0** | §1 新增 context compaction 恢復規則 — AI 在壓縮後必須重新執行啟動序列，不可信任 summary 的待辦清單 | 防止 Claude Code 自動壓縮情境後，AI 靜默沿用過時的 pending tasks |
 | **v1.7.0** | 交接 Prompt 首段新增明確指示：先讀 `AGENTS.md`，再依 §1 序列執行 | 接收工具就算不自動載入治理檔案，交接也能正常銜接 |
 | **v1.6.0** | 安裝後自動輸出 Quick Start 指令；`CODEBASE_CONTEXT.md` 生成前先備份，並擴大掃描來源 | 安裝完直接有指令可用；首次情境擷取更完整 |
+| **v1.5.0** | External API Code Safety §0b — 撰碼前須完成文件驗證基線；PROJECT_MASTER_SPEC §10 意圖觸發規則 | 防止 API 幻覺；長期專案擁有穩定的權威規格文件 |
 
 ---
 

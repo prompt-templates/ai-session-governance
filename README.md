@@ -47,9 +47,11 @@ It also catches a few common AI mistakes:
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v1.9.0** | 6 governance fixes: §1 3-trigger new-session definition, §3 PERSIST explicit cross-doc sync, §4 Open Priorities regeneration (replace not append), §4 "max 3" clarification, §10 Known Risks location, §5.7 modification ops precision | Closes real AI behavioral gaps found in field usage — stale priority lists, skipped doc sync, ambiguous scope |
 | **v1.8.0** | Context compaction recovery added to §1 — AI must re-run the startup sequence after compaction instead of trusting the summary's pending tasks | Prevents silent task drift when Claude Code auto-compacts mid-session context |
 | **v1.7.0** | Handoff prompt now opens with an explicit instruction to read `AGENTS.md` first, then follow the §1 startup sequence | Handoffs work even if the receiving tool doesn't auto-load governance files |
 | **v1.6.0** | Post-install Quick Start printed after setup; `CODEBASE_CONTEXT.md` generation backs up and scans more sources (docs/, yaml, .env) | Commands are ready to copy right after install; first-session context is more complete |
+| **v1.5.0** | External API Code Safety §0b — doc-verified baseline required before writing API-calling code; PROJECT_MASTER_SPEC §10 with intent-based trigger | Prevents API hallucination; long-lived projects get a stable authoritative spec |
 
 ---
 
