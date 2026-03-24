@@ -1,12 +1,12 @@
 # QA Regression Report
 
-Date: 2026-03-17 (UTC)
-Scope: Cross-LLM handoff prompt opening line rule (§4 rule 5) + §1 CODEBASE_CONTEXT scan hardening; full regression of all prior checks
+Date: 2026-03-24 (UTC)
+Scope: 6 governance gap fixes (v1.9.0 candidate) — §1 new-session definition consolidation, §3 PERSIST sync, §4 Open Priorities regeneration, §4 max-3 clarification, §10 Known Risks location, §5.7 precision wording; full regression of all prior checks
 
 ## Summary
 
-- Total checks: 57
-- Pass: 57
+- Total checks: 82
+- Pass: 82
 - Fail: 0
 
 ## What was validated
@@ -95,6 +95,36 @@ Scope: Cross-LLM handoff prompt opening line rule (§4 rule 5) + §1 CODEBASE_CO
 | (56) `cross-tool handoffs` rationale note present in §4 rule 5 (AGENTS.md) | PASS |
 | (57) `cross-tool handoffs` rationale note present in §4 rule 5 (INIT.md) | PASS |
 
+## Feature round 5 (2026-03-24): 6 governance gap fixes (v1.9.0 candidate)
+
+| Check | Result |
+|---|---|
+| (58) §1 "Definition of new session" 3-trigger block present in AGENTS.md | PASS |
+| (59) §1 "Definition of new session" 3-trigger block present in INIT.md | PASS |
+| (60) Old standalone compaction paragraph removed from AGENTS.md | PASS |
+| (61) Old standalone compaction paragraph removed from INIT.md | PASS |
+| (62) "Agent handoff" trigger present in §1 definition (AGENTS.md) | PASS |
+| (63) "Agent handoff" trigger present in §1 definition (INIT.md) | PASS |
+| (64) §3 PERSIST explicit sync: "same cross-document sync conditions as §4" present in AGENTS.md | PASS |
+| (65) §3 PERSIST explicit sync: "same cross-document sync conditions as §4" present in INIT.md | PASS |
+| (66) §3 PERSIST vague "relevant specifications to ensure" removed from AGENTS.md | PASS |
+| (67) §3 PERSIST vague "relevant specifications to ensure" removed from INIT.md | PASS |
+| (68) "Open Priorities regeneration" mandatory block present in AGENTS.md | PASS |
+| (69) "Open Priorities regeneration" mandatory block present in INIT.md | PASS |
+| (70) "replace, not append" rule present in AGENTS.md | PASS |
+| (71) "replace, not append" rule present in INIT.md | PASS |
+| (72) "SESSION_LOG summary field only" max-3 clarification present in AGENTS.md | PASS |
+| (73) "SESSION_LOG summary field only" max-3 clarification present in INIT.md | PASS |
+| (74) §10 "Known Risks.*not Open Priorities" wording present in AGENTS.md | PASS |
+| (75) §10 "Known Risks.*not Open Priorities" wording present in INIT.md | PASS |
+| (76) Old "Open Priorities or Known Risks" phrasing removed from AGENTS.md | PASS |
+| (77) Old "Open Priorities or Known Risks" phrasing removed from INIT.md | PASS |
+| (78) §5.7 "modification operations (create, delete" precision wording present in AGENTS.md | PASS |
+| (79) §5.7 "modification operations (create, delete" precision wording present in INIT.md | PASS |
+| (80) Old "to perform file system operations;" removed from AGENTS.md | PASS |
+| (81) Old "to perform file system operations;" removed from INIT.md | PASS |
+| (82) Fence counts unchanged: AGENTS.md=16, INIT.md=26 (even) | PASS |
+
 ## Notes
 
 - This report validates document and governance consistency at repository level.
@@ -102,6 +132,7 @@ Scope: Cross-LLM handoff prompt opening line rule (§4 rule 5) + §1 CODEBASE_CO
 - Feature round 2 adds: CODEBASE_CONTEXT governance integration, External API Code Safety §0b subsection, PROJECT_MASTER_SPEC §10 intent-based active trigger with filename enforcement.
 - Feature round 3 adds: §3d Test Plan Design conditional subsection (4 trigger conditions, 4 scenario categories, project-type adaptations, table format, recording location rules).
 - Feature round 4 adds: §4 rule 5 cross-LLM handoff opening line requirement (AGENTS.md read first + §1 startup sequence); §1 CODEBASE_CONTEXT scan hardening (backup step, expanded sources, consolidate-not-duplicate).
+- Feature round 5 adds: 6 governance gap fixes — §1 new-session definition (3-trigger), §3 PERSIST explicit sync, §4 Open Priorities regeneration, §4 max-3 clarification, §10 Known Risks location, §5.7 modification operations precision.
 
 ## Manual governance checks (cannot be automated with grep)
 
