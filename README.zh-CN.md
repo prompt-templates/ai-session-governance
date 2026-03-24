@@ -8,7 +8,7 @@
 - 统一工作流程：`PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - 防止治理规则漂移，而不是一直叠加新规则
 
-**[30 秒快速开始](#quickstart)** · **[安装](#install)** · **[快速操作](#quick-operations)**
+**[30 秒快速开始](#quickstart)** · **[安装](#install)** · **[升级](#upgrade)** · **[快速操作](#quick-operations)**
 
 ![Overview](ref_doc/overview_infograph_cn.png)
 
@@ -138,6 +138,23 @@
 AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 大多数情况下，直接使用 `INIT.md` 就够了。
 不要手动复制整个仓库，用 `INIT.md` 安装才能安全合并。
+
+---
+
+<a id="upgrade"></a>
+
+## :bookmark_tabs: 从旧版升级
+
+已安装并想升级到 v1.9.0 行为？
+
+1. 打开 **[UPGRADE.md](UPGRADE.md)** → 点击 **Raw** → 全选 → 复制
+2. 粘贴到你的 AI 命令行工具（Claude Code、Codex、Gemini CLI 均可）
+3. AI 会逐项检查每个 v1.9.0 行为 — 补上缺少的项目，已存在的则跳过
+4. 确认最终回报 — 每项检查会显示 **SKIP** / **APPLIED** / **BLOCKED**
+
+`UPGRADE.md` 版本无关且幂等：适用于任何已安装版本，可安全重复执行。
+
+> **若 Part 1 检测到章节缺失**（v1.5.0 以前的安装），升级提示会指示你改为重新运行 `INIT.md` — 它能安全处理完整安装。
 
 ---
 

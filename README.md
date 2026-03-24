@@ -8,7 +8,7 @@ When your Codex / Claude / Gemini quota runs out, paste the handoff block into t
 - Standard workflow: `PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - Keeps governance from drifting, instead of just adding more rules
 
-**[30-second Quick Start](#quickstart)** · **[Install](#install)** · **[Quick Operations](#quick-operations)**
+**[30-second Quick Start](#quickstart)** · **[Install](#install)** · **[Upgrade](#upgrade)** · **[Quick Operations](#quick-operations)**
 
 ![Overview](ref_doc/overview_infograph_en.png)
 
@@ -138,6 +138,25 @@ After step 4, AI creates a backup before writing anything.
 Don't copy the repo manually. Use `INIT.md` — it handles merging safely into your existing files.
 
 ---
+
+<a id="upgrade"></a>
+
+## :bookmark_tabs: Upgrading from a previous version
+
+Already installed and want v1.9.0 behaviors?
+
+1. Open **[UPGRADE.md](UPGRADE.md)** → click **Raw** → copy all
+2. Paste into your AI CLI (Claude Code, Codex, or Gemini CLI)
+3. The AI checks each v1.9.0 behavior — applies what is missing, skips what is already present
+4. Confirm the final report — each check returns **SKIP** / **APPLIED** / **BLOCKED**
+
+`UPGRADE.md` is version-agnostic and idempotent: it works from any previously installed version and is safe to run more than once.
+
+> **If Part 1 detects a missing section** (pre-v1.5.0 install), the prompt tells you to re-run `INIT.md` instead — it handles the full install safely.
+
+---
+
+<a id="quick-operations"></a>
 
 ## :bookmark_tabs: Quick Operations
 
