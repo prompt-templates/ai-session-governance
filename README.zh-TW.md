@@ -8,7 +8,7 @@
 - 統一工作流程：`PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - 防止治理規則漂移，而不是一直疊加新規則
 
-**[30 秒快速開始](#quickstart)** · **[安裝](#install)** · **[升級](#upgrade)** · **[快速操作](#quick-operations)**
+**[30 秒快速開始](#quickstart)** · **[安裝 / 升級](#install)** · **[快速操作](#quick-operations)**
 
 ![Overview](ref_doc/overview_infograph_tw.png)
 
@@ -145,18 +145,14 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ## :bookmark_tabs: 從舊版升級
 
-已安裝並想升級至最新行為？
+已安裝？重新執行最新版 `INIT.md`，流程與初次安裝完全相同。
 
-1. 開啟 **[UPGRADE.md](UPGRADE.md)** → 點擊 **Raw** → 全選 → 複製
+1. 開啟 **[INIT.md](INIT.md)** → 點擊 **Raw** → 全選 → 複製
 2. 貼到你的 AI 命令列工具（Claude Code、Codex、Gemini CLI 皆可）
-3. AI 先執行 dry-run 並顯示會變更的項目 — 回覆 `UPGRADE_OK` 確認
-4. 每項行為檢查回報 **SKIP**（已存在）/ **APPLIED**（已補上）/ **BLOCKED**（找不到錨點）
+3. 依序確認：`INSTALL_ROOT_OK: <absolute_path>`，再回覆 `INSTALL_WRITE_OK`
+4. AI 先備份既有文件，再將治理章節合併至最新版本
 
-只會修改 `AGENTS.md` 與 `INIT.md` FILE 1。工作階段記錄與自定內容不受影響。
-
-`UPGRADE.md` 冪等，可安全重複執行。
-
-> **若主要章節完全缺失**，升級提示會指示你改為重新執行 `INIT.md` — 它能安全處理完整安裝。
+適用任何已安裝版本。治理章節更新至最新；你在標準章節外自添的內容會保留。
 
 ---
 
