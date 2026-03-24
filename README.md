@@ -147,8 +147,10 @@ Already installed and want the latest behaviors?
 
 1. Open **[UPGRADE.md](UPGRADE.md)** → click **Raw** → copy all
 2. Paste into your AI CLI (Claude Code, Codex, or Gemini CLI)
-3. The AI checks each behavior — applies what is missing, skips what is already present
-4. Confirm the final report — each check returns **SKIP** / **APPLIED** / **BLOCKED**
+3. The AI runs a dry-run check and shows what would change — confirm with `UPGRADE_OK`
+4. Each behavior check returns **SKIP** (already present) / **APPLIED** (added) / **BLOCKED** (anchor not found)
+
+Only `AGENTS.md` and `INIT.md` FILE 1 are modified. Session files and custom content are never touched.
 
 `UPGRADE.md` is idempotent and safe to run more than once.
 

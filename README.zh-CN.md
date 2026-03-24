@@ -149,8 +149,10 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 1. 打开 **[UPGRADE.md](UPGRADE.md)** → 点击 **Raw** → 全选 → 复制
 2. 粘贴到你的 AI 命令行工具（Claude Code、Codex、Gemini CLI 均可）
-3. AI 会逐项检查每个行为 — 补上缺少的项目，已存在的则跳过
-4. 确认最终回报 — 每项检查会显示 **SKIP** / **APPLIED** / **BLOCKED**
+3. AI 先执行 dry-run 并显示会变更的项目 — 回复 `UPGRADE_OK` 确认
+4. 每项行为检查回报 **SKIP**（已存在）/ **APPLIED**（已补上）/ **BLOCKED**（找不到锚点）
+
+只会修改 `AGENTS.md` 与 `INIT.md` FILE 1。工作阶段记录与自定内容不受影响。
 
 `UPGRADE.md` 幂等，可安全重复执行。
 

@@ -1,10 +1,18 @@
-# UPGRADE.md — Upgrade Governance Behaviors to v1.9.0
+# UPGRADE.md — Upgrade Governance Behaviors
 
 You are an AI coding agent. Execute the upgrade steps below in the current project directory.
 
-This prompt upgrades any installed version of the ai-session-governance template to v1.9.0 behaviors.
-It works regardless of your current installed version and regardless of what custom content you
-have added to AGENTS.md. All user custom content is preserved.
+## What this does
+Applies governance behavior updates to an existing installation.
+For each check: grep detects whether the behavior is already present → skip if yes, apply if no.
+
+**Files changed:** `AGENTS.md` and `INIT.md` FILE 1 only.
+**Files never touched:** `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, any user custom content.
+
+## What this does NOT do
+- Does not create new files
+- Does not run root safety preflight (no INSTALL_ROOT_OK required — files already exist)
+- Does not touch session history or open priorities
 
 ---
 
@@ -21,8 +29,8 @@ have added to AGENTS.md. All user custom content is preserved.
 
 ## Part 1 — Section Presence Checks
 
-Verify that major sections from v1.5.0–v1.8.0 are present.
-If any section is entirely absent, the gap is too large for surgical patching.
+Verify that required governance sections are present.
+If any is entirely absent, the gap is too large for surgical patching — full re-install is needed.
 
 Run each grep against `AGENTS.md`:
 
@@ -31,15 +39,34 @@ Run each grep against `AGENTS.md`:
 3. `read \`AGENTS.md\` first` → must be present
 4. `compaction` → must be present
 
-**If all 4 are present:** proceed to Part 2.
+**If all 4 are present:** proceed to Dry-Run Check.
 
 **If any is absent:** STOP. Report which check failed and tell the user:
-"Section [name] is missing. This project is on a version older than v1.5.0–v1.8.0.
-Re-run INIT.md with the current version to install the full v1.9.0 template."
+"Section [name] is missing. Re-run INIT.md with the current version to install the full governance template."
 
 ---
 
-## Part 2 — v1.9.0 Behavioral Updates
+## Dry-Run Check (before any write)
+
+Run all 6 detection greps below against `AGENTS.md` — do not write anything yet.
+Report the projected outcome for each:
+
+| Check | Grep pattern | Projected |
+|---|---|---|
+| BU-01 | `Definition of "new session"` | SKIP / APPLY |
+| BU-02 | `Apply the same cross-document sync conditions` | SKIP / APPLY |
+| BU-03 | `Open Priorities regeneration` | SKIP / APPLY |
+| BU-04 | `SESSION_LOG summary field only` | SKIP / APPLY |
+| BU-05 | `not Open Priorities — that section is regenerated` | SKIP / APPLY |
+| BU-06 | `file system modification operations` | SKIP / APPLY |
+
+Then ask the user: **"Reply `UPGRADE_OK` to apply the changes above."**
+
+Do not proceed until `UPGRADE_OK` is received.
+
+---
+
+## Part 2 — Behavioral Updates
 
 Apply each check in order. Skip if the detection grep already matches.
 
@@ -180,8 +207,8 @@ For each BU check above:
 
 **Fence count check after all changes:**
 Count the number of lines that are exactly three backticks (opening/closing code fences) in each file:
-- AGENTS.md fence count must be **even** (v1.9.0 clean install baseline: 16)
-- INIT.md fence count must be **even** (v1.9.0 clean install baseline: 26)
+- AGENTS.md fence count must be **even** (clean install baseline: 16; yours may be higher if custom code fences were added)
+- INIT.md fence count must be **even** (clean install baseline: 26; yours may be higher if custom code fences were added)
 
 If either count is odd, review your edits and correct before reporting done.
 
