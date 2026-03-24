@@ -8,7 +8,7 @@
 - 統一工作流程：`PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - 防止治理規則漂移，而不是一直疊加新規則
 
-**[30 秒快速開始](#quickstart)** · **[安裝 / 升級](#install)** · **[快速操作](#quick-operations)**
+**[30 秒快速開始](#quickstart)** · **[安裝](#install)** · **[升級](#upgrade)** · **[快速操作](#quick-operations)**
 
 ![Overview](ref_doc/overview_infograph_tw.png)
 
@@ -139,20 +139,27 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 大多數情況下，直接使用 `INIT.md` 就夠了。
 不要手動複製整個儲存庫，用 `INIT.md` 安裝才能安全合併。
 
+**已安裝並想升級？** 同樣執行 `INIT.md` — 詳見下方[從舊版升級](#upgrade)。
+
 ---
 
 <a id="upgrade"></a>
 
 ## :bookmark_tabs: 從舊版升級
 
-已安裝？重新執行最新版 `INIT.md`，流程與初次安裝完全相同。
+重新執行最新版 `INIT.md`，步驟與初次安裝完全相同。
 
 1. 開啟 **[INIT.md](INIT.md)** → 點擊 **Raw** → 全選 → 複製
 2. 貼到你的 AI 命令列工具（Claude Code、Codex、Gemini CLI 皆可）
 3. 依序確認：`INSTALL_ROOT_OK: <absolute_path>`，再回覆 `INSTALL_WRITE_OK`
 4. AI 先備份既有文件，再將治理章節合併至最新版本
 
-適用任何已安裝版本。治理章節更新至最新；你在標準章節外自添的內容會保留。
+**升級時 AI 的動作：**
+- 現有 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` → **merge**（治理章節更新至最新，你的自定內容保留）
+- `dev/SESSION_HANDOFF.md`、`dev/SESSION_LOG.md` → **skip**（工作階段記錄絕對不動）
+- 安裝步驟 5 顯示的 dry-run 計劃會在寫入前確認各文件為 `merge` / `skip`
+
+適用任何已安裝版本。
 
 ---
 

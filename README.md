@@ -8,7 +8,7 @@ When your Codex / Claude / Gemini quota runs out, paste the handoff block into t
 - Standard workflow: `PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - Keeps governance from drifting, instead of just adding more rules
 
-**[30-second Quick Start](#quickstart)** · **[Install / Upgrade](#install)** · **[Quick Operations](#quick-operations)**
+**[30-second Quick Start](#quickstart)** · **[Install](#install)** · **[Upgrade](#upgrade)** · **[Quick Operations](#quick-operations)**
 
 ![Overview](ref_doc/overview_infograph_en.png)
 
@@ -137,20 +137,27 @@ After step 4, AI creates a backup before writing anything.
 
 Don't copy the repo manually. Use `INIT.md` — it handles merging safely into your existing files.
 
+**Already installed and want to upgrade?** Same `INIT.md` flow — see [Upgrading](#upgrade) below.
+
 ---
 
 <a id="upgrade"></a>
 
 ## :bookmark_tabs: Upgrading from a previous version
 
-Already installed? Re-run `INIT.md` with the current version — same flow as initial install.
+Re-run `INIT.md` with the current version. The steps are identical to initial install.
 
 1. Open **[INIT.md](INIT.md)** → click **Raw** → copy all
 2. Paste into your AI CLI (Claude Code, Codex, or Gemini CLI)
 3. Confirm: `INSTALL_ROOT_OK: <absolute_path>` then `INSTALL_WRITE_OK`
-4. AI backs up existing files first, then merges governance sections to the latest version
+4. AI backs up existing files, then merges governance sections to the latest version
 
-Works from any previously installed version. Governance sections are updated to current; any content you added outside the standard sections is preserved.
+**What the AI does during upgrade:**
+- Existing `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` → **merge** (governance sections updated, your custom content preserved)
+- `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md` → **skip** (session history never touched)
+- The dry-run plan shown in step 5 of Install will confirm `merge` / `skip` before any write
+
+Works from any previously installed version.
 
 ---
 
