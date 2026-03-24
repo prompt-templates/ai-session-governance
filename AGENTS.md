@@ -92,14 +92,17 @@ When reading an existing External Services block before writing code:
 ---
 
 ## 1) Single Entry (Mandatory)
+**Definition of "new session"** — any of the following triggers the full §1 startup sequence below:
+1. A fresh conversation / thread
+2. Context compaction / context recovery — the conversation history has been compressed into a summary by the platform; the compaction summary is not an authoritative source for project state, pending tasks, risks, or open items; actual governance files always take priority per §2
+3. Agent handoff — a different AI agent takes over
+
 At the start of every new session, the AI must read the following files in this order:
 
 1. `dev/SESSION_HANDOFF.md`
 2. `dev/SESSION_LOG.md`
 3. `dev/CODEBASE_CONTEXT.md` (if it exists; provides tech stack, directory map, build commands, External Services, and Key Decisions)
 4. `dev/PROJECT_MASTER_SPEC.md` (if it exists; serves as the advanced authoritative specification)
-
-Context compaction recovery (additional §1 trigger): If the AI detects that its current session context has been compacted — that is, the conversation history has been compressed into a summary by the platform — it must re-execute the §1 startup sequence before resuming any pending tasks listed in the summary. The compaction summary is not an authoritative source for project state, pending tasks, risks, or open items. The actual governance files (`dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`) always take priority per §2.
 
 If `dev/SESSION_HANDOFF.md` or `dev/SESSION_LOG.md` is missing, the AI must create a minimal version before beginning development.
 
@@ -231,7 +234,9 @@ Every task must follow this workflow and clearly label each phase in the respons
    - If the task involves batch deletion or batch modification, a dry-run (e.g. `ls` / `find` preview, PowerShell `-WhatIf`, etc.) with a "blast radius" list must be provided for confirmation first
 
 5. PERSIST
-   - Update handoff / log / relevant specifications to ensure the next session can continue
+   - Update `dev/SESSION_HANDOFF.md` and `dev/SESSION_LOG.md`
+   - Apply the same cross-document sync conditions as §4 closeout: if tech stack, directory structure, build commands, external services, or Key Decisions changed in this task — update `dev/CODEBASE_CONTEXT.md` now, do not defer to closeout
+   - If `dev/PROJECT_MASTER_SPEC.md` exists and carries status for the completed work — update it in the same pass
 
 ---
 
@@ -344,8 +349,15 @@ Each closeout must record at minimum:
 2. Session Identifier
 3. Completed items
 4. Pending items
-5. Next priorities (max 3)
+5. Next priorities (max 3 — SESSION_LOG summary field only; full prioritized list lives in `dev/SESSION_HANDOFF.md` Open Priorities)
 6. Risks or blockers
+
+**Open Priorities regeneration** (mandatory at every closeout):
+The `Open Priorities` section of `dev/SESSION_HANDOFF.md` must be regenerated at every closeout — not copy-pasted forward:
+1. Remove any item completed this session
+2. Scan `dev/SESSION_LOG.md` recent entries for newly surfaced pending items — add those
+3. Re-rank and overwrite the previous list (replace, not append)
+Hard rule: do not copy-paste old priorities without re-checking against current project state.
 
 Supplementary rules:
 1. Even if the session involved no substantive code changes (research / analysis / discussion / decisions only), the session record must still be updated
@@ -433,7 +445,7 @@ The AI is prohibited from executing high-risk destructive operations, including 
 4. Batch overwriting unknown files
 5. Overwriting or deleting files unrelated to the current task
 6. Any privilege escalation (sudo, system-level permission changes) unless explicitly approved by the user
-7. Strictly prohibited from invoking external shells (e.g. `cmd /c`, `sh -c`, `bash -c`, `powershell -Command`) to perform file system operations; must use the current environment's native commands with direct arguments
+7. Strictly prohibited from invoking external shells (e.g. `cmd /c`, `sh -c`, `bash -c`, `powershell -Command`) to perform file system modification operations (create, delete, overwrite, move, rename); must use the current environment's native commands with direct arguments
 8. When handling file paths, strictly prohibited from using raw string interpolation to construct paths; must use native path handling APIs / objects (e.g. `Join-Path`, `path.join`, `Path.Combine`, etc.)
 
 ## 5a) Root Scope Guard for Bootstrap / Multi-File Setup (Mandatory)
@@ -589,7 +601,7 @@ At the PERSIST phase, if `dev/PROJECT_MASTER_SPEC.md` does not yet exist, the AI
 2. This session involved the user and AI establishing architecture decisions, tech stack choices, or core feature requirements, AND at least one condition from the list above is met (i.e., the project qualifies as multi-module, long-term, has a release lifecycle, or has complex spec/runbook needs)
 
 The suggestion must state: which trigger applied, what decisions from this session are ready to consolidate, and a ready-to-use prompt the user can paste to initiate creation.
-When the suggestion is made, record a line in `dev/SESSION_HANDOFF.md` under Open Priorities or Known Risks: `PROJECT_MASTER_SPEC suggestion issued: [session ID] [date].`
+When the suggestion is made, record a line in `dev/SESSION_HANDOFF.md` under **Known Risks** (not Open Priorities — that section is regenerated and would lose the entry): `PROJECT_MASTER_SPEC suggestion issued: [session ID] [date].`
 Do not repeat the suggestion in subsequent sessions unless new major architecture or requirement decisions were made after that recorded date.
 
 Filename enforcement:
