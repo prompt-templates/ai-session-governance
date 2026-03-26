@@ -5,3 +5,6 @@ dev/SESSION_LOG.md
 
 # Git worktrees
 .worktrees/
+
+# Local reference / patch info — not for publication
+ref_doc/patch_info/
