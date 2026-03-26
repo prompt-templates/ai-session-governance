@@ -2,7 +2,7 @@
 
 This document keeps the detailed claim mapping and platform compatibility checks referenced by README files.
 
-Verification date baseline: 2026-03-16 (UTC)
+Verification date baseline: 2026-03-26 (UTC)
 
 ## Claim-to-mechanism mapping
 
@@ -19,6 +19,7 @@ Verification date baseline: 2026-03-16 (UTC)
 | Integration with existing project docs | AGENTS.md line 2 merge/preserve instruction | Yes |
 | External API code safety | AGENTS.md section 0b External API Code Safety | Yes |
 | Test plan governance | AGENTS.md section 3d Test Plan Design | Yes |
+| Doc-sync registry | dev/DOC_SYNC_CHECKLIST.md; AGENTS.md §3 PERSIST trigger, §7, §8 | Yes |
 
 ## Platform compatibility verified
 
@@ -32,7 +33,7 @@ Verification date baseline: 2026-03-16 (UTC)
 
 - Latest QA pointer: [docs/qa/LATEST.md](qa/LATEST.md)
 - Current detailed report: [docs/qa/QA_REGRESSION_REPORT.md](qa/QA_REGRESSION_REPORT.md)
-- Latest run snapshot (UTC): 2026-03-17, 57 checks, 57 pass, 0 fail
+- Latest run snapshot (UTC): 2026-03-26, 111 checks, 111 pass, 0 fail
 
 ## Not yet verified
 
