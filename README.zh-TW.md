@@ -40,6 +40,7 @@
 | **代碼庫上下文快照** | 每次工作階段切換後 AI 重新從零摸索技術棧、外部服務與關鍵決策 |
 | **測試計劃治理（§3d）** | 合併變更時未記錄情景矩陣 — 預期結果與實際結果未被追蹤 |
 | **整合紀律（§3b）** | 持續疊加規則，卻未先確認既有規則是否已涵蓋或應更新 |
+| **文件同步登錄表** | 變更後猜測要更新哪些文件 — `DOC_SYNC_CHECKLIST.md` 將變更類別對應到必要更新項，AI 查表而非自行判斷 |
 
 ---
 
@@ -47,11 +48,11 @@
 
 | 版本 | 變更內容 | 對你的意義 |
 |---|---|---|
+| **v2.0** | `DOC_SYNC_CHECKLIST.md` — 確定性文件同步登錄表，將變更類別對應到必須更新的文件；`AGENTS.md` 加入章節標記（MANDATORY / CONDITIONAL / REFERENCE） | 消除文件同步猜測：AI 查表決定要更新什麼，而非自行判斷 |
 | **v1.9.0** | 六項治理修正：§1 三觸發新工作階段定義、§3 PERSIST 顯式跨文件同步、§4 Open Priorities 再生機制（replace not append）、§4 max-3 說明、§10 Known Risks 記錄位置、§5.7 修改操作精確化 | 修正從實際應用中發現的 AI 行為缺口 — 過期清單、遺漏文件同步、範圍歧義 |
 | **v1.8.0** | §1 新增 context compaction 恢復規則 — AI 在壓縮後必須重新執行啟動序列，不可信任 summary 的待辦清單 | 防止 Claude Code 自動壓縮情境後，AI 靜默沿用過時的 pending tasks |
 | **v1.7.0** | 交接 Prompt 首段新增明確指示：先讀 `AGENTS.md`，再依 §1 序列執行 | 接收工具就算不自動載入治理檔案，交接也能正常銜接 |
 | **v1.6.0** | 安裝後自動輸出 Quick Start 指令；`CODEBASE_CONTEXT.md` 生成前先備份，並擴大掃描來源 | 安裝完直接有指令可用；首次情境擷取更完整 |
-| **v1.5.0** | External API Code Safety §0b — 撰碼前須完成文件驗證基線；PROJECT_MASTER_SPEC §10 意圖觸發規則 | 防止 API 幻覺；長期專案擁有穩定的權威規格文件 |
 
 ---
 
@@ -84,7 +85,7 @@
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
 7. 在首次寫入前，AI 會於 `<PROJECT_ROOT>/dev/init_backup/<UTC_TIMESTAMP>/` 自動建立輕量備份快照，保存既有治理目標檔案
-8. AI 會在你確認的專案根目錄中建立或合併 5 個治理檔案
+8. AI 會在你確認的專案根目錄中建立或合併治理檔案
 9. AI 自動輸出 **Quick Start** 區塊，含可直接複製貼上的操作指令 — 無須另行記憶
 
 ### :small_blue_diamond: 安裝流程畫面
@@ -156,6 +157,7 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 **升級時 AI 的動作：**
 - 現有 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` → **merge**（治理章節更新至最新，你的自定內容保留）
+- `dev/DOC_SYNC_CHECKLIST.md` → **merge**（專案自訂列保留，缺少的通用列自動補上）
 - `dev/SESSION_HANDOFF.md`、`dev/SESSION_LOG.md` → **skip**（工作階段記錄絕對不動）
 - 安裝步驟 5 顯示的 dry-run 計劃會在寫入前確認各文件為 `merge` / `skip`
 
@@ -258,6 +260,7 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
+   ├─ DOC_SYNC_CHECKLIST.md    # 文件同步登錄表
    ├─ CODEBASE_CONTEXT.md      # 首次工作階段自動生成
    └─ PROJECT_MASTER_SPEC.md   # 可選
 ```
@@ -270,6 +273,7 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - `GEMINI.md` - Gemini 指標檔
 - `dev/SESSION_HANDOFF.md` - 當前基線與下一步優先事項
 - `dev/SESSION_LOG.md` - 逐工作階段歷史與驗證結果
+- `dev/DOC_SYNC_CHECKLIST.md` - 文件同步登錄表：將變更類別對應到必須更新的文件
 - `dev/CODEBASE_CONTEXT.md` - 技術棧、外部服務、關鍵決策（首次工作階段自動生成）
 - `dev/PROJECT_MASTER_SPEC.md` - 可選的長期權威規格
 
@@ -291,8 +295,8 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新 QA 回歸驗收報告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-截至 2026-03-17 的摘要如下：
-- AGENTS/INIT 規則同步：已驗證（57 項回歸測試）
+截至 2026-03-26 的摘要如下：
+- AGENTS/INIT 規則同步：已驗證（111 項回歸測試）
 - 多平台指標檔行為：已驗證
 - 50+ 工作階段的長期縱向效果：尚未驗證
 

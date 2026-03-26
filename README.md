@@ -40,6 +40,7 @@ It also catches a few common AI mistakes:
 | **Codebase context snapshot** | Relearning tech stack, external services, and key decisions from scratch every session |
 | **Test plan governance** | Merging changes without a scenario matrix — expected vs. actual outcomes untracked |
 | **Consolidation discipline** | Rule accumulation without checking whether existing rules should be updated first |
+| **Doc-sync registry** | Guessing which docs to update after a change — `DOC_SYNC_CHECKLIST.md` maps change category to required updates so AI looks up instead of self-assessing |
 
 ---
 
@@ -47,11 +48,11 @@ It also catches a few common AI mistakes:
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v2.0** | `DOC_SYNC_CHECKLIST.md` — deterministic doc-sync registry mapping change category to required doc updates; section markers in `AGENTS.md` (MANDATORY / CONDITIONAL / REFERENCE) | Removes guesswork from doc sync: AI looks up what to update instead of self-assessing |
 | **v1.9.0** | 6 governance fixes: §1 3-trigger new-session definition, §3 PERSIST explicit cross-doc sync, §4 Open Priorities regeneration (replace not append), §4 "max 3" clarification, §10 Known Risks location, §5.7 modification ops precision | Closes real AI behavioral gaps found in field usage — stale priority lists, skipped doc sync, ambiguous scope |
 | **v1.8.0** | Context compaction recovery added to §1 — AI must re-run the startup sequence after compaction instead of trusting the summary's pending tasks | Prevents silent task drift when Claude Code auto-compacts mid-session context |
 | **v1.7.0** | Handoff prompt now opens with an explicit instruction to read `AGENTS.md` first, then follow the §1 startup sequence | Handoffs work even if the receiving tool doesn't auto-load governance files |
 | **v1.6.0** | Post-install Quick Start printed after setup; `CODEBASE_CONTEXT.md` generation backs up and scans more sources (docs/, yaml, .env) | Commands are ready to copy right after install; first-session context is more complete |
-| **v1.5.0** | External API Code Safety §0b — doc-verified baseline required before writing API-calling code; PROJECT_MASTER_SPEC §10 with intent-based trigger | Prevents API hallucination; long-lived projects get a stable authoritative spec |
 
 ---
 
@@ -84,7 +85,7 @@ Follow AGENTS.md
    - `INSTALL_ROOT_OK: <absolute_path>`
    - `INSTALL_WRITE_OK`
 7. Before first write, AI creates a lightweight backup snapshot at `<PROJECT_ROOT>/dev/init_backup/<UTC_TIMESTAMP>/` for existing target governance files
-8. AI creates/merges 5 governance files in the confirmed project root
+8. AI creates or merges governance files in the confirmed project root
 9. AI prints a **Quick Start** block with copy-paste commands — no need to memorize session commands
 
 ### :small_blue_diamond: Install UI walkthrough
@@ -154,6 +155,7 @@ Re-run `INIT.md` with the current version. The steps are identical to initial in
 
 **What the AI does during upgrade:**
 - Existing `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` → **merge** (governance sections updated, your custom content preserved)
+- `dev/DOC_SYNC_CHECKLIST.md` → **merge** (existing project-specific rows preserved, missing universal rows added)
 - `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md` → **skip** (session history never touched)
 - The dry-run plan shown in step 5 of Install will confirm `merge` / `skip` before any write
 
@@ -254,6 +256,7 @@ Yes. It merges with what you already have — it doesn't overwrite things.
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
+   ├─ DOC_SYNC_CHECKLIST.md    # doc-sync registry
    ├─ CODEBASE_CONTEXT.md      # auto-generated first session
    └─ PROJECT_MASTER_SPEC.md   # optional
 ```
@@ -266,6 +269,7 @@ Yes. It merges with what you already have — it doesn't overwrite things.
 - `GEMINI.md` - Gemini pointer to SSOT
 - `dev/SESSION_HANDOFF.md` - current baseline and next priorities
 - `dev/SESSION_LOG.md` - session-by-session history and validation
+- `dev/DOC_SYNC_CHECKLIST.md` - doc-sync registry: maps change category to required doc updates
 - `dev/CODEBASE_CONTEXT.md` - tech stack, external services, key decisions (auto-generated first session)
 - `dev/PROJECT_MASTER_SPEC.md` - optional long-term authority
 
@@ -287,8 +291,8 @@ Full verification details:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-Snapshot status (as of 2026-03-17):
-- AGENTS/INIT rule parity: verified (57-check regression suite)
+Snapshot status (as of 2026-03-26):
+- AGENTS/INIT rule parity: verified (111-check regression suite)
 - Multi-platform pointer behavior: verified
 - Longitudinal 50+ session durability: not yet verified
 
