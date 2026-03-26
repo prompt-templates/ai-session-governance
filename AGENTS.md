@@ -2,6 +2,10 @@
 (If an AGENTS.md already exists in this project's directory, the original content must be preserved and integrated/merged — retaining the strengths of each while coordinating them to complement rather than conflict with one another)
 
 <INSTRUCTIONS>
+<!-- MANDATORY STARTUP — read every session: §0 §1 §2 -->
+<!-- MANDATORY WORKFLOW — execute every task/closeout: §3 §4 -->
+<!-- CONDITIONAL — apply when triggered: §0b §2b §2c §3b §3c §3d §5 §6 §7 §8 §8b §9 -->
+<!-- REFERENCE — consult when needed: §10 §11 §12 -->
 
 ## 0) Purpose
 This project adopts a "sustainable session governance" model. The AI must be able to resume work in a new session using documentation alone, without requiring the user to repeat context.
@@ -237,6 +241,7 @@ Every task must follow this workflow and clearly label each phase in the respons
    - Update `dev/SESSION_HANDOFF.md` and `dev/SESSION_LOG.md`
    - Apply the same cross-document sync conditions as §4 closeout: if tech stack, directory structure, build commands, external services, or Key Decisions changed in this task — update `dev/CODEBASE_CONTEXT.md` now, do not defer to closeout
    - If `dev/PROJECT_MASTER_SPEC.md` exists and carries status for the completed work — update it in the same pass
+   - If any file was created or modified during CHANGE, and `dev/DOC_SYNC_CHECKLIST.md` exists: query the registry for this change category and update all listed docs before completing PERSIST
 
 ---
 
@@ -276,7 +281,7 @@ Whenever a task involves a merge, release, deploy, publish, GA, or hotfix comple
 
 1. Independent Review Pass
    - Conduct an independent review (may be performed by a second agent, a review mode, or a structured self-check checklist)
-   - Must cover: correctness, consistency, regression risk, documentation sync, toolchain compatibility
+   - Must cover: correctness, consistency, regression risk, documentation sync (verify all `dev/DOC_SYNC_CHECKLIST.md` entries affected by this release's changes are updated), toolchain compatibility
 
 2. Machine Verification
    - Run the project's applicable build / type-check / lint / tests / regression / consistency checks
@@ -339,8 +344,6 @@ When the user expresses any of the following (or similar) end-of-session intent,
 At closeout, the following must be updated at minimum:
 1. `dev/SESSION_HANDOFF.md`
 2. `dev/SESSION_LOG.md`
-
-If the session's changes involve specifications, acceptance criteria, runbooks, releases, baselines, regression thresholds, or external platform integrations, the corresponding documents must also be updated.
 
 If the session's changes involve tech stack, directory structure, build commands, external services, or Key Decisions, `dev/CODEBASE_CONTEXT.md` must also be updated and a new entry appended to the `AI Maintenance Log` section with the current session ID and a brief change summary.
 
@@ -477,7 +480,7 @@ Before any bootstrap/setup task that creates or modifies multiple governance fil
    - `INSTALL_WRITE_OK`
 9. After `INSTALL_WRITE_OK` and before first write, create a lightweight backup snapshot:
    - Directory: `<PROJECT_ROOT>/dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/`
-   - Copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, if present)
+   - Copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, if present)
    - Preserve relative paths under `<PROJECT_ROOT>`
    - Use native filesystem copy operations (cross-platform), no git required
 10. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly
@@ -508,7 +511,7 @@ Normal external network service APIs / Web SDKs required for project feature dev
 2. Do not perform unrelated refactoring
 3. Do not revert the user's existing modifications
 4. If unexpected changes not caused by the AI are discovered, stop and confirm with the user first
-5. If behavior, processes, interfaces, acceptance criteria, runbooks, release conditions, or related matters change, the corresponding documentation and regression must be updated in the same changeset
+5. If behavior, processes, interfaces, acceptance criteria, runbooks, release conditions, or related matters change, the corresponding documentation (see `dev/DOC_SYNC_CHECKLIST.md` if it exists) and regression must be updated in the same changeset
 6. If the current fix would make the project's rules more complex, first assess whether consolidation can reduce overall complexity
 
 ---
@@ -517,7 +520,7 @@ Normal external network service APIs / Web SDKs required for project feature dev
 Whenever a bug, process issue, incident root cause, or recurring error is fixed, the following must also be done:
 
 1. Add / update a regression case
-2. Update acceptance docs / runbook / spec (depending on impact scope)
+2. Query `dev/DOC_SYNC_CHECKLIST.md` (if it exists) for doc impact scope; update all listed entries for this change category
 3. Record in `dev/SESSION_LOG.md`:
    - Problem
    - Root Cause
