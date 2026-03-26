@@ -2,3 +2,6 @@
 # Local development records — not for publication
 dev/SESSION_HANDOFF.md
 dev/SESSION_LOG.md
+
+# Git worktrees
+.worktrees/
