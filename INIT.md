@@ -759,7 +759,7 @@ Rule if exists: skip, do not overwrite.
 
 ## Update Rule
 This file and `dev/SESSION_LOG.md` must be updated at the end of every session.
-If the session's changes affect specifications, runbooks, regression thresholds, release conditions, or external platform integrations, the corresponding documents must also be updated.
+If the session's changes affect behavior, acceptance criteria, specifications, runbooks, release conditions, or external platform integrations, query `dev/DOC_SYNC_CHECKLIST.md` (if it exists) for the complete scope of affected docs and update all listed entries.
 If the session's fix involves adding a new rule, first check whether the existing definition should be integrated or outdated wording retired — avoid stacking without consolidating.
 
 ## Last Session Record
@@ -824,7 +824,7 @@ Overall: PASS / PASS with notes / FAIL
 ---
 
 ## FILE 6: dev/DOC_SYNC_CHECKLIST.md
-Rule if exists: preserve all existing rows; ensure the 5 universal rows in the template are present — add any that are missing without removing custom rows added by the project.
+Rule if exists: preserve all existing rows; ensure the universal rows in the template are present — add any that are missing without removing custom rows added by the project.
 
 ```
 # Doc Sync Checklist
@@ -865,7 +865,7 @@ After creating all files, confirm:
 - Backup snapshot path and which files were backed up (or `none`)
 - Which files were created
 - Which were skipped (already existed)
-- Which were merged (AGENTS.md / CLAUDE.md / GEMINI.md with existing content)
+- Which were merged (AGENTS.md / CLAUDE.md / GEMINI.md with existing content; dev/DOC_SYNC_CHECKLIST.md if it existed)
 
 Then say: "Governance setup complete.
 

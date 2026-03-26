@@ -1,13 +1,15 @@
 # QA Regression Report
 
-Date: 2026-03-24 (UTC)
-Scope: 6 governance gap fixes (v1.9.0 candidate) — §1 new-session definition consolidation, §3 PERSIST sync, §4 Open Priorities regeneration, §4 max-3 clarification, §10 Known Risks location, §5.7 precision wording; full regression of all prior checks
+Date: 2026-03-26 (UTC)
+Scope: v2.0 — DOC_SYNC_CHECKLIST registry + doc-sync rule tightening (§3 PERSIST, §3c, §4 retire, §5a backup lists, §7, §8); section markers; INIT.md FILE 6 bootstrap; full regression of all prior checks
 
 ## Summary
 
-- Total checks: 82
-- Pass: 82
+- Total checks: 111
+- Pass: 111
 - Fail: 0
+
+Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
 
 ## What was validated
 
@@ -123,7 +125,88 @@ Scope: 6 governance gap fixes (v1.9.0 candidate) — §1 new-session definition 
 | (79) §5.7 "modification operations (create, delete" precision wording present in INIT.md | PASS |
 | (80) Old "to perform file system operations;" removed from AGENTS.md | PASS |
 | (81) Old "to perform file system operations;" removed from INIT.md | PASS |
-| (82) Fence counts unchanged: AGENTS.md=16, INIT.md=26 (even) | PASS |
+| (82) Fence counts: AGENTS.md=16 (unchanged), INIT.md=28 (was 26, +2 from FILE 6) (even) | PASS |
+
+## Feature round 6 (2026-03-26): v2.0 — DOC_SYNC_CHECKLIST registry + doc-sync rule tightening
+
+### Section Markers
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (83) "MANDATORY STARTUP" marker in AGENTS.md | `grep -c "MANDATORY STARTUP" AGENTS.md` | 1 | PASS |
+| (84) "MANDATORY STARTUP" marker in INIT.md FILE 1 | `grep -c "MANDATORY STARTUP" INIT.md` | 1 | PASS |
+| (85) "MANDATORY WORKFLOW" marker in AGENTS.md | `grep -c "MANDATORY WORKFLOW" AGENTS.md` | 1 | PASS |
+| (86) "CONDITIONAL" marker in AGENTS.md | `grep -c "CONDITIONAL.*apply when triggered" AGENTS.md` | 1 | PASS |
+| (87) "REFERENCE" marker in AGENTS.md | `grep -c "REFERENCE.*consult when needed" AGENTS.md` | 1 | PASS |
+
+### §3 PERSIST DOC_SYNC_CHECKLIST trigger
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (88) PERSIST trigger present in AGENTS.md | `grep -c "DOC_SYNC_CHECKLIST.md.*exists.*query" AGENTS.md` | 1 | PASS |
+| (89) PERSIST trigger present in INIT.md FILE 1 | `grep -c "DOC_SYNC_CHECKLIST.md.*exists.*query" INIT.md` | 1 | PASS |
+
+### §3c Release Gate — documentation sync tightened
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (90) Entries affected ref in AGENTS.md | `grep -c "DOC_SYNC_CHECKLIST.*entries affected" AGENTS.md` | 1 | PASS |
+| (91) Entries affected ref in INIT.md | `grep -c "DOC_SYNC_CHECKLIST.*entries affected" INIT.md` | 1 | PASS |
+
+### §4 Closeout — vague sentence retired
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (92) Vague sentence absent from AGENTS.md | `grep -c "corresponding documents must also be updated" AGENTS.md` | 0 | PASS |
+| (93) Vague sentence absent from INIT.md (all locations incl. FILE 4) | `grep -c "corresponding documents must also be updated" INIT.md` | 0 | PASS |
+
+### §5a + ROOT SAFETY CHECK — backup lists updated
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (94) DOC_SYNC_CHECKLIST.md in AGENTS.md backup list | `grep -c "DOC_SYNC_CHECKLIST.md.*if present" AGENTS.md` | 1 | PASS |
+| (95) DOC_SYNC_CHECKLIST.md in INIT.md backup lists | `grep -c "DOC_SYNC_CHECKLIST.md.*if present" INIT.md` | 2 | PASS |
+
+### §7 item 5 — tightened
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (96) Checklist reference in §7 AGENTS.md | `grep -c "DOC_SYNC_CHECKLIST.*if it exists" AGENTS.md` | ≥1 | PASS (2) |
+| (97) Checklist reference in §7 INIT.md | `grep -c "DOC_SYNC_CHECKLIST.*if it exists" INIT.md` | ≥1 | PASS (3) |
+
+### §8 item 2 — replaced with checklist query
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (98) Old §8 text absent from AGENTS.md | `grep -c "Update acceptance docs / runbook" AGENTS.md` | 0 | PASS |
+| (99) Old §8 text absent from INIT.md | `grep -c "Update acceptance docs / runbook" INIT.md` | 0 | PASS |
+| (100) New checklist query in AGENTS.md | `grep -c "Query.*DOC_SYNC_CHECKLIST" AGENTS.md` | 1 | PASS |
+| (101) New checklist query in INIT.md | `grep -c "Query.*DOC_SYNC_CHECKLIST" INIT.md` | 1 | PASS |
+
+### INIT.md FILE 6 structure
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (102) FILE 6 heading present in INIT.md | `grep -c "FILE 6.*DOC_SYNC_CHECKLIST" INIT.md` | 1 | PASS |
+| (103) FILE 6 rule: no hardcoded "5 universal rows" | `grep -c "5 universal rows" INIT.md` | 0 | PASS |
+| (104) "Change Category Registry" heading in FILE 6 content | `grep -c "Change Category Registry" INIT.md` | 1 | PASS |
+| (105) "Anti-pattern: No Matching Row" in FILE 6 content | `grep -c "Anti-pattern.*No Matching Row" INIT.md` | 1 | PASS |
+
+### dev/DOC_SYNC_CHECKLIST.md file integrity
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (106) File exists | `test -f dev/DOC_SYNC_CHECKLIST.md` | exists | PASS |
+| (107) "Change Category Registry" section present | `grep -c "Change Category Registry" dev/DOC_SYNC_CHECKLIST.md` | 1 | PASS |
+| (108) "Anti-pattern: No Matching Row" section present | `grep -c "Anti-pattern.*No Matching Row" dev/DOC_SYNC_CHECKLIST.md` | 1 | PASS |
+| (109) First universal row present | `grep -c "Governance rule change.*AGENTS.md" dev/DOC_SYNC_CHECKLIST.md` | 1 | PASS |
+
+### Total reference counts (parity sentinel)
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (110) Total DOC_SYNC_CHECKLIST occurrences in AGENTS.md | `grep -c "DOC_SYNC_CHECKLIST" AGENTS.md` | 5 | PASS |
+| (111) Total DOC_SYNC_CHECKLIST occurrences in INIT.md | `grep -c "DOC_SYNC_CHECKLIST" INIT.md` | 9 | PASS |
 
 ## Notes
 
@@ -133,6 +216,7 @@ Scope: 6 governance gap fixes (v1.9.0 candidate) — §1 new-session definition 
 - Feature round 3 adds: §3d Test Plan Design conditional subsection (4 trigger conditions, 4 scenario categories, project-type adaptations, table format, recording location rules).
 - Feature round 4 adds: §4 rule 5 cross-LLM handoff opening line requirement (AGENTS.md read first + §1 startup sequence); §1 CODEBASE_CONTEXT scan hardening (backup step, expanded sources, consolidate-not-duplicate).
 - Feature round 5 adds: 6 governance gap fixes — §1 new-session definition (3-trigger), §3 PERSIST explicit sync, §4 Open Priorities regeneration, §4 max-3 clarification, §10 Known Risks location, §5.7 modification operations precision.
+- Feature round 6 adds: DOC_SYNC_CHECKLIST.md registry (deterministic doc-sync via lookup table); section markers in AGENTS.md (MANDATORY/CONDITIONAL/REFERENCE); §3 PERSIST checklist trigger; §3c documentation sync definition; §4 vague "corresponding documents" sentence retired; §5a backup lists updated; §7 and §8 tightened with registry references; INIT.md FILE 6 bootstrap; INIT.md fence count updated to 28.
 
 ## Manual governance checks (cannot be automated with grep)
 
@@ -144,4 +228,6 @@ These require human or live-session verification:
 | §0b step 0: if CODEBASE_CONTEXT does not exist, AI generates it before recording External Services | Behavioral | Verify in first-session scenario with API-calling code |
 | §1 generation scan: AI scans README → docs/**/*.md → package manifests → .env.example → yaml configs without modifying source files; consolidates duplicates into one entry | Behavioral | Verify in first-session scenario with multi-source project |
 | Cross-tool handoff (A→B): generated handoff prompt opens with AGENTS.md read instruction; receiving tool reads AGENTS.md first then follows §1 startup sequence; baseline loaded without re-briefing | Behavioral | Verify by pasting handoff prompt into a different AI CLI tool (e.g. Claude Code → Gemini CLI, or Codex → Claude Code) |
+| DOC_SYNC_CHECKLIST merge on upgrade: re-running INIT.md on project with custom rows in DOC_SYNC_CHECKLIST.md preserves those rows and adds any missing universal rows without overwriting | Behavioral | Verify by running INIT.md on a project that already has DOC_SYNC_CHECKLIST.md with a project-specific row added |
+| PERSIST checklist trigger: agent queries DOC_SYNC_CHECKLIST when CHANGE phase modified files; skips query when session was pure research/discussion with no file changes | Behavioral | Verify in two live sessions: one with file changes (query triggered), one without (query skipped) |
 | Re-install on existing project: dry-run plan shows merge/skip (not create) for existing files; backup created before first write; SESSION_HANDOFF.md and SESSION_LOG.md left untouched | Behavioral | Verify by running INIT.md on a project that already has governance files |
