@@ -1,15 +1,16 @@
 # QA Regression Report
 
-Date: 2026-03-26 (UTC)
-Scope: v2.0 — DOC_SYNC_CHECKLIST registry + doc-sync rule tightening (§3 PERSIST, §3c, §4 retire, §5a backup lists, §7, §8); section markers; INIT.md FILE 6 bootstrap; full regression of all prior checks
+Date: 2026-03-27 (UTC)
+Scope: v2.1 — Handoff Prompt chain integrity fixes (断环 1/2/3/4/6) + DOC_SYNC Matrix Scan mandatory visible output; full regression of all prior checks
 
 ## Summary
 
-- Total checks: 111
-- Pass: 111
+- Total checks: 125
+- Pass: 125
 - Fail: 0
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
+Note: Checks 112–125 added for Feature Round 7 (v2.1 Handoff chain fixes + DOC_SYNC Matrix Scan enforcement).
 
 ## What was validated
 
@@ -208,6 +209,45 @@ Note: Check (82) expected value updated — INIT.md fence count changed from 26 
 | (110) Total DOC_SYNC_CHECKLIST occurrences in AGENTS.md | `grep -c "DOC_SYNC_CHECKLIST" AGENTS.md` | 5 | PASS |
 | (111) Total DOC_SYNC_CHECKLIST occurrences in INIT.md | `grep -c "DOC_SYNC_CHECKLIST" INIT.md` | 9 | PASS |
 
+## Feature round 7 (2026-03-27): v2.1 — Handoff chain integrity fixes + DOC_SYNC Matrix Scan enforcement
+
+Root cause addressed: systematic analysis of "new stateless agent receives Handoff Prompt → runs full flow" revealed 6 断环 in the information chain. This round fixes断环 1/2/3/4/6 and adds mandatory visible DOC_SYNC output enforcement.
+
+Changes: §1 Verbatim block "last occurring" precision + "does not substitute" startup clarification; §3 PERSIST DOC_SYNC Matrix Scan mandatory visible block; §4 rule 5 Opening line verbatim template + PROJECT_MASTER_SPEC added to sequence + "Post-startup first action:" label.
+
+### §1 Verbatim block precision (断环 4) + startup clarification (断环 2)
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (112) "last occurring" definition in AGENTS.md | `grep -c "last occurring" AGENTS.md` | 1 | PASS |
+| (113) "last occurring" definition in INIT.md | `grep -c "last occurring" INIT.md` | 1 | PASS |
+| (114) "does not substitute" startup clarification in AGENTS.md | `grep -c "does not substitute" AGENTS.md` | 1 | PASS |
+| (115) "does not substitute" startup clarification in INIT.md | `grep -c "does not substitute" INIT.md` | 1 | PASS |
+
+### §3 PERSIST DOC_SYNC Matrix Scan mandatory visible output
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (116) DOC_SYNC Matrix Scan mandatory rule in AGENTS.md | `grep -c "DOC_SYNC Matrix Scan.*mandatory" AGENTS.md` | 1 | PASS |
+| (117) DOC_SYNC Matrix Scan mandatory rule in INIT.md | `grep -c "DOC_SYNC Matrix Scan.*mandatory" INIT.md` | 1 | PASS |
+| (118) Absence enforcement note in AGENTS.md | `grep -c "scan was skipped" AGENTS.md` | 1 | PASS |
+| (119) Absence enforcement note in INIT.md | `grep -c "scan was skipped" INIT.md` | 1 | PASS |
+| (120) "no file changes" SKIP variant present in AGENTS.md | `grep -c "no file changes this task" AGENTS.md` | 1 | PASS |
+| (121) "no file changes" SKIP variant present in INIT.md | `grep -c "no file changes this task" INIT.md` | 1 | PASS |
+
+### §4 rule 5 Opening line verbatim template (断环 1/3/6) + Post-startup label (断环 1)
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (122) Verbatim template requirement in AGENTS.md | `grep -c "verbatim template" AGENTS.md` | 1 | PASS |
+| (123) Verbatim template requirement in INIT.md | `grep -c "verbatim template" INIT.md` | 1 | PASS |
+| (124) Post-startup first action label in AGENTS.md | `grep -c "Post-startup first action" AGENTS.md` | 1 | PASS |
+| (125) Post-startup first action label in INIT.md | `grep -c "Post-startup first action" INIT.md` | 1 | PASS |
+
+PROJECT_MASTER_SPEC.md in Opening line template: AGENTS.md=1 (§4 rule 5 only), INIT.md=2 (§4 rule 5 + QUICK START section) — both ≥1, verified by inspection; not assigned a numbered check as the value differs by file.
+
+Fence counts unchanged: AGENTS.md=16 (even), INIT.md=28 (even) — verified by inspection (no fenced code blocks added in any change).
+
 ## Notes
 
 - This report validates document and governance consistency at repository level.
@@ -217,6 +257,7 @@ Note: Check (82) expected value updated — INIT.md fence count changed from 26 
 - Feature round 4 adds: §4 rule 5 cross-LLM handoff opening line requirement (AGENTS.md read first + §1 startup sequence); §1 CODEBASE_CONTEXT scan hardening (backup step, expanded sources, consolidate-not-duplicate).
 - Feature round 5 adds: 6 governance gap fixes — §1 new-session definition (3-trigger), §3 PERSIST explicit sync, §4 Open Priorities regeneration, §4 max-3 clarification, §10 Known Risks location, §5.7 modification operations precision.
 - Feature round 6 adds: DOC_SYNC_CHECKLIST.md registry (deterministic doc-sync via lookup table); section markers in AGENTS.md (MANDATORY/CONDITIONAL/REFERENCE); §3 PERSIST checklist trigger; §3c documentation sync definition; §4 vague "corresponding documents" sentence retired; §5a backup lists updated; §7 and §8 tightened with registry references; INIT.md FILE 6 bootstrap; INIT.md fence count updated to 28.
+- Feature round 7 adds: §1 "last occurring" Verbatim block definition + "does not substitute" startup clarification; §3 PERSIST DOC_SYNC Matrix Scan mandatory visible block (replaces silent trigger); §4 rule 5 Opening line verbatim template + PROJECT_MASTER_SPEC in sequence + "Post-startup first action:" label; total 14 new grep checks (112–125).
 
 ## Manual governance checks (cannot be automated with grep)
 
@@ -227,7 +268,8 @@ These require human or live-session verification:
 | §10 suppression: if SESSION_HANDOFF contains "PROJECT_MASTER_SPEC suggestion issued: [session ID] [date]", AI must NOT re-suggest in subsequent sessions unless new arch decisions were made | Behavioral | Verify in live session after §10 suggestion is issued |
 | §0b step 0: if CODEBASE_CONTEXT does not exist, AI generates it before recording External Services | Behavioral | Verify in first-session scenario with API-calling code |
 | §1 generation scan: AI scans README → docs/**/*.md → package manifests → .env.example → yaml configs without modifying source files; consolidates duplicates into one entry | Behavioral | Verify in first-session scenario with multi-source project |
-| Cross-tool handoff (A→B): generated handoff prompt opens with AGENTS.md read instruction; receiving tool reads AGENTS.md first then follows §1 startup sequence; baseline loaded without re-briefing | Behavioral | Verify by pasting handoff prompt into a different AI CLI tool (e.g. Claude Code → Gemini CLI, or Codex → Claude Code) |
+| Cross-tool handoff (A→B): generated Handoff Prompt opens with verbatim Opening line template (AGENTS.md + §1 sequence including PROJECT_MASTER_SPEC); receiving tool reads AGENTS.md first then follows full §1 startup sequence; labeled "Post-startup first action:" appears only after §1 is complete | Behavioral | Verify by pasting handoff prompt into a different AI CLI tool (e.g. Claude Code → Gemini CLI, or Codex → Claude Code); confirm "Post-startup first action:" label is used |
+| DOC_SYNC Matrix Scan visible output: at PERSIST phase, response contains "### DOC_SYNC Matrix Scan" block with matched registry rows and Status column; absence of block is immediately flagged | Behavioral | Verify in a live session where CHANGE phase modified files; confirm block appears before PERSIST completes |
 | DOC_SYNC_CHECKLIST merge on upgrade: re-running INIT.md on project with custom rows in DOC_SYNC_CHECKLIST.md preserves those rows and adds any missing universal rows without overwriting | Behavioral | Verify by running INIT.md on a project that already has DOC_SYNC_CHECKLIST.md with a project-specific row added |
-| PERSIST checklist trigger: agent queries DOC_SYNC_CHECKLIST when CHANGE phase modified files; skips query when session was pure research/discussion with no file changes | Behavioral | Verify in two live sessions: one with file changes (query triggered), one without (query skipped) |
+| PERSIST checklist trigger: agent outputs DOC_SYNC Matrix Scan block when CHANGE phase modified files; outputs SKIP notice when no file changes occurred | Behavioral | Verify in two live sessions: one with file changes (block appears), one without (SKIP output or absent) |
 | Re-install on existing project: dry-run plan shows merge/skip (not create) for existing files; backup created before first write; SESSION_HANDOFF.md and SESSION_LOG.md left untouched | Behavioral | Verify by running INIT.md on a project that already has governance files |

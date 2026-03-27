@@ -48,6 +48,7 @@
 
 | 版本 | 變更內容 | 對你的意義 |
 |---|---|---|
+| **v2.1** | 兩項可靠性修正：(1) 收到交接時，新的 AI 工具現在有更明確的指示，要求在開始工作前先讀取治理規則；(2) 做完任何修改後，AI 必須在回覆中顯示它更新了哪些文件 — 看不到這個區塊就代表該步驟被跳過 | 切換 AI 工具時交接更穩定；文件更新是否有做，在 AI 的回覆中一目了然，不再靜默略過 |
 | **v2.0** | `DOC_SYNC_CHECKLIST.md` — 確定性文件同步登錄表，將變更類別對應到必須更新的文件；`AGENTS.md` 加入章節標記（MANDATORY / CONDITIONAL / REFERENCE） | 消除文件同步猜測：AI 查表決定要更新什麼，而非自行判斷 |
 | **v1.9.0** | 六項治理修正：§1 三觸發新工作階段定義、§3 PERSIST 顯式跨文件同步、§4 Open Priorities 再生機制（replace not append）、§4 max-3 說明、§10 Known Risks 記錄位置、§5.7 修改操作精確化 | 修正從實際應用中發現的 AI 行為缺口 — 過期清單、遺漏文件同步、範圍歧義 |
 | **v1.8.0** | §1 新增 context compaction 恢復規則 — AI 在壓縮後必須重新執行啟動序列，不可信任 summary 的待辦清單 | 防止 Claude Code 自動壓縮情境後，AI 靜默沿用過時的 pending tasks |
@@ -295,8 +296,8 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新 QA 回歸驗收報告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-截至 2026-03-26 的摘要如下：
-- AGENTS/INIT 規則同步：已驗證（111 項回歸測試）
+截至 2026-03-27 的摘要如下：
+- AGENTS/INIT 規則同步：已驗證（125 項回歸測試）
 - 多平台指標檔行為：已驗證
 - 50+ 工作階段的長期縱向效果：尚未驗證
 

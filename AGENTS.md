@@ -121,7 +121,7 @@ If `dev/CODEBASE_CONTEXT.md` does not exist, the AI must generate it during the 
 4. Record all source files scanned in the `AI Maintenance Log` section
 5. Never modify the source files during this scan — read only
 
-After reading `dev/SESSION_LOG.md`, the AI must locate the latest `### Next Session Handoff Prompt (Verbatim)` block (if present) and use that block as startup execution seed context for PLAN.
+After reading `dev/SESSION_LOG.md`, the AI must locate the latest `### Next Session Handoff Prompt (Verbatim)` block — defined as the last occurring such heading in the entire file — and use that block as startup execution seed context for PLAN. Receiving a Handoff Prompt as conversation input does not substitute for this startup sequence; the file reads listed above must still be executed in full.
 
 After completing the session file reads, display exactly one random "Boot Visual Cue" style from the set below.
 Selection rule: randomize across styles; if the previous style is known, prefer a different style instead of repeating.
@@ -241,7 +241,7 @@ Every task must follow this workflow and clearly label each phase in the respons
    - Update `dev/SESSION_HANDOFF.md` and `dev/SESSION_LOG.md`
    - Apply the same cross-document sync conditions as §4 closeout: if tech stack, directory structure, build commands, external services, or Key Decisions changed in this task — update `dev/CODEBASE_CONTEXT.md` now, do not defer to closeout
    - If `dev/PROJECT_MASTER_SPEC.md` exists and carries status for the completed work — update it in the same pass
-   - If any file was created or modified during CHANGE, and `dev/DOC_SYNC_CHECKLIST.md` exists: query the registry for this change category and update all listed docs before completing PERSIST
+   - **DOC_SYNC Matrix Scan (mandatory visible output)**: Before completing PERSIST, output a `### DOC_SYNC Matrix Scan` block in the response. If no files were created or modified during CHANGE: output `### DOC_SYNC Matrix Scan — SKIP (no file changes this task)`. If `dev/DOC_SYNC_CHECKLIST.md` exists: query the registry and list every matched row with columns `Change Category | Required Doc Updates | Status` (Status = `✓ Done`, `N/A`, or `⚠ Skipped (reason)`); update all required docs. If no row matches the current change: add the missing row to the registry first (anti-pattern guard), then list it with Status `✓ Row added`. If the registry does not exist: output `### DOC_SYNC Matrix Scan — SKIP (registry not present)`. Absence of this block in the response = scan was skipped; user may immediately request the agent to complete it.
 
 ---
 
@@ -368,12 +368,14 @@ Supplementary rules:
 3. After closeout is complete, the response must include a copy-paste-ready "Next Session Handoff Prompt" for the next agent
 4. The "Next Session Handoff Prompt" must be generated from the project's actual current state; fixed or hardcoded handoff sentences are prohibited
 5. The "Next Session Handoff Prompt" must include at minimum:
-   - Opening line: instruct the receiving AI to read `AGENTS.md` first (governance SSOT), then follow the §1 startup sequence (`dev/SESSION_HANDOFF.md` → `dev/SESSION_LOG.md` → `dev/CODEBASE_CONTEXT.md` if exists) — this ensures cross-tool handoffs work even when the receiving tool does not auto-load `AGENTS.md`
+   - Opening line: use this verbatim template — do not paraphrase or omit any file — paste as two consecutive lines to ensure cross-tool handoffs work even when the receiving tool does not auto-load `AGENTS.md`:
+     `Read AGENTS.md first (governance SSOT), then follow its §1 startup sequence:`
+     `dev/SESSION_HANDOFF.md → dev/SESSION_LOG.md → dev/CODEBASE_CONTEXT.md (if exists) → dev/PROJECT_MASTER_SPEC.md (if exists)`
    - Current objective and progress state
    - Pending tasks in priority order
    - Key files changed in this session
    - Known risks / blockers / cautions
-   - Validation status and the first concrete next action
+   - Validation status and the first concrete action after completing the full §1 startup sequence, labeled `Post-startup first action:` — this is executed only after §1 is complete, not before
 6. After closeout is complete, the response must be formatted in exactly three sections in this order:
    - Section 1: `SESSION CLOSEOUT SUMMARY`
    - Section 2: `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)`

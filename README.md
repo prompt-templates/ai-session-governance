@@ -48,6 +48,7 @@ It also catches a few common AI mistakes:
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v2.1** | Two reliability fixes: (1) when receiving a handoff, new agents are now guided more clearly to read governance rules before starting work; (2) after every change, AI must display which docs it updated — if that block is absent from the response, you know to ask | Switching AI tools mid-session is more reliable; doc update gaps are now visible in the response instead of happening silently |
 | **v2.0** | `DOC_SYNC_CHECKLIST.md` — deterministic doc-sync registry mapping change category to required doc updates; section markers in `AGENTS.md` (MANDATORY / CONDITIONAL / REFERENCE) | Removes guesswork from doc sync: AI looks up what to update instead of self-assessing |
 | **v1.9.0** | 6 governance fixes: §1 3-trigger new-session definition, §3 PERSIST explicit cross-doc sync, §4 Open Priorities regeneration (replace not append), §4 "max 3" clarification, §10 Known Risks location, §5.7 modification ops precision | Closes real AI behavioral gaps found in field usage — stale priority lists, skipped doc sync, ambiguous scope |
 | **v1.8.0** | Context compaction recovery added to §1 — AI must re-run the startup sequence after compaction instead of trusting the summary's pending tasks | Prevents silent task drift when Claude Code auto-compacts mid-session context |
@@ -291,8 +292,8 @@ Full verification details:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-Snapshot status (as of 2026-03-26):
-- AGENTS/INIT rule parity: verified (111-check regression suite)
+Snapshot status (as of 2026-03-27):
+- AGENTS/INIT rule parity: verified (125-check regression suite)
 - Multi-platform pointer behavior: verified
 - Longitudinal 50+ session durability: not yet verified
 
