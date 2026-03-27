@@ -4,7 +4,7 @@
 <INSTRUCTIONS>
 <!-- MANDATORY STARTUP — read every session: §0 §1 §2 -->
 <!-- MANDATORY WORKFLOW — execute every task/closeout: §3 §4 -->
-<!-- CONDITIONAL — apply when triggered: §0b §2b §2c §3b §3c §3d §5 §6 §7 §8 §8b §9 -->
+<!-- CONDITIONAL — apply when triggered: §0b §2b §2c §3b §3c §3d §4a §5 §6 §7 §8 §8b §9 -->
 <!-- REFERENCE — consult when needed: §10 §11 §12 -->
 
 ## 0) Purpose
@@ -438,6 +438,41 @@ Closeout Visual Cue - Style C
 
   🧭  shipped. next up.
 ```
+
+---
+
+## 4a) Session Log Maintenance (Conditional — auto-triggered at closeout)
+
+Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, check the following trigger conditions:
+
+**Trigger (either condition):**
+1. `dev/SESSION_LOG.md` exceeds 800 lines
+2. The oldest session entry in `dev/SESSION_LOG.md` is dated more than 30 days ago
+
+**If neither condition is met:** proceed with writing the new session entry normally.
+
+**If triggered, perform archiving before writing the new entry:**
+
+1. Create `dev/archive/` directory if it does not exist
+2. Identify entries to archive:
+   - Line-count trigger: archive oldest entries until `dev/SESSION_LOG.md` ≤ 350 lines; always retain the 2 most recent session entries regardless of size
+   - Date trigger: archive all entries older than 30 days; always retain the 2 most recent session entries regardless of date
+3. Determine the archive filename by year and quarter of the archived entries:
+   - Format: `dev/archive/SESSION_LOG_YYYY_QN.md` (e.g., `SESSION_LOG_2026_Q1.md` for Jan–Mar 2026)
+   - If archived entries span multiple quarters, create one file per quarter
+   - If the target archive file already exists, append to it (do not overwrite)
+4. Move the identified entries from `dev/SESSION_LOG.md` into the archive file(s)
+5. Add or update an archive pointer comment immediately after the file header in `dev/SESSION_LOG.md`:
+   `<!-- Archives: dev/archive/ — entries moved when >800 lines or oldest entry >30 days -->`
+6. Proceed with writing the new session entry to the now-trimmed `dev/SESSION_LOG.md`
+
+**First-run auto-transition:**
+If `dev/SESSION_LOG.md` has no archive pointer and either trigger condition is met, apply the same steps above. Existing large files are trimmed automatically on the first closeout after upgrading — no manual migration needed.
+
+**Hard rules:**
+1. Never delete session entries — only move to archive
+2. `dev/archive/` files are not part of the §1 mandatory read list; do not read them at startup unless the user explicitly requests historical lookup
+3. The most recent session entry's `### Next Session Handoff Prompt (Verbatim)` block must remain in `dev/SESSION_LOG.md`
 
 ---
 

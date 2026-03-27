@@ -1,16 +1,17 @@
 # QA Regression Report
 
 Date: 2026-03-27 (UTC)
-Scope: v2.1 — Handoff Prompt chain integrity fixes (断环 1/2/3/4/6) + DOC_SYNC Matrix Scan mandatory visible output; full regression of all prior checks
+Scope: v2.2 — §4a Session Log Maintenance auto-archive rule; full regression of all prior checks
 
 ## Summary
 
-- Total checks: 125
-- Pass: 125
+- Total checks: 139
+- Pass: 139
 - Fail: 0
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
 Note: Checks 112–125 added for Feature Round 7 (v2.1 Handoff chain fixes + DOC_SYNC Matrix Scan enforcement).
+Note: Checks 126–139 added for Feature Round 8 (v2.2 §4a Session Log Maintenance auto-archive rule).
 
 ## What was validated
 
@@ -244,6 +245,25 @@ Changes: §1 Verbatim block "last occurring" precision + "does not substitute" s
 | (124) Post-startup first action label in AGENTS.md | `grep -c "Post-startup first action" AGENTS.md` | 1 | PASS |
 | (125) Post-startup first action label in INIT.md | `grep -c "Post-startup first action" INIT.md` | 1 | PASS |
 
+### Feature Round 8 — §4a Session Log Maintenance (v2.2)
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (126) §4a heading in AGENTS.md | `grep -c "4a) Session Log Maintenance" AGENTS.md` | 1 | PASS |
+| (127) §4a heading in INIT.md | `grep -c "4a) Session Log Maintenance" INIT.md` | 1 | PASS |
+| (128) 800-line trigger in AGENTS.md | `grep -c "exceeds 800 lines" AGENTS.md` | 1 | PASS |
+| (129) 800-line trigger in INIT.md | `grep -c "exceeds 800 lines" INIT.md` | 1 | PASS |
+| (130) 30-day trigger in AGENTS.md | `grep -c "dated more than 30 days ago" AGENTS.md` | 1 | PASS |
+| (131) 30-day trigger in INIT.md | `grep -c "dated more than 30 days ago" INIT.md` | 1 | PASS |
+| (132) ≤350-line archive target in AGENTS.md | `grep -c "350 lines" AGENTS.md` | 1 | PASS |
+| (133) ≤350-line archive target in INIT.md | `grep -c "350 lines" INIT.md` | 1 | PASS |
+| (134) Quarterly archive format in AGENTS.md | `grep -c "SESSION_LOG_YYYY_QN" AGENTS.md` | 1 | PASS |
+| (135) Quarterly archive format in INIT.md | `grep -c "SESSION_LOG_YYYY_QN" INIT.md` | 1 | PASS |
+| (136) Never-delete hard rule in AGENTS.md | `grep -c "Never delete session entries" AGENTS.md` | 1 | PASS |
+| (137) Never-delete hard rule in INIT.md | `grep -c "Never delete session entries" INIT.md` | 1 | PASS |
+| (138) §4a in CONDITIONAL markers in AGENTS.md | `grep -c "CONDITIONAL.*§4a" AGENTS.md` | 1 | PASS |
+| (139) §4a in CONDITIONAL markers in INIT.md | `grep -c "CONDITIONAL.*§4a" INIT.md` | 1 | PASS |
+
 PROJECT_MASTER_SPEC.md in Opening line template: AGENTS.md=1 (§4 rule 5 only), INIT.md=2 (§4 rule 5 + QUICK START section) — both ≥1, verified by inspection; not assigned a numbered check as the value differs by file.
 
 Fence counts unchanged: AGENTS.md=16 (even), INIT.md=28 (even) — verified by inspection (no fenced code blocks added in any change).
@@ -258,6 +278,7 @@ Fence counts unchanged: AGENTS.md=16 (even), INIT.md=28 (even) — verified by i
 - Feature round 5 adds: 6 governance gap fixes — §1 new-session definition (3-trigger), §3 PERSIST explicit sync, §4 Open Priorities regeneration, §4 max-3 clarification, §10 Known Risks location, §5.7 modification operations precision.
 - Feature round 6 adds: DOC_SYNC_CHECKLIST.md registry (deterministic doc-sync via lookup table); section markers in AGENTS.md (MANDATORY/CONDITIONAL/REFERENCE); §3 PERSIST checklist trigger; §3c documentation sync definition; §4 vague "corresponding documents" sentence retired; §5a backup lists updated; §7 and §8 tightened with registry references; INIT.md FILE 6 bootstrap; INIT.md fence count updated to 28.
 - Feature round 7 adds: §1 "last occurring" Verbatim block definition + "does not substitute" startup clarification; §3 PERSIST DOC_SYNC Matrix Scan mandatory visible block (replaces silent trigger); §4 rule 5 Opening line verbatim template + PROJECT_MASTER_SPEC in sequence + "Post-startup first action:" label; total 14 new grep checks (112–125).
+- Feature round 8 adds: §4a Session Log Maintenance — auto-archive triggers (>800 lines or oldest entry >30 days), archive target (≤350 lines or entries older than 30 days), quarterly archive naming, first-run auto-transition, hard rules (never delete, archive not in §1 read list, retain latest Verbatim block); section markers updated to include §4a; total 14 new grep checks (126–139).
 
 ## Manual governance checks (cannot be automated with grep)
 

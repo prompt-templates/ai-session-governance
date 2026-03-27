@@ -41,6 +41,7 @@ It also catches a few common AI mistakes:
 | **Test plan governance** | Merging changes without a scenario matrix — expected vs. actual outcomes untracked |
 | **Consolidation discipline** | Rule accumulation without checking whether existing rules should be updated first |
 | **Doc-sync registry** | Guessing which docs to update after a change — `DOC_SYNC_CHECKLIST.md` maps change category to required updates so AI looks up instead of self-assessing |
+| **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — auto-archives old entries to `dev/archive/` when `SESSION_LOG.md` exceeds 800 lines or has entries older than 30 days; no manual migration needed |
 
 ---
 
