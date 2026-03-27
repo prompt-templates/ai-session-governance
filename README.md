@@ -43,6 +43,19 @@ It also catches a few common AI mistakes:
 | **Doc-sync registry** | Guessing which docs to update after a change — `DOC_SYNC_CHECKLIST.md` maps change category to required updates so AI looks up instead of self-assessing |
 | **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — auto-archives old entries to `dev/archive/` when `SESSION_LOG.md` exceeds 800 lines or has entries older than 30 days; no manual migration needed |
 
+### :small_blue_diamond: How SESSION_LOG.md stays manageable
+
+`dev/SESSION_LOG.md` is read at every session start. In an active project this file can grow to thousands of lines — loading months of history that has no relevance to today's work.
+
+The template handles this automatically at each session close:
+
+- When the log exceeds **800 lines** or contains entries older than **30 days**, old entries are moved to `dev/archive/` — never deleted, only relocated
+- The active log is trimmed back to the last 5–6 sessions (≤ 350 lines)
+- Archive files are organized by quarter: `dev/archive/SESSION_LOG_YYYY_QN.md`
+- The AI reads only `SESSION_LOG.md` at startup — archive files are never loaded
+
+If you already have a large session log, it is trimmed automatically on the first session close after upgrading. No manual step needed.
+
 ---
 
 ## :bookmark_tabs: Recent releases
@@ -258,6 +271,7 @@ Yes. It merges with what you already have — it doesn't overwrite things.
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
+   ├─ archive/                 # auto-archived log entries (quarterly)
    ├─ DOC_SYNC_CHECKLIST.md    # doc-sync registry
    ├─ CODEBASE_CONTEXT.md      # auto-generated first session
    └─ PROJECT_MASTER_SPEC.md   # optional
@@ -270,7 +284,8 @@ Yes. It merges with what you already have — it doesn't overwrite things.
 - `CLAUDE.md` - Claude pointer to SSOT
 - `GEMINI.md` - Gemini pointer to SSOT
 - `dev/SESSION_HANDOFF.md` - current baseline and next priorities
-- `dev/SESSION_LOG.md` - session-by-session history and validation
+- `dev/SESSION_LOG.md` - session-by-session history and validation (rolling window, auto-trimmed)
+- `dev/archive/` - auto-archived session log entries, organized by quarter; not read at startup
 - `dev/DOC_SYNC_CHECKLIST.md` - doc-sync registry: maps change category to required doc updates
 - `dev/CODEBASE_CONTEXT.md` - tech stack, external services, key decisions (auto-generated first session)
 - `dev/PROJECT_MASTER_SPEC.md` - optional long-term authority

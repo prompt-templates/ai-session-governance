@@ -43,6 +43,19 @@
 | **文档同步注册表** | 变更后猜测要更新哪些文档 — `DOC_SYNC_CHECKLIST.md` 将变更类别映射到必要更新项，AI 查表而非自行判断 |
 | **工作日志自动维护** | 工作日志随时间增长到数千行，占用 AI 每次启动的 context — 当 `SESSION_LOG.md` 超过 800 行或有超过 30 天的旧记录时，自动归档到 `dev/archive/`；无需手动迁移 |
 
+### :small_blue_diamond: SESSION_LOG.md 怎么保持精简
+
+`dev/SESSION_LOG.md` 在每次工作阶段启动时都会被读取。在活跃的项目中，这个文件可能增长到数千行——把几个月前已无关的历史记录全部载入 AI 的 context。
+
+本模板在每次工作阶段收尾时自动处理：
+
+- 当日志超过 **800 行**或含有超过 **30 天**的旧记录时，旧 entries 会被移到 `dev/archive/`——不删除，只移动
+- 主动日志缩回最近 5–6 个工作阶段（≤ 350 行）
+- 归档文件按季度整理：`dev/archive/SESSION_LOG_YYYY_QN.md`
+- AI 启动时只读 `SESSION_LOG.md`，归档文件不会被载入
+
+若你已有一个庞大的工作日志，在升级后第一次工作阶段收尾时会自动整理，不需要手动操作。
+
 ---
 
 ## :bookmark_tabs: 近期版本
@@ -262,6 +275,7 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
+   ├─ archive/                 # 自动归档的旧记录（按季度）
    ├─ DOC_SYNC_CHECKLIST.md    # 文档同步注册表
    ├─ CODEBASE_CONTEXT.md      # 首次工作阶段自动生成
    └─ PROJECT_MASTER_SPEC.md   # 可选
@@ -274,7 +288,8 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - `CLAUDE.md` - Claude 指针文件
 - `GEMINI.md` - Gemini 指针文件
 - `dev/SESSION_HANDOFF.md` - 当前基线与下一步优先事项
-- `dev/SESSION_LOG.md` - 逐工作阶段历史与验证结果
+- `dev/SESSION_LOG.md` - 逐工作阶段历史与验证结果（rolling window，自动整理）
+- `dev/archive/` - 自动归档的旧工作日志，按季度整理；启动时不读取
 - `dev/DOC_SYNC_CHECKLIST.md` - 文档同步注册表：将变更类别映射到必须更新的文档
 - `dev/CODEBASE_CONTEXT.md` - 技术栈、外部服务、关键决策（首次工作阶段自动生成）
 - `dev/PROJECT_MASTER_SPEC.md` - 可选的长期权威规格
