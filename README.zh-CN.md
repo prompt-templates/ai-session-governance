@@ -12,6 +12,9 @@
 
 ![Overview](ref_doc/overview_infograph_cn.png)
 
+> **初次接触？** 请看 **[互动式介绍页面](https://prompt-templates.github.io/ai-session-governance/?lang=cn)** — 以可视化方式了解本模板的功能与设计理念。
+
+
 ---
 
 ## :bookmark_tabs: 为什么要做这个
@@ -248,6 +251,8 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ## :bookmark_tabs: 常见问题
 
+可视化常见问题解答请见 **[互动式介绍页面](https://prompt-templates.github.io/ai-session-governance/?lang=cn)**。
+
 ### :small_blue_diamond: 1) 这只适合大型项目吗？
 不是。小型项目马上就有效果；大型项目时间拉长效益更明显。
 
@@ -262,8 +267,6 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ### :small_blue_diamond: 5) 我已经有 README、既有文档与内部规则，仍然适用吗？
 可以。它会跟你现有的合并，不会覆盖掉。
-
----
 
 ## :bookmark_tabs: 此仓库原始布局
 

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Session Governance</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a28;
+    --text:#e8e8ed;--text2:#a0a0b0;--text3:#707085;
+    --accent:#6c63ff;--accent2:#ff6b6b;--accent3:#4ecdc4;--accent4:#f7d794;
+    --card:#16162a;--border:#2a2a40;
+    --font:'Noto Sans TC','Noto Sans JP','SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  html{scroll-behavior:smooth;font-size:16px}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+  ::selection{background:var(--accent);color:#fff}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;
+    background:rgba(10,10,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;transition:transform .3s}
+  nav.hidden{transform:translateY(-100%)}
+  .nav-logo{font-size:1.1rem;font-weight:700;color:var(--accent);letter-spacing:.5px}
+  .nav-links{display:flex;gap:1.5rem;align-items:center}
+  .nav-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+  .nav-links a:hover{color:var(--accent)}  .lang-switch{display:flex;gap:4px;background:var(--bg3);border-radius:6px;padding:2px}
+  .lang-btn{padding:3px 8px;border:none;background:transparent;color:var(--text3);
+    cursor:pointer;font-size:.75rem;border-radius:4px;font-family:var(--font);transition:all .2s}
+  .lang-btn.active{background:var(--accent);color:#fff}
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+    background:radial-gradient(ellipse at 50% 30%,rgba(108,99,255,.12) 0%,transparent 60%);pointer-events:none}
+  .hero-badge{display:inline-block;padding:.4rem 1rem;border:1px solid var(--accent);border-radius:100px;
+    font-size:.8rem;color:var(--accent);margin-bottom:1.5rem;letter-spacing:1px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.2;margin-bottom:1rem;
+    background:linear-gradient(135deg,#fff 0%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{font-size:clamp(1rem,2vw,1.25rem);color:var(--text2);max-width:680px;margin:0 auto 2rem}
+  .hero-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;
+    background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:600;
+    transition:transform .2s,box-shadow .2s}
+  .hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(108,99,255,.35)}
+  section{padding:6rem 2rem;max-width:1100px;margin:0 auto}
+  .section-label{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:2px;
+    text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+  .section-title{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:1rem;line-height:1.25}
+  .section-desc{color:var(--text2);font-size:1.05rem;max-width:700px;margin-bottom:3rem}
+  .pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+  .pain-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;
+    position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+  .pain-card:hover{transform:translateY(-4px);border-color:var(--accent2)}
+  .pain-icon{font-size:2rem;margin-bottom:1rem}
+  .pain-card h3{font-size:1.15rem;margin-bottom:.5rem}
+  .pain-card p{color:var(--text2);font-size:.92rem}  .compare-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem}
+  @media(max-width:700px){.compare-wrap{grid-template-columns:1fr}}
+  .compare-col{border-radius:16px;padding:2rem;position:relative}
+  .compare-col.bad{background:linear-gradient(135deg,#1a0a0a,#1a1020);border:1px solid rgba(255,107,107,.25)}
+  .compare-col.good{background:linear-gradient(135deg,#0a1a15,#101a20);border:1px solid rgba(78,205,196,.25)}
+  .compare-label{font-size:.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.2rem}
+  .compare-col.bad .compare-label{color:var(--accent2)}
+  .compare-col.good .compare-label{color:var(--accent3)}
+  .chat-bubble{padding:.7rem 1rem;border-radius:12px;margin-bottom:.6rem;font-size:.85rem;max-width:90%;line-height:1.5}
+  .chat-bubble.user{background:var(--accent);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+  .chat-bubble.ai{background:var(--bg3);color:var(--text);border-bottom-left-radius:4px}
+  .chat-bubble.ai.error{border-left:3px solid var(--accent2)}
+  .chat-bubble.ai.ok{border-left:3px solid var(--accent3)}
+  .chat-dots{text-align:center;color:var(--text3);font-size:1.5rem;letter-spacing:4px;margin:.5rem 0}
+  .workflow-steps{display:flex;flex-direction:column;gap:0;position:relative;margin-top:2rem}
+  .workflow-step{display:flex;align-items:flex-start;gap:1.5rem;padding:1.5rem 0;position:relative}
+  .step-marker{flex-shrink:0;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:1.3rem;font-weight:800;border:2px solid var(--border);
+    background:var(--bg2);position:relative;z-index:2;transition:border-color .3s,background .3s}
+  .workflow-step:hover .step-marker{border-color:var(--accent);background:rgba(108,99,255,.15)}
+  .step-line{position:absolute;left:27px;top:56px;bottom:0;width:2px;background:var(--border)}
+  .workflow-step:last-child .step-line{display:none}
+  .step-content h3{font-size:1.1rem;margin-bottom:.3rem}
+  .step-content p{color:var(--text2);font-size:.9rem}
+  .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+  .feature-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;
+    transition:transform .25s,border-color .25s}
+  .feature-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .feature-card .f-icon{font-size:1.6rem;margin-bottom:.8rem}
+  .feature-card h3{font-size:1.05rem;margin-bottom:.4rem}
+  .feature-card p{color:var(--text2);font-size:.88rem}  .scenario-tabs{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap}
+  .scenario-tab{padding:.55rem 1.2rem;border-radius:100px;border:1px solid var(--border);
+    background:transparent;color:var(--text2);cursor:pointer;font-size:.85rem;font-family:var(--font);transition:all .2s}
+  .scenario-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .scenario-panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem}
+  .scenario-panel.active{display:block}
+  .scenario-panel h3{font-size:1.15rem;margin-bottom:.5rem}
+  .scenario-panel p{color:var(--text2);font-size:.92rem;margin-bottom:.75rem}
+  .scenario-highlight{padding:.75rem 1rem;background:rgba(108,99,255,.08);border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0;font-size:.88rem;color:var(--text)}
+  .qs-steps{display:flex;flex-direction:column;gap:1.2rem;margin-top:2rem}
+  .qs-step{display:flex;gap:1.2rem;align-items:flex-start}
+  .qs-num{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--accent);
+    color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem}
+  .qs-step p{font-size:.95rem;color:var(--text2)}
+  .qs-step code{background:var(--bg3);padding:.2rem .5rem;border-radius:4px;font-size:.85rem;color:var(--accent3)}
+  .code-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem;
+    font-family:'Fira Code',monospace;font-size:.85rem;color:var(--accent3);margin-top:1rem;
+    position:relative;overflow-x:auto;white-space:pre;line-height:1.6}
+  .code-block .comment{color:var(--text3)}
+  .faq-list{display:flex;flex-direction:column;gap:.75rem}
+  .faq-item{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .faq-q{padding:1.2rem 1.5rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+    font-weight:600;font-size:.95rem;transition:color .2s;user-select:none}
+  .faq-q:hover{color:var(--accent)}
+  .faq-q::after{content:'+';font-size:1.3rem;color:var(--text3);transition:transform .3s}
+  .faq-item.open .faq-q::after{transform:rotate(45deg);color:var(--accent)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 1.5rem}
+  .faq-item.open .faq-a{max-height:400px;padding:0 1.5rem 1.2rem}
+  .faq-a p{color:var(--text2);font-size:.9rem}
+  footer{text-align:center;padding:4rem 2rem;border-top:1px solid var(--border);color:var(--text3);font-size:.85rem}
+  footer a{color:var(--accent);text-decoration:none}
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal-delay-1{transition-delay:.15s}
+  .reveal-delay-2{transition-delay:.3s}
+  .stat-row{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin:3rem 0}
+  .stat-item{text-align:center}
+  .stat-num{font-size:clamp(2rem,4vw,3rem);font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .stat-label{font-size:.85rem;color:var(--text3);margin-top:.2rem}
+  .full-bg{background:var(--bg2);max-width:100%;padding:5rem 2rem;margin:0}
+  .inner{max-width:1100px;margin:0 auto}
+  .cause-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
+  .cause-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem}
+  .cause-card h3{color:var(--accent4);margin-bottom:.5rem}
+  .cause-card p{color:var(--text2);font-size:.9rem}
+  @media(max-width:600px){nav{padding:.75rem 1rem}.nav-links{gap:.6rem}.stat-row{gap:1.5rem}section{padding:4rem 1.2rem}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="nav-logo">AI Session Governance</div>
+  <div class="nav-links">
+    <a href="#pain" data-i18n="nav_pain"></a>
+    <a href="#compare" data-i18n="nav_compare"></a>
+    <a href="#how" data-i18n="nav_how"></a>
+    <a href="#features" data-i18n="nav_features"></a>
+    <a href="#start" data-i18n="nav_start"></a>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="tw">繁</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="cn">简</button>
+      <button class="lang-btn" data-lang="ja">JA</button>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <span class="hero-badge">OPEN SOURCE · <span data-i18n="badge_cross"></span></span>
+  <h1 data-i18n-html="hero_title"></h1>
+  <p data-i18n="hero_desc"></p>
+  <a href="#start" class="hero-cta">⚡ <span data-i18n="hero_cta"></span></a>
+  <div class="stat-row">
+    <div class="stat-item reveal">
+      <div class="stat-num" data-target="139">0</div>
+      <div class="stat-label" data-i18n="stat_tests"></div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-num" data-target="3">0</div>
+      <div class="stat-label" data-i18n="stat_platforms"></div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-num" data-target="30">0</div>
+      <div class="stat-label" data-i18n="stat_seconds"></div>
+    </div>
+  </div>
+</div>
+<section id="pain">
+  <div class="reveal">
+    <span class="section-label" data-i18n="pain_label"></span>
+    <h2 class="section-title" data-i18n="pain_title"></h2>
+    <p class="section-desc" data-i18n="pain_desc"></p>
+  </div>
+  <div class="pain-grid">
+    <div class="pain-card reveal"><div class="pain-icon">🧠</div><h3 data-i18n="pain1_t"></h3><p data-i18n="pain1_d"></p></div>
+    <div class="pain-card reveal reveal-delay-1"><div class="pain-icon">🔄</div><h3 data-i18n="pain2_t"></h3><p data-i18n="pain2_d"></p></div>
+    <div class="pain-card reveal reveal-delay-2"><div class="pain-icon">💸</div><h3 data-i18n="pain3_t"></h3><p data-i18n="pain3_d"></p></div>
+    <div class="pain-card reveal"><div class="pain-icon">📄</div><h3 data-i18n="pain4_t"></h3><p data-i18n="pain4_d"></p></div>
+    <div class="pain-card reveal reveal-delay-1"><div class="pain-icon">🏗️</div><h3 data-i18n="pain5_t"></h3><p data-i18n="pain5_d"></p></div>
+    <div class="pain-card reveal reveal-delay-2"><div class="pain-icon">🎯</div><h3 data-i18n="pain6_t"></h3><p data-i18n="pain6_d"></p></div>
+  </div>
+</section>
+
+<section class="full-bg" style="max-width:100%">
+  <div class="inner">
+    <div class="reveal">
+      <span class="section-label" data-i18n="cause_label"></span>
+      <h2 class="section-title" data-i18n="cause_title"></h2>
+      <p class="section-desc" data-i18n="cause_desc"></p>
+    </div>
+    <div class="cause-grid">
+      <div class="cause-card reveal"><h3 data-i18n="cause1_t"></h3><p data-i18n="cause1_d"></p></div>
+      <div class="cause-card reveal reveal-delay-1"><h3 data-i18n="cause2_t"></h3><p data-i18n="cause2_d"></p></div>
+      <div class="cause-card reveal reveal-delay-2"><h3 data-i18n="cause3_t"></h3><p data-i18n="cause3_d"></p></div>
+    </div>
+  </div>
+</section>
+<section id="compare">
+  <div class="reveal">
+    <span class="section-label" data-i18n="cmp_label"></span>
+    <h2 class="section-title" data-i18n="cmp_title"></h2>
+    <p class="section-desc" data-i18n="cmp_desc"></p>
+  </div>
+  <div class="compare-wrap reveal">
+    <div class="compare-col bad">
+      <div class="compare-label" data-i18n="cmp_bad"></div>
+      <div class="chat-bubble user" data-i18n="cmp_b1"></div>
+      <div class="chat-bubble ai error" data-i18n="cmp_b2"></div>
+      <div class="chat-bubble user" data-i18n="cmp_b3"></div>
+      <div class="chat-bubble ai error" data-i18n="cmp_b4"></div>
+      <div class="chat-bubble user" data-i18n="cmp_b5"></div>
+      <div class="chat-dots">···</div>
+      <p style="color:var(--accent2);font-size:.82rem;text-align:center;margin-top:.5rem" data-i18n="cmp_b_sum"></p>
+    </div>
+    <div class="compare-col good">
+      <div class="compare-label" data-i18n="cmp_good"></div>
+      <div class="chat-bubble user" data-i18n="cmp_g1"></div>
+      <div class="chat-bubble ai ok" data-i18n="cmp_g2"></div>
+      <div class="chat-bubble ai ok" data-i18n="cmp_g3"></div>
+      <div class="chat-bubble user" data-i18n="cmp_g4"></div>
+      <div class="chat-bubble ai ok" data-i18n="cmp_g5"></div>
+      <div class="chat-dots">···</div>
+      <p style="color:var(--accent3);font-size:.82rem;text-align:center;margin-top:.5rem" data-i18n="cmp_g_sum"></p>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="full-bg" style="max-width:100%">
+  <div class="inner">
+    <div class="reveal">
+      <span class="section-label" data-i18n="how_label"></span>
+      <h2 class="section-title" data-i18n="how_title"></h2>
+      <p class="section-desc" data-i18n-html="how_desc"></p>
+    </div>
+    <div class="workflow-steps">
+      <div class="workflow-step reveal"><div class="step-marker">📖</div><div class="step-line"></div><div class="step-content"><h3 data-i18n="wf1_t"></h3><p data-i18n="wf1_d"></p></div></div>
+      <div class="workflow-step reveal reveal-delay-1"><div class="step-marker">📝</div><div class="step-line"></div><div class="step-content"><h3 data-i18n="wf2_t"></h3><p data-i18n="wf2_d"></p></div></div>
+      <div class="workflow-step reveal reveal-delay-1"><div class="step-marker">🔧</div><div class="step-line"></div><div class="step-content"><h3 data-i18n="wf3_t"></h3><p data-i18n="wf3_d"></p></div></div>
+      <div class="workflow-step reveal reveal-delay-2"><div class="step-marker">✅</div><div class="step-line"></div><div class="step-content"><h3 data-i18n="wf4_t"></h3><p data-i18n="wf4_d"></p></div></div>
+      <div class="workflow-step reveal reveal-delay-2"><div class="step-marker">💾</div><div class="step-content"><h3 data-i18n="wf5_t"></h3><p data-i18n="wf5_d"></p></div></div>
+    </div>
+  </div>
+</section>
+<section id="features">
+  <div class="reveal">
+    <span class="section-label" data-i18n="feat_label"></span>
+    <h2 class="section-title" data-i18n="feat_title"></h2>
+    <p class="section-desc" data-i18n="feat_desc"></p>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card reveal"><div class="f-icon">🛡️</div><h3 data-i18n="f1_t"></h3><p data-i18n="f1_d"></p></div>
+    <div class="feature-card reveal reveal-delay-1"><div class="f-icon">🧩</div><h3 data-i18n="f2_t"></h3><p data-i18n="f2_d"></p></div>
+    <div class="feature-card reveal reveal-delay-2"><div class="f-icon">📋</div><h3 data-i18n="f3_t"></h3><p data-i18n="f3_d"></p></div>
+    <div class="feature-card reveal"><div class="f-icon">🔬</div><h3 data-i18n="f4_t"></h3><p data-i18n="f4_d"></p></div>
+    <div class="feature-card reveal reveal-delay-1"><div class="f-icon">🗂️</div><h3 data-i18n="f5_t"></h3><p data-i18n="f5_d"></p></div>
+    <div class="feature-card reveal reveal-delay-2"><div class="f-icon">🔒</div><h3 data-i18n="f6_t"></h3><p data-i18n="f6_d"></p></div>
+  </div>
+</section>
+
+<section class="full-bg" style="max-width:100%">
+  <div class="inner">
+    <div class="reveal">
+      <span class="section-label" data-i18n="sc_label"></span>
+      <h2 class="section-title" data-i18n="sc_title"></h2>
+      <p class="section-desc" data-i18n="sc_desc"></p>
+    </div>
+    <div class="scenario-tabs reveal">
+      <button class="scenario-tab active" data-tab="s1" data-i18n="sc_tab1"></button>
+      <button class="scenario-tab" data-tab="s2" data-i18n="sc_tab2"></button>
+      <button class="scenario-tab" data-tab="s3" data-i18n="sc_tab3"></button>
+    </div>
+    <div class="scenario-panel active reveal" id="s1"><h3 data-i18n="sc1_t"></h3><p data-i18n="sc1_d"></p><div class="scenario-highlight" data-i18n="sc1_h"></div></div>
+    <div class="scenario-panel" id="s2"><h3 data-i18n="sc2_t"></h3><p data-i18n="sc2_d"></p><div class="scenario-highlight" data-i18n="sc2_h"></div></div>
+    <div class="scenario-panel" id="s3"><h3 data-i18n="sc3_t"></h3><p data-i18n="sc3_d"></p><div class="scenario-highlight" data-i18n="sc3_h"></div></div>
+  </div>
+</section>
+<section id="start">
+  <div class="reveal">
+    <span class="section-label" data-i18n="qs_label"></span>
+    <h2 class="section-title" data-i18n="qs_title"></h2>
+    <p class="section-desc" data-i18n="qs_desc"></p>
+  </div>
+  <div class="qs-steps">
+    <div class="qs-step reveal"><div class="qs-num">1</div><div><p data-i18n-html="qs1"></p></div></div>
+    <div class="qs-step reveal reveal-delay-1"><div class="qs-num">2</div><div><p data-i18n="qs2"></p><div class="code-block"><span class="comment" data-i18n="qs2_c1"></span>
+INSTALL_ROOT_OK: /your/project/path
+<span class="comment" data-i18n="qs2_c2"></span>
+INSTALL_WRITE_OK</div></div></div>
+    <div class="qs-step reveal reveal-delay-2"><div class="qs-num">3</div><div><p data-i18n="qs3"></p><div class="code-block" data-i18n="qs3_cmd"></div><p style="margin-top:.5rem;font-size:.88rem" data-i18n="qs3_note"></p></div></div>
+    <div class="qs-step reveal"><div class="qs-num">4</div><div><p data-i18n="qs4"></p><div class="code-block" data-i18n="qs4_cmd"></div><p style="margin-top:.5rem;font-size:.88rem" data-i18n="qs4_note"></p></div></div>
+    <div class="qs-step reveal reveal-delay-1"><div class="qs-num">5</div><div><p data-i18n="qs5"></p><div class="code-block"><span class="comment" data-i18n="qs5_c1"></span>
+<span class="comment" data-i18n="qs5_c2"></span></div><p style="margin-top:.5rem;font-size:.88rem" data-i18n-html="qs5_note"></p></div></div>
+  </div>
+</section>
+
+<section class="full-bg" style="max-width:100%;padding:5rem 2rem">
+  <div style="max-width:800px;margin:0 auto">
+    <div class="reveal">
+      <span class="section-label" data-i18n="faq_label"></span>
+      <h2 class="section-title" data-i18n="faq_title"></h2>
+    </div>
+    <div class="faq-list reveal" id="faqList"></div>
+  </div>
+</section>
+
+<section style="text-align:center;padding:5rem 2rem">
+  <div class="reveal">
+    <h2 class="section-title" style="max-width:600px;margin:0 auto 1rem" data-i18n-html="cta_title"></h2>
+    <p class="section-desc" style="margin:0 auto 2rem;text-align:center" data-i18n="cta_desc"></p>
+    <a href="https://github.com/prompt-templates/ai-session-governance" class="hero-cta" target="_blank">🚀 <span data-i18n="cta_btn"></span></a>
+    <p style="margin-top:1.5rem"><a href="https://github.com/prompt-templates/ai-session-governance#readme" style="color:var(--accent);font-size:.9rem" data-i18n="cta_readme"></a></p>
+  </div>
+</section>
+
+<footer>
+  <p><span data-i18n="footer_by"></span> <a href="https://www.facebook.com/chan.adam" target="_blank">Adam Chan</a> · <a href="https://github.com/prompt-templates/ai-session-governance" target="_blank">GitHub</a></p>
+  <p style="margin-top:.5rem;color:var(--text3)" data-i18n="footer_tagline"></p>
+</footer>
+<script>
+const I={
+tw:{
+nav_pain:"痛點",nav_compare:"對比",nav_how:"原理",nav_features:"功能",nav_start:"開始",
+badge_cross:"跨 AI 工具",
+hero_title:"大幅減少 AI 的<br>Session 斷裂問題",
+hero_desc:"AI 助手很聰明——但每次新對話都不記得上次做了什麼。這是目前 AI 技術的固有限制，無法 100% 消除。AI Session Governance 透過結構化的交接文件，盡可能縮小這個斷裂。",
+hero_cta:"30 秒快速開始",
+stat_tests:"回歸測試覆蓋",stat_platforms:"AI 平台支援",stat_seconds:"秒完成安裝",
+pain_label:"問題",pain_title:"你有遇過這些情況嗎？",pain_desc:"用 AI 寫程式一開始很順——但時間一長，麻煩就開始了。",
+pain1_t:"「你誰？我們之前做了什麼？」",pain1_d:"新 session 開始，AI 對你的專案一無所知。你花了 10 分鐘重新解釋技術棧、當前進度、上次做到哪。",
+pain2_t:"修了 A 壞了 B，再修 B 又壞了 C",pain2_d:"AI 沒有歷史記憶，不知道上一輪為什麼做那個決定。每次修改都可能踩到之前踩過的坑。",
+pain3_t:"配額用完，進度歸零",pain3_d:"Claude 用完換 Gemini、Gemini 用完換 Codex——每次切換都要從頭說明，等於付了雙倍時間。",
+pain4_t:"文件說一套，程式做一套",pain4_d:"README 寫的是三個月前的版本，SESSION_LOG 兩週沒更新。AI 照著過時的文件改，你又要再修一輪。",
+pain5_t:"規則越來越多，矛盾越來越大",pain5_d:"每次出問題就加一條規則。半年後規則相互衝突，AI 不知道該聽哪一條。",
+pain6_t:"API 參數用猜的",pain6_d:"AI 「記得」一個 endpoint 長什麼樣——但那是訓練資料裡的舊版。code 寫了，跑不動，debug 半天。",cause_label:"根本原因",cause_title:"為什麼 AI 會「斷片」？",cause_desc:"不是 AI 不聰明——這是目前所有大型語言模型的結構性限制。",
+cause1_t:"🪟 Context Window 有上限",cause1_d:"AI 的對話視窗像白板——容量有限，寫滿就要擦掉。每次新 session 開始，白板是空的。這是技術限制，不是 bug。",
+cause2_t:"🚫 沒有內建「筆記本」",cause2_d:"AI 不會主動幫你記上次做了什麼。如果你不給它看「上班筆記」，它每次都像新來的實習生——聰明但一無所知。",
+cause3_t:"🔀 工具之間不通訊",cause3_d:"Claude、Gemini、Codex——各自有自己的 context，彼此不會自動分享。就像三個不同的員工，你得一個一個交代。",
+cmp_label:"對比",cmp_title:"同一個任務，兩種體驗",cmp_desc:"假設你昨天用 Claude 做了一半的功能，今天換 Gemini 繼續。",
+cmp_bad:"❌ 沒有 Session Governance",cmp_good:"✅ 使用 Session Governance",
+cmp_b1:"繼續昨天的工作",cmp_b2:"我是新的對話，無法知道你昨天做了什麼。可以告訴我你的專案使用什麼技術棧嗎？",
+cmp_b3:"（嘆氣）React + Express + PostgreSQL，已經做好了登入功能，正在做購物車…",cmp_b4:"好的。購物車的資料結構是什麼樣的？目前的 API 路由有哪些？",
+cmp_b5:"（又要重新解釋 15 分鐘…）",cmp_b_sum:"⏱ 浪費 15-30 分鐘重建 context",
+cmp_g1:"請依 AGENTS.md 開始本次工作階段",cmp_g2:"讀取 SESSION_HANDOFF.md… SESSION_LOG.md… 完成。",
+cmp_g3:"📋 目前狀態：React+Express+PostgreSQL，登入完成（已測試），購物車 API 路由 3/5 完成。上次停在 cart/checkout endpoint。",
+cmp_g4:"好，繼續",cmp_g5:"PLAN：完成 cart/checkout 與 cart/remove endpoint…",
+cmp_g_sum:"⚡ 大幅減少重複說明時間（無法保證 100% 零遺漏）",how_label:"運作原理",how_title:"就像醫院的輪班交接",
+how_desc:"護士下班時會寫交班紀錄：病人狀況、用藥、注意事項。下一班護士看完紀錄就能直接照顧，不用重新問病人。<br><br>AI Session Governance 做的事一模一樣——只是對象從「病人」換成了「你的專案」。",
+wf1_t:"1. 讀交班 — READ",wf1_d:"新 session 開始時，AI 先讀 HANDOFF（目前狀態）和 LOG（歷史紀錄），不用你口述。",
+wf2_t:"2. 擬定計畫 — PLAN",wf2_d:"搞清楚要做什麼、影響範圍多大、哪些地方有風險。",
+wf3_t:"3. 最小改動 — CHANGE",wf3_d:"只改需要改的部分，不做無關的重構或修飾。",
+wf4_t:"4. 品質確認 — QC",wf4_d:"跑測試、驗結果、確認沒有破壞既有功能。",
+wf5_t:"5. 寫交班 — PERSIST",wf5_d:"更新 HANDOFF 和 LOG，下一位接手的 AI（或下一次的你）就能接續。",
+feat_label:"內建防護",feat_title:"不只是交接——還幫你擋住常見的坑",feat_desc:"這些是用 AI 開發時最容易踩到的雷。Session Governance 在規則層面就幫你預防了。",
+f1_t:"外部 API 安全",f1_d:"AI 不准用「記憶」裡的 API 參數寫 code。必須先查文件、記錄在案，查不到就不寫——防止你 debug 半天才發現是 endpoint 過期。",
+f2_t:"整合優先紀律",f2_d:"遇到問題不是無腦加新規則，而是先檢查有沒有舊規則可以更新。避免規則膨脹到自相矛盾。",
+f3_t:"文件同步登錄表",f3_d:"改了 code？登錄表告訴 AI 還要同步哪些文件。不猜、不漏，查表就好。",
+f4_t:"測試計畫治理",f4_d:"每個功能改動都要有「測試矩陣」：正常路徑、邊界條件、錯誤路徑、回歸。不是改完就算交差。",
+f5_t:"日誌自動歸檔",f5_d:"工作日誌超過 800 行自動搬到 archive，保持 AI 啟動時讀取的資料精簡。不刪除，只搬移。",
+f6_t:"檔案安全治理",f6_d:"AI 不准執行危險操作（如 rm -rf、git reset --hard）。權限不夠？列出「手動操作清單」讓你自己決定。",
+sc_label:"應用情境",sc_title:"誰適合用？",sc_desc:"不管你是一個人開發還是團隊協作，只要用 AI 寫 code 就會遇到這些狀況。",
+sc_tab1:"配額切換",sc_tab2:"多工具協作",sc_tab3:"長期專案",
+sc1_t:"配額用完，換工具繼續",sc1_d:"Claude 用完換 Gemini、Gemini 用完換 Codex——交接文件讓下一個工具直接接續，不用從頭解釋。",sc1_h:"💡 實測：從 Claude 切到 Gemini，透過 SESSION_HANDOFF 可大幅減少重複說明的時間。",
+sc2_t:"一個 Repo，多個 AI 分工",sc2_d:"Codex 寫程式、Claude 寫文件、Gemini 處理基礎設施——共用交接紀錄，各工具對專案狀態保持一致。",sc2_h:"💡 共享 SESSION_LOG 讓不同工具看到一致的歷史記錄。",
+sc3_t:"半年後規則開始打架",sc3_d:"修復累積、規則膨脹、文件矛盾。「先整合、後新增」的紀律幫你控制複雜度。",sc3_h:"💡 整合紀律（§3b）要求每次新增規則前先檢查有無重疊——從源頭防止衝突。",
+qs_label:"快速開始",qs_title:"30 秒搞定",qs_desc:"不需要手動複製檔案。用 INIT.md 一鍵安裝，AI 會自動處理合併。",
+qs1:"開啟 <a href='https://github.com/prompt-templates/ai-session-governance/blob/main/INIT.md' target='_blank' style='color:var(--accent)'>INIT.md</a>，點 <strong>Raw</strong>，全選複製，貼到你的 AI 命令列工具。",
+qs2:"AI 會顯示路徑與計劃，輸入以下確認：",
+qs2_c1:"# 確認安裝路徑",qs2_c2:"# 確認開始寫入",
+qs3:"安裝完成後，每次新 session 開始時輸入：",qs3_cmd:"請依 AGENTS.md 開始本次工作階段",qs3_note:"AI 會自動讀取交接文件，載入專案狀態。",
+qs4:"工作結束時，輸入：",qs4_cmd:"請為本次工作階段完成收尾與完整交接。",qs4_note:"AI 會更新 HANDOFF 和 LOG，並輸出交接區塊供下一個工具使用。",
+qs5:"下次換工具時，直接貼上上一輪輸出的交接區塊：",qs5_c1:"# 貼上 NEXT SESSION HANDOFF PROMPT",qs5_c2:"# (整段原文不改)",qs5_note:"這就是完整的使用循環：<strong>啟動 → 工作 → 收尾交接 → 下一個工具接續</strong>。",
+faq_label:"常見問題",faq_title:"FAQ",
+faqs:[{q:"這只適合大型專案嗎？",a:"不是。小型專案馬上就有效果，大型專案時間拉長效益更明顯。"},{q:"第一天就需要 PROJECT_MASTER_SPEC.md 嗎？",a:"不用。先用 AGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.md 就夠了，日後需要再加。"},{q:"這是編碼標準嗎？",a:"不是。它規範 AI 怎麼讀、改、驗證、交接——不管你怎麼寫程式。"},{q:"這會拖慢 AI 嗎？",a:"開始時有一小段讀取時間，通常比重複交代情況和修正錯誤省時得多。"},{q:"能跟我現有的 README 和內部規則共存嗎？",a:"可以。安裝時會跟你現有檔案合併，不會覆蓋掉你的內容。"}],
+cta_title:"準備好讓 AI 交接<br>不再從零開始了嗎？",cta_desc:"開源、免費、30 秒安裝。讓你的每一次 AI 工作階段都建立在上一次的基礎上。",cta_btn:"前往 GitHub 開始使用",cta_readme:"📖 閱讀完整 README →",
+footer_by:"由",footer_tagline:"Vibe Coding 的時代，人人都能打造屬於自己的 AI 世界。"
+},
+en:{
+nav_pain:"Pain Points",nav_compare:"Compare",nav_how:"How It Works",nav_features:"Features",nav_start:"Start",
+badge_cross:"Cross-AI Tool",
+hero_title:"Drastically Reduce AI<br>Session Fragmentation",
+hero_desc:"AI assistants are smart — but every new conversation starts from zero. This is a structural limitation of current LLMs, not a bug. AI Session Governance uses structured handoff documents to minimize this gap.",
+hero_cta:"30-Second Quick Start",
+stat_tests:"Regression Tests",stat_platforms:"AI Platforms",stat_seconds:"Sec to Install",
+pain_label:"THE PROBLEM",pain_title:"Sound Familiar?",pain_desc:"AI coding starts great — but over time, the cracks start showing.",
+pain1_t:"\"Who are you? What did we do last time?\"",pain1_d:"New session starts, AI knows nothing about your project. You spend 10 minutes re-explaining your tech stack, current progress, and where you left off.",
+pain2_t:"Fixed A, broke B, fixed B, broke C",pain2_d:"AI has no memory of why decisions were made last time. Every fix risks stepping on a landmine you already defused.",
+pain3_t:"Quota gone, progress gone",pain3_d:"Claude runs out, switch to Gemini. Gemini runs out, switch to Codex. Each switch means re-explaining everything — double the time cost.",
+pain4_t:"Docs say one thing, code does another",pain4_d:"README is 3 months old, SESSION_LOG hasn\'t been updated in weeks. AI follows stale docs and you fix it again.",
+pain5_t:"Rules pile up, contradictions multiply",pain5_d:"Every problem adds a new rule. Six months later rules contradict each other and AI doesn\'t know which to follow.",
+pain6_t:"API params from hallucination",pain6_d:"AI \"remembers\" an endpoint — but it\'s from stale training data. Code compiles, doesn\'t run, debug for hours.",
+cause_label:"ROOT CAUSE",cause_title:"Why Does AI \"Forget\"?",cause_desc:"It\'s not that AI isn\'t smart — this is a structural limitation of all current large language models.",
+cause1_t:"🪟 Context Window Has Limits",cause1_d:"AI\'s conversation window is like a whiteboard — limited capacity, must be erased when full. Every new session starts with a blank board. This is a technical constraint, not a bug.",
+cause2_t:"🚫 No Built-in Notebook",cause2_d:"AI won\'t proactively save what you did last time. Without \"shift notes\", every session is like a brilliant new intern — smart but clueless.",
+cause3_t:"🔀 Tools Don\'t Talk to Each Other",cause3_d:"Claude, Gemini, Codex — each has its own context, none auto-share. Like three separate employees you must brief individually.",
+cmp_label:"COMPARE",cmp_title:"Same Task, Two Experiences",cmp_desc:"Imagine you built half a feature with Claude yesterday, switching to Gemini today.",
+cmp_bad:"❌ Without Session Governance",cmp_good:"✅ With Session Governance",
+cmp_b1:"Continue yesterday\'s work",cmp_b2:"I\'m a new conversation and have no knowledge of what you did yesterday. Could you tell me your tech stack?",
+cmp_b3:"(Sigh) React + Express + PostgreSQL, login is done, working on shopping cart…",cmp_b4:"Got it. What\'s the cart data structure? What API routes exist so far?",
+cmp_b5:"(Another 15 minutes of re-explaining…)",cmp_b_sum:"⏱ 15-30 min wasted rebuilding context",
+cmp_g1:"Follow AGENTS.md to start this session",cmp_g2:"Reading SESSION_HANDOFF.md… SESSION_LOG.md… Done.",
+cmp_g3:"📋 Current state: React+Express+PostgreSQL, login complete (tested), cart API 3/5 routes done. Last stopped at cart/checkout endpoint.",
+cmp_g4:"Good, continue",cmp_g5:"PLAN: Complete cart/checkout and cart/remove endpoints…",
+cmp_g_sum:"⚡ Drastically reduced re-explanation time (not guaranteed 100% lossless)",
+how_label:"HOW IT WORKS",how_title:"Like Hospital Shift Handoff",
+how_desc:"When nurses end their shift, they write handoff notes: patient status, medications, things to watch. The next nurse reads the notes and continues care without re-asking the patient.<br><br>AI Session Governance does exactly the same — just replacing \"patient\" with \"your project\".",
+wf1_t:"1. Read Handoff — READ",wf1_d:"New session starts, AI reads HANDOFF (current state) and LOG (history) without you explaining.",
+wf2_t:"2. Make a Plan — PLAN",wf2_d:"Understand what needs to be done, scope of impact, and where risks lie.",
+wf3_t:"3. Minimal Change — CHANGE",wf3_d:"Only change what needs changing. No unnecessary refactoring or cosmetic edits.",
+wf4_t:"4. Quality Check — QC",wf4_d:"Run tests, verify results, confirm nothing existing is broken.",
+wf5_t:"5. Write Handoff — PERSIST",wf5_d:"Update HANDOFF and LOG so the next AI (or your next session) can pick up seamlessly.",
+feat_label:"BUILT-IN SAFEGUARDS",feat_title:"Not Just Handoff — It Guards Against Common Pitfalls",feat_desc:"These are the most common traps when coding with AI. Session Governance prevents them at the rule level.",
+f1_t:"External API Safety",f1_d:"AI cannot write API code from memory. Must verify docs first, log the source — no doc means no code. Prevents hours of debugging stale endpoints.",
+f2_t:"Consolidation Discipline",f2_d:"When problems arise, don\'t blindly add new rules. First check if existing rules can be updated. Prevents rules from contradicting each other.",
+f3_t:"Doc-Sync Registry",f3_d:"Changed code? The registry tells AI which docs need updating. No guessing, no forgetting — just look it up.",
+f4_t:"Test Plan Governance",f4_d:"Every change needs a test matrix: happy path, edge cases, error paths, regression. No shipping without verification.",
+f5_t:"Auto-Archive Logs",f5_d:"Session logs over 800 lines auto-move to archive. Keeps AI startup reads lean. Nothing deleted, only relocated.",
+f6_t:"File Safety Governance",f6_d:"AI cannot execute dangerous operations (rm -rf, git reset --hard). Insufficient permissions? It lists a manual action checklist for you to decide.",
+sc_label:"SCENARIOS",sc_title:"Who Is This For?",sc_desc:"Whether you work solo or in a team, if you use AI to write code, you\'ll hit these situations.",
+sc_tab1:"Quota Switch",sc_tab2:"Multi-Tool Collab",sc_tab3:"Long-Term Projects",
+sc1_t:"Quota Exhausted, Switch and Continue",sc1_d:"Claude runs out, switch to Gemini. Gemini runs out, switch to Codex — handoff docs let the next tool pick up directly without re-explaining.",sc1_h:"💡 Real test: Switching from Claude to Gemini via SESSION_HANDOFF drastically reduced re-explanation time.",
+sc2_t:"One Repo, Multiple AI Agents",sc2_d:"Codex writes code, Claude handles docs, Gemini debugs infra — shared handoff records keep all tools aligned on project state.",sc2_h:"💡 Shared SESSION_LOG gives different tools a consistent history view.",
+sc3_t:"Six Months Later, Rules Start Fighting",sc3_d:"Fixes accumulate, rules bloat, docs contradict. The consolidate-before-adding discipline helps you control complexity.",sc3_h:"💡 Consolidation discipline (§3b) requires checking for overlap before adding any rule — preventing conflicts at the source.",
+qs_label:"QUICK START",qs_title:"Done in 30 Seconds",qs_desc:"No manual file copying needed. Use INIT.md for one-click install — AI handles merging automatically.",
+qs1:"Open <a href=\'https://github.com/prompt-templates/ai-session-governance/blob/main/INIT.md\' target=\'_blank\' style=\'color:var(--accent)\'>INIT.md</a>, click <strong>Raw</strong>, select all, copy, and paste into your AI CLI.",
+qs2:"AI will show paths and plan. Enter these confirmations:",
+qs2_c1:"# Confirm install path",qs2_c2:"# Confirm write permission",
+qs3:"After install, start each new session with:",qs3_cmd:"Follow AGENTS.md",qs3_note:"AI will automatically read handoff docs and load project state.",
+qs4:"When done working, enter:",qs4_cmd:"Wrap up this session with full closeout and handover.",qs4_note:"AI updates HANDOFF and LOG, outputs a handoff block for the next tool.",
+qs5:"Next time you switch tools, paste the handoff block from last session:",qs5_c1:"# Paste NEXT SESSION HANDOFF PROMPT",qs5_c2:"# (keep the entire block unchanged)",qs5_note:"That\'s the complete cycle: <strong>Start → Work → Closeout Handoff → Next Tool Continues</strong>.",
+faq_label:"FAQ",faq_title:"Frequently Asked Questions",
+faqs:[{q:"Is this only for large projects?",a:"No. Small projects benefit immediately; larger ones see more gain over time."},{q:"Do I need PROJECT_MASTER_SPEC.md on day one?",a:"No. Start with AGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.md. Add more later as needed."},{q:"Is this a coding standard?",a:"No. It governs how AI reads, changes, verifies, and hands over work — not how you write code."},{q:"Will this slow sessions down?",a:"There\'s a short read at startup. Usually less overhead than re-explaining context and redoing mistakes."},{q:"Can I keep my existing docs and internal rules?",a:"Yes. It merges with what you already have — it doesn\'t overwrite."}],
+cta_title:"Ready to Stop AI Sessions<br>From Starting at Zero?",cta_desc:"Open source, free, 30-second install. Make every AI session build on the last one.",cta_btn:"Get Started on GitHub",cta_readme:"📖 Read the Full README →",
+footer_by:"By",footer_tagline:"In the Vibe Coding era, everyone can build their own AI-powered world."
+},
+cn:{
+nav_pain:"痛点",nav_compare:"对比",nav_how:"原理",nav_features:"功能",nav_start:"开始",
+badge_cross:"跨 AI 工具",
+hero_title:"大幅减少 AI 的<br>Session 断裂问题",
+hero_desc:"AI 助手很聪明——但每次新对话都不记得上次做了什么。这是目前 AI 技术的固有限制，无法 100% 消除。AI Session Governance 通过结构化的交接文档，尽可能缩小这个断裂。",
+hero_cta:"30 秒快速开始",
+stat_tests:"回归测试覆盖",stat_platforms:"AI 平台支持",stat_seconds:"秒完成安装",
+pain_label:"问题",pain_title:"你有遇过这些情况吗？",pain_desc:"用 AI 写代码一开始很顺——但时间一长，麻烦就开始了。",
+pain1_t:"「你谁？我们之前做了什么？」",pain1_d:"新 session 开始，AI 对你的项目一无所知。你花了 10 分钟重新解释技术栈、当前进度、上次做到哪。",
+pain2_t:"修了 A 坏了 B，再修 B 又坏了 C",pain2_d:"AI 没有历史记忆，不知道上一轮为什么做那个决定。每次修改都可能踩到之前踩过的坑。",
+pain3_t:"配额用完，进度归零",pain3_d:"Claude 用完换 Gemini、Gemini 用完换 Codex——每次切换都要从头说明，等于付了双倍时间。",
+pain4_t:"文档说一套，代码做一套",pain4_d:"README 写的是三个月前的版本，SESSION_LOG 两周没更新。AI 照着过时的文档改，你又要再修一轮。",
+pain5_t:"规则越来越多，矛盾越来越大",pain5_d:"每次出问题就加一条规则。半年后规则相互冲突，AI 不知道该听哪一条。",
+pain6_t:"API 参数用猜的",pain6_d:"AI「记得」一个 endpoint 长什么样——但那是训练数据里的旧版。代码写了，跑不动，debug 半天。",
+cause_label:"根本原因",cause_title:"为什么 AI 会「断片」？",cause_desc:"不是 AI 不聪明——这是目前所有大型语言模型的结构性限制。",
+cause1_t:"🪟 Context Window 有上限",cause1_d:"AI 的对话窗口像白板——容量有限，写满就要擦掉。每次新 session 开始，白板是空的。这是技术限制，不是 bug。",
+cause2_t:"🚫 没有内置「笔记本」",cause2_d:"AI 不会主动帮你记上次做了什么。如果你不给它看「上班笔记」，它每次都像新来的实习生——聪明但一无所知。",
+cause3_t:"🔀 工具之间不通讯",cause3_d:"Claude、Gemini、Codex——各自有自己的 context，彼此不会自动分享。就像三个不同的员工，你得一个一个交代。",
+cmp_label:"对比",cmp_title:"同一个任务，两种体验",cmp_desc:"假设你昨天用 Claude 做了一半的功能，今天换 Gemini 继续。",
+cmp_bad:"❌ 没有 Session Governance",cmp_good:"✅ 使用 Session Governance",
+cmp_b1:"继续昨天的工作",cmp_b2:"我是新的对话，无法知道你昨天做了什么。可以告诉我你的项目使用什么技术栈吗？",
+cmp_b3:"（叹气）React + Express + PostgreSQL，已经做好了登录功能，正在做购物车…",cmp_b4:"好的。购物车的数据结构是什么样的？目前的 API 路由有哪些？",
+cmp_b5:"（又要重新解释 15 分钟…）",cmp_b_sum:"⏱ 浪费 15-30 分钟重建 context",
+cmp_g1:"请按 AGENTS.md 开始本次工作阶段",cmp_g2:"读取 SESSION_HANDOFF.md… SESSION_LOG.md… 完成。",
+cmp_g3:"📋 目前状态：React+Express+PostgreSQL，登录完成（已测试），购物车 API 路由 3/5 完成。上次停在 cart/checkout endpoint。",
+cmp_g4:"好，继续",cmp_g5:"PLAN：完成 cart/checkout 与 cart/remove endpoint…",
+cmp_g_sum:"⚡ 大幅减少重复说明时间（无法保证 100% 零遗漏）",
+how_label:"运作原理",how_title:"就像医院的轮班交接",
+how_desc:"护士下班时会写交班记录：病人状况、用药、注意事项。下一班护士看完记录就能直接照顾，不用重新问病人。<br><br>AI Session Governance 做的事一模一样——只是对象从「病人」换成了「你的项目」。",
+wf1_t:"1. 读交班 — READ",wf1_d:"新 session 开始时，AI 先读 HANDOFF（目前状态）和 LOG（历史记录），不用你口述。",
+wf2_t:"2. 拟定计划 — PLAN",wf2_d:"搞清楚要做什么、影响范围多大、哪些地方有风险。",
+wf3_t:"3. 最小改动 — CHANGE",wf3_d:"只改需要改的部分，不做无关的重构或修饰。",
+wf4_t:"4. 质量确认 — QC",wf4_d:"跑测试、验结果、确认没有破坏现有功能。",
+wf5_t:"5. 写交班 — PERSIST",wf5_d:"更新 HANDOFF 和 LOG，下一位接手的 AI（或下一次的你）就能接续。",
+feat_label:"内置防护",feat_title:"不只是交接——还帮你挡住常见的坑",feat_desc:"这些是用 AI 开发时最容易踩到的雷。Session Governance 在规则层面就帮你预防了。",
+f1_t:"外部 API 安全",f1_d:"AI 不准用「记忆」里的 API 参数写代码。必须先查文档、记录在案，查不到就不写——防止你 debug 半天才发现是 endpoint 过期。",
+f2_t:"整合优先纪律",f2_d:"遇到问题不是无脑加新规则，而是先检查有没有旧规则可以更新。避免规则膨胀到自相矛盾。",
+f3_t:"文档同步注册表",f3_d:"改了代码？注册表告诉 AI 还要同步哪些文档。不猜、不漏，查表就好。",
+f4_t:"测试计划治理",f4_d:"每个功能改动都要有「测试矩阵」：正常路径、边界条件、错误路径、回归。不是改完就算交差。",
+f5_t:"日志自动归档",f5_d:"工作日志超过 800 行自动搬到 archive，保持 AI 启动时读取的数据精简。不删除，只搬移。",
+f6_t:"文件安全治理",f6_d:"AI 不准执行危险操作（如 rm -rf、git reset --hard）。权限不够？列出「手动操作清单」让你自己决定。",
+sc_label:"应用场景",sc_title:"谁适合用？",sc_desc:"不管你是一个人开发还是团队协作，只要用 AI 写代码就会遇到这些状况。",
+sc_tab1:"配额切换",sc_tab2:"多工具协作",sc_tab3:"长期项目",
+sc1_t:"配额用完，换工具继续",sc1_d:"Claude 用完换 Gemini、Gemini 用完换 Codex——交接文档让下一个工具直接接续，不用从头解释。",sc1_h:"💡 实测：从 Claude 切到 Gemini，通过 SESSION_HANDOFF 可大幅减少重复说明的时间。",
+sc2_t:"一个 Repo，多个 AI 分工",sc2_d:"Codex 写代码、Claude 写文档、Gemini 处理基础设施——共用交接记录，各工具对项目状态保持一致。",sc2_h:"💡 共享 SESSION_LOG 让不同工具看到一致的历史记录。",
+sc3_t:"半年后规则开始打架",sc3_d:"修复累积、规则膨胀、文档矛盾。「先整合、后新增」的纪律帮你控制复杂度。",sc3_h:"💡 整合纪律（§3b）要求每次新增规则前先检查有无重叠——从源头防止冲突。",
+qs_label:"快速开始",qs_title:"30 秒搞定",qs_desc:"不需要手动复制文件。用 INIT.md 一键安装，AI 会自动处理合并。",
+qs1:"打开 <a href=\'https://github.com/prompt-templates/ai-session-governance/blob/main/INIT.md\' target=\'_blank\' style=\'color:var(--accent)\'>INIT.md</a>，点 <strong>Raw</strong>，全选复制，粘贴到你的 AI 命令行工具。",
+qs2:"AI 会显示路径与计划，输入以下确认：",
+qs2_c1:"# 确认安装路径",qs2_c2:"# 确认开始写入",
+qs3:"安装完成后，每次新 session 开始时输入：",qs3_cmd:"请按 AGENTS.md 开始本次工作阶段",qs3_note:"AI 会自动读取交接文档，加载项目状态。",
+qs4:"工作结束时，输入：",qs4_cmd:"请为本次工作阶段完成收尾与完整交接。",qs4_note:"AI 会更新 HANDOFF 和 LOG，并输出交接区块供下一个工具使用。",
+qs5:"下次换工具时，直接粘贴上一轮输出的交接区块：",qs5_c1:"# 粘贴 NEXT SESSION HANDOFF PROMPT",qs5_c2:"# (整段原文不改)",qs5_note:"这就是完整的使用循环：<strong>启动 → 工作 → 收尾交接 → 下一个工具接续</strong>。",
+faq_label:"常见问题",faq_title:"FAQ",
+faqs:[{q:"这只适合大型项目吗？",a:"不是。小型项目马上就有效果，大型项目时间拉长效益更明显。"},{q:"第一天就需要 PROJECT_MASTER_SPEC.md 吗？",a:"不用。先用 AGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.md 就够了，日后需要再加。"},{q:"这是编码标准吗？",a:"不是。它规范 AI 怎么读、改、验证、交接——不管你怎么写代码。"},{q:"这会拖慢 AI 吗？",a:"开始时有一小段读取时间，通常比重复交代情况和修正错误省时得多。"},{q:"能跟我现有的 README 和内部规则共存吗？",a:"可以。安装时会跟你现有文件合并，不会覆盖掉你的内容。"}],
+cta_title:"准备好让 AI 交接<br>不再从零开始了吗？",cta_desc:"开源、免费、30 秒安装。让你的每一次 AI 工作阶段都建立在上一次的基础上。",cta_btn:"前往 GitHub 开始使用",cta_readme:"📖 阅读完整 README →",
+footer_by:"由",footer_tagline:"Vibe Coding 的时代，人人都能打造属于自己的 AI 世界。"
+},
+ja:{
+nav_pain:"課題",nav_compare:"比較",nav_how:"仕組み",nav_features:"機能",nav_start:"開始",
+badge_cross:"クロスAIツール",
+hero_title:"AIセッションの<br>断絶を大幅に削減",
+hero_desc:"AIアシスタントは賢い——でも新しい会話のたびに前回の作業を忘れます。これは現在のLLMの構造的な制約であり、バグではありません。AI Session Governanceは構造化された引き継ぎ文書でこのギャップを最小化します。",
+hero_cta:"30秒クイックスタート",
+stat_tests:"回帰テスト",stat_platforms:"AIプラットフォーム",stat_seconds:"秒でインストール",
+pain_label:"課題",pain_title:"こんな経験ありませんか？",pain_desc:"AIコーディングは最初は順調——でも時間が経つと問題が出始めます。",
+pain1_t:"「誰？前回何をした？」",pain1_d:"新しいセッションが始まると、AIはプロジェクトについて何も知りません。技術スタック、進捗、前回の続きを10分かけて説明し直す羽目に。",
+pain2_t:"Aを直したらBが壊れ、Bを直したらCが壊れる",pain2_d:"AIには過去の判断の記憶がありません。修正のたびに、既に解決した地雷を踏む可能性があります。",
+pain3_t:"配分切れ、進捗ゼロに",pain3_d:"Claude使い切ってGeminiへ、Gemini使い切ってCodexへ——切り替えるたびに最初から説明、時間コストは2倍。",
+pain4_t:"ドキュメントとコードが食い違う",pain4_d:"READMEは3ヶ月前の内容、SESSION_LOGは2週間更新なし。AIは古いドキュメントに従って変更し、また修正が必要に。",
+pain5_t:"ルールが増え、矛盾も増える",pain5_d:"問題が起きるたびにルールを追加。半年後にはルール同士が矛盾し、AIはどれに従うべきかわからなくなる。",
+pain6_t:"APIパラメータは推測頼み",pain6_d:"AIはエンドポイントを「覚えている」——でもそれは訓練データの古い版。コードは書けても動かない、デバッグに半日。",
+cause_label:"根本原因",cause_title:"なぜAIは「忘れる」のか？",cause_desc:"AIが賢くないわけではない——これは現在のすべての大規模言語モデルの構造的制約です。",
+cause1_t:"🪟 コンテキストウィンドウに上限がある",cause1_d:"AIの会話ウィンドウはホワイトボードのようなもの——容量に限りがあり、いっぱいになったら消す必要があります。新しいセッションは空白のボードから始まります。これはバグではなく技術的制約です。",
+cause2_t:"🚫 ビルトインの「ノート」がない",cause2_d:"AIは前回の作業を自発的にメモしません。「引き継ぎノート」を見せなければ、毎回優秀だが何も知らない新人インターンのように振る舞います。",
+cause3_t:"🔀 ツール間は通信しない",cause3_d:"Claude、Gemini、Codex——それぞれ独自のコンテキストを持ち、自動共有はしません。3人の別々の社員に個別ブリーフィングするようなものです。",
+cmp_label:"比較",cmp_title:"同じタスク、2つの体験",cmp_desc:"昨日Claudeで半分作った機能を、今日Geminiで続けるとします。",
+cmp_bad:"❌ Session Governanceなし",cmp_good:"✅ Session Governanceあり",
+cmp_b1:"昨日の作業を続けて",cmp_b2:"私は新しい会話で、昨日の作業内容を知りません。技術スタックを教えていただけますか？",
+cmp_b3:"（ため息）React + Express + PostgreSQL、ログイン機能は完成、ショッピングカートを作成中…",cmp_b4:"わかりました。カートのデータ構造は？既存のAPIルートは？",
+cmp_b5:"（また15分かけて説明し直す…）",cmp_b_sum:"⏱ コンテキスト再構築に15-30分浪費",
+cmp_g1:"AGENTS.mdに従ってこのセッションを開始してください",cmp_g2:"SESSION_HANDOFF.md… SESSION_LOG.md を読み込み中… 完了。",
+cmp_g3:"📋 現在の状態：React+Express+PostgreSQL、ログイン完了（テスト済み）、カートAPI 3/5ルート完了。前回はcart/checkoutエンドポイントで停止。",
+cmp_g4:"よし、続けて",cmp_g5:"PLAN：cart/checkoutとcart/removeエンドポイントを完成させる…",
+cmp_g_sum:"⚡ 再説明時間を大幅削減（100%ロスレスは保証できません）",
+how_label:"仕組み",how_title:"病院のシフト引き継ぎと同じ",
+how_desc:"看護師は退勤時に引き継ぎノートを書きます：患者の状態、投薬、注意事項。次の看護師はノートを読んで、患者に聞き直すことなくケアを続けられます。<br><br>AI Session Governanceもまったく同じです——「患者」を「あなたのプロジェクト」に置き換えただけ。",
+wf1_t:"1. 引き継ぎを読む — READ",wf1_d:"新しいセッション開始時、AIがHANDOFF（現在の状態）とLOG（履歴）を読み取ります。口頭説明は不要。",
+wf2_t:"2. 計画を立てる — PLAN",wf2_d:"何をすべきか、影響範囲はどれくらいか、リスクはどこにあるかを把握。",
+wf3_t:"3. 最小限の変更 — CHANGE",wf3_d:"必要な部分だけ変更。不要なリファクタリングや装飾的な編集はしない。",
+wf4_t:"4. 品質確認 — QC",wf4_d:"テスト実行、結果検証、既存機能が壊れていないことを確認。",
+wf5_t:"5. 引き継ぎを書く — PERSIST",wf5_d:"HANDOFFとLOGを更新し、次のAI（または次回のあなた）がシームレスに引き継げるようにする。",
+feat_label:"内蔵セーフガード",feat_title:"引き継ぎだけじゃない——よくある落とし穴も防ぐ",feat_desc:"AIコーディングで最もよく踏む地雷。Session Governanceはルールレベルで予防します。",
+f1_t:"外部API安全",f1_d:"AIは記憶のAPIパラメータでコードを書けません。先にドキュメントを確認し記録する必要があります。ドキュメントがなければコードなし。",
+f2_t:"統合優先規律",f2_d:"問題が起きたら新ルール追加ではなく、まず既存ルールを更新できないか確認。ルールの自己矛盾を防止。",
+f3_t:"文書同期レジストリ",f3_d:"コードを変更した？レジストリがAIにどの文書を更新すべきか教えます。推測も漏れもなし。",
+f4_t:"テスト計画ガバナンス",f4_d:"すべての変更にテストマトリックスが必要：正常パス、エッジケース、エラーパス、回帰。検証なしで完了とは言えない。",
+f5_t:"ログ自動アーカイブ",f5_d:"セッションログが800行を超えたら自動でアーカイブへ移動。AI起動時の読み込みを軽量に保つ。削除はしない、移動のみ。",
+f6_t:"ファイル安全ガバナンス",f6_d:"AIは危険な操作（rm -rf、git reset --hard等）を実行できません。権限不足の場合は「手動操作チェックリスト」を提示。",
+sc_label:"利用シナリオ",sc_title:"誰のため？",sc_desc:"個人開発でもチーム協業でも、AIでコードを書くなら必ずこれらの状況に遭遇します。",
+sc_tab1:"配分切替",sc_tab2:"マルチツール協業",sc_tab3:"長期プロジェクト",
+sc1_t:"配分切れ、ツールを切り替えて続行",sc1_d:"Claude使い切ってGemini、Gemini使い切ってCodex——引き継ぎ文書があれば次のツールが直接続行、再説明不要。",sc1_h:"💡 実測：ClaudeからGeminiへの切り替え時、SESSION_HANDOFFにより再説明時間を大幅に削減。",
+sc2_t:"1つのリポ、複数のAIエージェント",sc2_d:"Codexがコード、Claudeがドキュメント、Geminiがインフラ——共有引き継ぎ記録で全ツールがプロジェクト状態を一致。",sc2_h:"💡 共有SESSION_LOGが異なるツールに一貫した履歴ビューを提供。",
+sc3_t:"半年後、ルールが矛盾し始める",sc3_d:"修正の蓄積、ルールの肥大化、ドキュメントの矛盾。「追加前に統合」の規律で複雑さをコントロール。",sc3_h:"💡 統合規律（§3b）はルール追加前に重複チェックを要求——ソースで矛盾を防止。",
+qs_label:"クイックスタート",qs_title:"30秒で完了",qs_desc:"手動でファイルをコピーする必要はありません。INIT.mdでワンクリックインストール、AIが自動でマージ処理。",
+qs1:"<a href=\'https://github.com/prompt-templates/ai-session-governance/blob/main/INIT.md\' target=\'_blank\' style=\'color:var(--accent)\'>INIT.md</a> を開き、<strong>Raw</strong> をクリック、全選択してコピー、AIコマンドラインツールに貼り付けます。",
+qs2:"AIがパスと計画を表示します。以下の確認を入力：",
+qs2_c1:"# インストールパスを確認",qs2_c2:"# 書き込みを確認",
+qs3:"インストール後、新しいセッション開始時に入力：",qs3_cmd:"AGENTS.md に従ってこのセッションを開始してください",qs3_note:"AIが自動で引き継ぎ文書を読み込み、プロジェクト状態をロードします。",
+qs4:"作業終了時に入力：",qs4_cmd:"このセッションを収束し、完全な引き継ぎまで実行してください。",qs4_note:"AIがHANDOFFとLOGを更新し、次のツール用の引き継ぎブロックを出力します。",
+qs5:"次にツールを切り替える時、前回出力の引き継ぎブロックをそのまま貼り付け：",qs5_c1:"# NEXT SESSION HANDOFF PROMPTを貼り付け",qs5_c2:"# (ブロック全体をそのまま)",qs5_note:"これが完全なサイクルです：<strong>開始 → 作業 → 収束引き継ぎ → 次のツールが続行</strong>。",
+faq_label:"FAQ",faq_title:"よくある質問",
+faqs:[{q:"大規模プロジェクト向けですか？",a:"違います。小規模でもすぐ効果があり、長期運用では規模が大きいほど差が出ます。"},{q:"初日からPROJECT_MASTER_SPEC.mdは必要？",a:"不要です。まずAGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.mdだけで始められます。"},{q:"これはコーディング規約ですか？",a:"違います。AIがどう読み・変更し・検証し・引き継ぐかを決めるもので、コードの書き方は関係ありません。"},{q:"セッションは遅くなりますか？",a:"開始時に少し読み込みが増えます。再説明や修正のやり直しより通常は短いです。"},{q:"既存のREADMEや内部規則は残せますか？",a:"残せます。既存のものに合わせてマージします。上書きはしません。"}],
+cta_title:"AIセッションをゼロから<br>始めるのをやめる準備はできましたか？",cta_desc:"オープンソース、無料、30秒インストール。すべてのAIセッションを前回の続きから始めましょう。",cta_btn:"GitHubで始める",cta_readme:"📖 完全なREADMEを読む →",
+footer_by:"デザイン：",footer_tagline:"Vibe Codingの時代、誰もが自分だけのAI世界をつくれる。"
+}
+};
+let lang="tw";
+function setLang(l){
+  lang=l;const d=I[l];if(!d)return;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(d[k]!=null)el.textContent=d[k]});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{const k=el.getAttribute("data-i18n-html");if(d[k]!=null)el.innerHTML=d[k]});
+  document.querySelectorAll(".lang-btn").forEach(b=>{b.classList.toggle("active",b.dataset.lang===l)});
+  document.documentElement.lang=l==="tw"?"zh-Hant":l==="cn"?"zh-Hans":l==="ja"?"ja":"en";
+  renderFaq(d);
+}
+function renderFaq(d){
+  const list=document.getElementById("faqList");if(!list||!d.faqs)return;
+  list.innerHTML=d.faqs.map((f,i)=>`<div class="faq-item"><div class="faq-q">${f.q}</div><div class="faq-a"><p>${f.a}</p></div></div>`).join("");
+  list.querySelectorAll(".faq-q").forEach(q=>q.addEventListener("click",()=>q.parentElement.classList.toggle("open")));
+}
+document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+// Scroll reveal
+const revealObs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");revealObs.unobserve(e.target)}})},{threshold:0.1});
+document.querySelectorAll(".reveal").forEach(el=>revealObs.observe(el));
+// Counter animation
+const ctrObs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){const el=e.target;const target=+el.dataset.target;let cur=0;const step=Math.max(1,Math.floor(target/40));const timer=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(timer)}el.textContent=cur+(target===30?"s":"+")},30);ctrObs.unobserve(el)}})},{threshold:0.3});
+document.querySelectorAll(".stat-num[data-target]").forEach(el=>ctrObs.observe(el));
+// Scenario tabs
+document.querySelectorAll(".scenario-tab").forEach(tab=>tab.addEventListener("click",()=>{
+  document.querySelectorAll(".scenario-tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".scenario-panel").forEach(p=>p.classList.remove("active"));
+  tab.classList.add("active");
+  const p=document.getElementById(tab.dataset.tab);if(p)p.classList.add("active");
+}));
+// Nav hide on scroll
+let lastY=0;const nav=document.getElementById("nav");
+window.addEventListener("scroll",()=>{const y=window.scrollY;if(y>lastY&&y>80)nav.classList.add("hidden");else nav.classList.remove("hidden");lastY=y});
+// Smooth scroll for nav links
+document.querySelectorAll('nav a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();const t=document.querySelector(a.getAttribute("href"));if(t)t.scrollIntoView({behavior:"smooth",block:"start"})}));
+// Init — respect ?lang= query param from README links
+const urlLang=new URLSearchParams(window.location.search).get("lang");
+setLang(urlLang&&I[urlLang]?urlLang:"tw");
+</script>
+</body>
+</html>

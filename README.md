@@ -12,6 +12,9 @@ When your Codex / Claude / Gemini quota runs out, paste the handoff block into t
 
 ![Overview](ref_doc/overview_infograph_en.png)
 
+> **New here?** Check out the **[Interactive Introduction](https://prompt-templates.github.io/ai-session-governance/)** — a visual guide to what this template does and why it exists.
+
+
 ---
 
 ## :bookmark_tabs: Why this exists
@@ -244,8 +247,10 @@ Consolidation-before-adding rules reduce SOP sprawl and maintenance cost.
 
 ## :bookmark_tabs: FAQ
 
+For a visual walkthrough of common questions, see the **[Interactive Introduction](https://prompt-templates.github.io/ai-session-governance/)**.
+
 ### :small_blue_diamond: 1) Is this only for large projects?
-No. Small repos get the benefit right away; larger ones see more gain over time.
+No. Small repos benefit right away; larger ones see more gain over time.
 
 ### :small_blue_diamond: 2) Do I need `PROJECT_MASTER_SPEC.md` on day one?
 No. Start with `AGENTS.md` + `SESSION_HANDOFF.md` + `SESSION_LOG.md`.
@@ -258,8 +263,6 @@ There's a short read at startup. Usually less overhead than re-explaining contex
 
 ### :small_blue_diamond: 5) Can I keep my existing docs and internal rules?
 Yes. It merges with what you already have — it doesn't overwrite things.
-
----
 
 ## :bookmark_tabs: Repository source layout
 

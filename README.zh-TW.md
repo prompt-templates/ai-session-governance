@@ -12,6 +12,9 @@
 
 ![Overview](ref_doc/overview_infograph_tw.png)
 
+> **初次接觸？** 請看 **[互動式介紹頁面](https://prompt-templates.github.io/ai-session-governance/?lang=tw)** — 以視覺化方式了解本範本的功能與設計理念。
+
+
 ---
 
 ## :bookmark_tabs: 為什麼要做這個
@@ -248,6 +251,8 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ## :bookmark_tabs: 常見問題
 
+視覺化常見問題解答請見 **[互動式介紹頁面](https://prompt-templates.github.io/ai-session-governance/?lang=tw)**。
+
 ### :small_blue_diamond: 1) 這只適合大型專案嗎？
 不是。小型專案馬上就有效果；大型專案時間拉長效益更明顯。
 
@@ -262,8 +267,6 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ### :small_blue_diamond: 5) 我已經有 README、既有文件與內部規則，仍然適用嗎？
 可以。它會跟你現有的合併，不會覆蓋掉。
-
----
 
 ## :bookmark_tabs: 此儲存庫原始佈局
 
