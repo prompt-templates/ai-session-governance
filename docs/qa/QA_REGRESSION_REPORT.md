@@ -1,12 +1,12 @@
 # QA Regression Report
 
 Date: 2026-04-08 (UTC)
-Scope: v2.3 — Governance audit fixes (7+1); full regression of all prior checks
+Scope: v2.4 — PLAN self-challenge, lean session log format, archive thresholds 800→400/350→200; full regression
 
 ## Summary
 
-- Total checks: 155
-- Pass: 155
+- Total checks: 163
+- Pass: 163
 - Fail: 0
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
@@ -253,12 +253,12 @@ Changes: §1 Verbatim block "last occurring" precision + "does not substitute" s
 |---|---|---|---|
 | (126) §4a heading in AGENTS.md | `grep -c "4a) Session Log Maintenance" AGENTS.md` | 1 | PASS |
 | (127) §4a heading in INIT.md | `grep -c "4a) Session Log Maintenance" INIT.md` | 1 | PASS |
-| (128) 800-line trigger in AGENTS.md | `grep -c "exceeds 800 lines" AGENTS.md` | 1 | PASS |
-| (129) 800-line trigger in INIT.md | `grep -c "exceeds 800 lines" INIT.md` | 1 | PASS |
+| (128) 400-line trigger in AGENTS.md | `grep -c "exceeds 400 lines" AGENTS.md` | 1 | PASS |
+| (129) 400-line trigger in INIT.md | `grep -c "exceeds 400 lines" INIT.md` | 1 | PASS |
 | (130) 30-day trigger in AGENTS.md | `grep -c "dated more than 30 days ago" AGENTS.md` | 1 | PASS |
 | (131) 30-day trigger in INIT.md | `grep -c "dated more than 30 days ago" INIT.md` | 1 | PASS |
-| (132) ≤350-line archive target in AGENTS.md | `grep -c "350 lines" AGENTS.md` | 1 | PASS |
-| (133) ≤350-line archive target in INIT.md | `grep -c "350 lines" INIT.md` | 1 | PASS |
+| (132) ≤200-line archive target in AGENTS.md | `grep -c "200 lines" AGENTS.md` | 1 | PASS |
+| (133) ≤200-line archive target in INIT.md | `grep -c "200 lines" INIT.md` | 1 | PASS |
 | (134) Quarterly archive format in AGENTS.md | `grep -c "SESSION_LOG_YYYY_QN" AGENTS.md` | 1 | PASS |
 | (135) Quarterly archive format in INIT.md | `grep -c "SESSION_LOG_YYYY_QN" INIT.md` | 1 | PASS |
 | (136) Never-delete hard rule in AGENTS.md | `grep -c "Never delete session entries" AGENTS.md` | 1 | PASS |
@@ -325,6 +325,33 @@ Root cause addressed: systematic audit of AGENTS.md identified 7 ambiguity/contr
 | (154) CODEBASE_CONTEXT in FILE 4 template checklist | `grep -c "Read.*CODEBASE_CONTEXT" INIT.md` | >=1 | PASS |
 | (155) FILE 4 checklist item count increased | `grep -c "^[0-9]\+\. " INIT.md` | >=10 | PASS |
 
+## Feature round 10 (2026-04-08): v2.4 — PLAN self-challenge, lean log format, archive threshold reduction
+
+Root cause addressed: "lost in the middle" research (Stanford/Anthropic 2023) shows 30%+ accuracy drop for mid-context content. 800-line SESSION_LOG sits in the attention dead zone. Lean format reduces entry size ~60%. Self-challenge forces adversarial thinking at PLAN phase.
+
+### PLAN self-challenge
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (156) Self-challenge rule in AGENTS.md | `grep -c "Challenge own assumptions" AGENTS.md` | 1 | PASS |
+| (157) Self-challenge rule in INIT.md | `grep -c "Challenge own assumptions" INIT.md` | 1 | PASS |
+
+### Lean session log format
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (158) Lean format guideline in AGENTS.md | `grep -c "lean key-value style" AGENTS.md` | 1 | PASS |
+| (159) Lean format guideline in INIT.md | `grep -c "lean key-value style" INIT.md` | 1 | PASS |
+| (160) INIT FILE 5 template uses bold key format | `grep -c "\\*\\*ID:\\*\\*" INIT.md` | 1 | PASS |
+| (161) INIT FILE 5 "Files read" field removed | `grep -c "^[0-9]*\\. Files read:" INIT.md` | 0 | PASS |
+
+### Archive threshold update
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (162) Archive pointer text updated in AGENTS.md | `grep -c ">400 lines" AGENTS.md` | 1 | PASS |
+| (163) Archive pointer text updated in INIT.md | `grep -c ">400 lines" INIT.md` | 1 | PASS |
+
 ### Parity sentinel
 
 | Check | Command | Expected | Result |
@@ -342,6 +369,7 @@ Root cause addressed: systematic audit of AGENTS.md identified 7 ambiguity/contr
 - Feature round 6 adds: DOC_SYNC_CHECKLIST.md registry (deterministic doc-sync via lookup table); section markers in AGENTS.md (MANDATORY/CONDITIONAL/REFERENCE); §3 PERSIST checklist trigger; §3c documentation sync definition; §4 vague "corresponding documents" sentence retired; §5a backup lists updated; §7 and §8 tightened with registry references; INIT.md FILE 6 bootstrap; INIT.md fence count updated to 28.
 - Feature round 7 adds: §1 "last occurring" Verbatim block definition + "does not substitute" startup clarification; §3 PERSIST DOC_SYNC Matrix Scan mandatory visible block (replaces silent trigger); §4 rule 5 Opening line verbatim template + PROJECT_MASTER_SPEC in sequence + "Post-startup first action:" label; total 14 new grep checks (112–125).
 - Feature round 8 adds: §4a Session Log Maintenance — auto-archive triggers (>800 lines or oldest entry >30 days), archive target (≤350 lines or entries older than 30 days), quarterly archive naming, first-run auto-transition, hard rules (never delete, archive not in §1 read list, retain latest Verbatim block); section markers updated to include §4a; total 14 new grep checks (126–139).
+- Feature round 10 adds: §3 PLAN self-challenge requirement; §4 lean session log format guideline (target ~20-30 lines/entry, omit empty sections, remove "Files read"); §4a archive thresholds lowered (800→400 trigger, 350→200 target); INIT.md FILE 5 template rewritten to lean key-value format. Checks (128)/(129) updated from "800 lines" to "400 lines", (132)/(133) from "350 lines" to "200 lines". Total 8 new grep checks (156–163).
 - Feature round 9 adds: 7 governance clarifications + 1 parity bug fix from systematic audit — §3 PLAN must display "My understanding / Impact scope / Assumptions" (A1); §2 conflict arbitration rule for user-vs-governance conflicts (A2); §2b triage exploratory read allowance (A4); §3 CHANGE deviation stop-and-report (A5); §8/§8b reconciliation bridging sentence (A3); §11 Output Contract scoped to CHANGE/PERSIST responses (B1); INIT.md FILE 4 template checklist adds CODEBASE_CONTEXT (parity fix). Checks (114)/(115) expected values updated from 1 to 2. Total 16 new grep checks (140–155).
 
 ## Manual governance checks (cannot be automated with grep)

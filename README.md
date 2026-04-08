@@ -44,7 +44,7 @@ It also catches a few common AI mistakes:
 | **Test plan governance** | Merging changes without a scenario matrix — expected vs. actual outcomes untracked |
 | **Consolidation discipline** | Rule accumulation without checking whether existing rules should be updated first |
 | **Doc-sync registry** | Guessing which docs to update after a change — `DOC_SYNC_CHECKLIST.md` maps change category to required updates so AI looks up instead of self-assessing |
-| **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — auto-archives old entries to `dev/archive/` when `SESSION_LOG.md` exceeds 800 lines or has entries older than 30 days; no manual migration needed |
+| **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — auto-archives old entries to `dev/archive/` when `SESSION_LOG.md` exceeds 400 lines or has entries older than 30 days; no manual migration needed |
 
 ### :small_blue_diamond: How SESSION_LOG.md stays manageable
 
@@ -52,8 +52,8 @@ It also catches a few common AI mistakes:
 
 The template handles this automatically at each session close:
 
-- When the log exceeds **800 lines** or contains entries older than **30 days**, old entries are moved to `dev/archive/` — never deleted, only relocated
-- The active log is trimmed back to the last 5–6 sessions (≤ 350 lines)
+- When the log exceeds **400 lines** or contains entries older than **30 days**, old entries are moved to `dev/archive/` — never deleted, only relocated
+- The active log is trimmed back to the last 7–10 sessions (≤ 200 lines)
 - Archive files are organized by quarter: `dev/archive/SESSION_LOG_YYYY_QN.md`
 - The AI reads only `SESSION_LOG.md` at startup — archive files are never loaded
 
@@ -65,8 +65,9 @@ If you already have a large session log, it is trimmed automatically on the firs
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v2.4** | AI now challenges its own assumptions at PLAN phase before acting; session log entries use a lean format (~60% smaller); archive threshold lowered from 800 to 400 lines (target ≤ 200) based on "lost in the middle" research showing 30%+ accuracy drop for mid-context content | Higher quality plans, faster AI startup, more session history fits in less space |
 | **v2.3** | Seven clarity fixes from a systematic audit: AI now shows its understanding before acting (PLAN display), names conflicts when user instructions override governance rules, stops and reports when mid-task assumptions turn out wrong, and gives shorter answers to simple questions instead of forced 4-part output | Fewer misunderstood tasks, traceable overrides, less wasted work from wrong assumptions |
-| **v2.2** | Session log files no longer grow unbounded — when `SESSION_LOG.md` exceeds 800 lines or has entries older than 30 days, old entries are automatically moved to `dev/archive/`; the active log stays at the last 5–6 sessions | Long-running projects stay lean without manual cleanup; AI startup context is not consumed by months-old history |
+| **v2.2** | Session log files no longer grow unbounded — when `SESSION_LOG.md` exceeds 400 lines or has entries older than 30 days, old entries are automatically moved to `dev/archive/`; the active log stays at the last 5–6 sessions | Long-running projects stay lean without manual cleanup; AI startup context is not consumed by months-old history |
 | **v2.1** | Two reliability fixes: (1) when receiving a handoff, new agents are now guided more clearly to read governance rules before starting work; (2) after every change, AI must display which docs it updated — if that block is absent from the response, you know to ask | Switching AI tools mid-session is more reliable; doc update gaps are now visible in the response instead of happening silently |
 | **v2.0** | `DOC_SYNC_CHECKLIST.md` — deterministic doc-sync registry mapping change category to required doc updates; section markers in `AGENTS.md` (MANDATORY / CONDITIONAL / REFERENCE) | Removes guesswork from doc sync: AI looks up what to update instead of self-assessing |
 | **v1.9.0** | 6 governance fixes: §1 3-trigger new-session definition, §3 PERSIST explicit cross-doc sync, §4 Open Priorities regeneration (replace not append), §4 "max 3" clarification, §10 Known Risks location, §5.7 modification ops precision | Closes real AI behavioral gaps found in field usage — stale priority lists, skipped doc sync, ambiguous scope |
@@ -314,7 +315,7 @@ Full verification details:
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
 Snapshot status (as of 2026-04-08):
-- AGENTS/INIT rule parity: verified (155-check regression suite)
+- AGENTS/INIT rule parity: verified (163-check regression suite)
 - Multi-platform pointer behavior: verified
 - Longitudinal 50+ session durability: not yet verified
 

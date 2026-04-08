@@ -271,6 +271,7 @@ Every task must follow this workflow and clearly label each phase in the respons
 1. PLAN
    - Objective, scope, risks, acceptance criteria
    - State explicitly: "My understanding: [1-sentence restatement of user intent]", "Impact scope: [files/modules to be modified]", "Assumptions: [any inferences not explicitly stated by user]"
+   - Challenge own assumptions: state at least one risk to the current approach, one alternative considered, or one way the plan could be wrong
    - If task meets §3d trigger conditions: define test scenario matrix before proceeding to READ
 
 2. READ
@@ -403,6 +404,8 @@ Each closeout must record at minimum:
 5. Next priorities (max 3 — SESSION_LOG summary field only; full prioritized list lives in `dev/SESSION_HANDOFF.md` Open Priorities)
 6. Risks or blockers
 
+**Session log entry format:** Use lean key-value style (see `dev/SESSION_LOG.md` template). Target ~20-30 lines per entry excluding the Handoff Prompt block. Omit conditional sections (Fix Record, Consolidation) when they have no content — do not write empty blocks. Do not record "Files read" — it has no value for future sessions.
+
 **Open Priorities regeneration** (mandatory at every closeout):
 The `Open Priorities` section of `dev/SESSION_HANDOFF.md` must be regenerated at every closeout — not copy-pasted forward:
 1. Remove any item completed this session
@@ -494,7 +497,7 @@ Closeout Visual Cue - Style C
 Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, check the following trigger conditions:
 
 **Trigger (either condition):**
-1. `dev/SESSION_LOG.md` exceeds 800 lines
+1. `dev/SESSION_LOG.md` exceeds 400 lines
 2. The oldest session entry in `dev/SESSION_LOG.md` is dated more than 30 days ago
 
 **If neither condition is met:** proceed with writing the new session entry normally.
@@ -503,7 +506,7 @@ Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, ch
 
 1. Create `dev/archive/` directory if it does not exist
 2. Identify entries to archive:
-   - Line-count trigger: archive oldest entries until `dev/SESSION_LOG.md` ≤ 350 lines; always retain the 2 most recent session entries regardless of size
+   - Line-count trigger: archive oldest entries until `dev/SESSION_LOG.md` ≤ 200 lines; always retain the 2 most recent session entries regardless of size
    - Date trigger: archive all entries older than 30 days; always retain the 2 most recent session entries regardless of date
 3. Determine the archive filename by year and quarter of the archived entries:
    - Format: `dev/archive/SESSION_LOG_YYYY_QN.md` (e.g., `SESSION_LOG_2026_Q1.md` for Jan–Mar 2026)
@@ -511,7 +514,7 @@ Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, ch
    - If the target archive file already exists, append to it (do not overwrite)
 4. Move the identified entries from `dev/SESSION_LOG.md` into the archive file(s)
 5. Add or update an archive pointer comment immediately after the file header in `dev/SESSION_LOG.md`:
-   `<!-- Archives: dev/archive/ — entries moved when >800 lines or oldest entry >30 days -->`
+   `<!-- Archives: dev/archive/ — entries moved when >400 lines or oldest entry >30 days -->`
 6. Proceed with writing the new session entry to the now-trimmed `dev/SESSION_LOG.md`
 
 **First-run auto-transition:**
@@ -830,39 +833,25 @@ Rule if exists: skip, do not overwrite.
 # Session Log
 
 ## <YYYY-MM-DD>
-1. Agent & Session ID:
-2. Task summary:
-3. Layer classification:
-4. Source triage:
-5. Files read:
-6. Files changed:
-7. Completed:
-8. Validation / QC:
-9. Pending:
-10. Next priorities:
-11. Risks / blockers:
-12. Notes:
+- **ID:** <AgentName>_<YYYYMMDD>_<HHMM>
+- **Summary:** <one-sentence task description including layer if non-obvious>
+- **Changed:** <files modified, comma-separated>
+- **Done:** <completed items, semicolon-separated>
+- **QC:** <key verification results, semicolon-separated>
+- **Pending:** <open items>
+- **Next:** <max 3 priorities>
+- **Risks:** <blockers or cautions>
 
-### Problem -> Root Cause -> Fix -> Verification
-1. Problem:
-2. Root Cause:
-3. Fix:
-4. Verification:
-5. Regression / rule update:
+### Fix Record (only if bug/issue was resolved — omit entire section otherwise)
+- Problem:
+- Root cause:
+- Fix:
+- Verified:
 
-### Consolidation / Retirement Record
-1. Duplicate / drift found:
-2. Single source of truth chosen:
-3. What was merged:
-4. What was retired / superseded:
-5. Why consolidation was needed:
-
-### Test Scenarios (if §3d applies)
-| Scenario | Precondition | Action / input | Expected | Actual | Result |
-|---|---|---|---|---|---|
-| | | | | | |
-
-Overall: PASS / PASS with notes / FAIL
+### Consolidation Record (only if consolidation was performed — omit entire section otherwise)
+- Merged:
+- Retired:
+- Why:
 
 ### Next Session Handoff Prompt (Verbatim)
 <paste the exact closeout Section 2 block content here, including its fenced text block>
