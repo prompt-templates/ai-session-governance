@@ -1,5 +1,5 @@
 # Latest QA Regression
 
 - Current report: [QA_REGRESSION_REPORT.md](QA_REGRESSION_REPORT.md)
-- Date (UTC): 2026-03-27
-- Result: 139 checks, 139 pass, 0 fail
+- Date (UTC): 2026-04-08
+- Result: 155 checks, 155 pass, 0 fail

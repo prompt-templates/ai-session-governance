@@ -183,6 +183,7 @@ Supplementary rules:
 3. `PROJECT_MASTER_SPEC.md` represents "long-term stable rules and the complete authoritative reference".
 4. If the current state is inconsistent with an older specification, defer to the handoff/log first, and remediate specification drift during the PERSIST phase.
 5. If `SESSION_LOG.md` contains a latest `Next Session Handoff Prompt (Verbatim)` block, treat it as operational seed context, but do not let it override higher-priority current-state facts in `SESSION_HANDOFF.md` / latest log facts.
+6. When a user instruction conflicts with a rule in this document: (a) state which rule is in conflict, (b) explain the risk of overriding, (c) if user confirms override — comply and record the override in `SESSION_LOG.md`.
 
 ---
 
@@ -201,6 +202,8 @@ Before source classification is complete:
 1. Do not make large-scale code changes
 2. Do not arbitrarily revert files
 3. Do not equate a single error message directly with the root cause
+
+Note: Targeted file reads for the purpose of determining issue source are permitted during triage. This does not substitute for the full §2c read coverage required before entering CHANGE.
 
 ---
 
@@ -224,6 +227,7 @@ Every task must follow this workflow and clearly label each phase in the respons
 
 1. PLAN
    - Objective, scope, risks, acceptance criteria
+   - State explicitly: "My understanding: [1-sentence restatement of user intent]", "Impact scope: [files/modules to be modified]", "Assumptions: [any inferences not explicitly stated by user]"
    - If task meets §3d trigger conditions: define test scenario matrix before proceeding to READ
 
 2. READ
@@ -231,6 +235,7 @@ Every task must follow this workflow and clearly label each phase in the respons
 
 3. CHANGE
    - Minimal necessary modifications, no unrelated refactoring
+   - If execution diverges from PLAN (unexpected state, wrong assumptions, scope change needed): stop, report the divergence to the user, and wait for direction rather than attempting self-correction
 
 4. QC
    - Run tests / checks, list results (test/check commands and key outcomes)
@@ -604,6 +609,8 @@ Hard rules:
 2. Do not allow SOPs to expand without limit
 3. Each time a new long-term rule is added, check whether old rules can be integrated or retired
 
+Reconciling §8 and §8b: §8 ensures lessons are captured; §8b prevents overreaction. When §8 triggers (e.g. first-time user-visible error) but §8b criteria suggest no promotion: record the full lesson in `SESSION_LOG.md` and mark as `monitoring — promote to rule if recurrence is observed`.
+
 ---
 
 ## 9) Toolchain / Policy Compatibility (Conditional Mandatory)
@@ -651,12 +658,14 @@ Do not use alternative names such as `SPEC.md`, `MASTER_SPEC.md`, `ARCHITECTURE.
 ---
 
 ## 11) Output Contract
-Every AI response must include at minimum:
+Every AI response that includes a CHANGE or PERSIST phase must include at minimum:
 
 1. What was done
 2. Why it was done that way
 3. Verification results
 4. Next-step recommendations (if any)
+
+Responses that contain only clarifying questions, status updates, or simple information lookups are not bound by this contract but should remain clear and useful.
 
 ---
 

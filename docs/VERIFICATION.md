@@ -33,7 +33,7 @@ Verification date baseline: 2026-03-26 (UTC)
 
 - Latest QA pointer: [docs/qa/LATEST.md](qa/LATEST.md)
 - Current detailed report: [docs/qa/QA_REGRESSION_REPORT.md](qa/QA_REGRESSION_REPORT.md)
-- Latest run snapshot (UTC): 2026-03-26, 111 checks, 111 pass, 0 fail
+- Latest run snapshot (UTC): 2026-04-08, 155 checks, 155 pass, 0 fail
 
 ## Not yet verified
 

@@ -1,17 +1,19 @@
 # QA Regression Report
 
-Date: 2026-03-27 (UTC)
-Scope: v2.2 — §4a Session Log Maintenance auto-archive rule; full regression of all prior checks
+Date: 2026-04-08 (UTC)
+Scope: v2.3 — Governance audit fixes (7+1); full regression of all prior checks
 
 ## Summary
 
-- Total checks: 139
-- Pass: 139
+- Total checks: 155
+- Pass: 155
 - Fail: 0
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
 Note: Checks 112–125 added for Feature Round 7 (v2.1 Handoff chain fixes + DOC_SYNC Matrix Scan enforcement).
 Note: Checks 126–139 added for Feature Round 8 (v2.2 §4a Session Log Maintenance auto-archive rule).
+Note: Checks (114)/(115) expected value updated from 1 to 2 — §2b triage read note added "does not substitute" phrase (A4 fix); original §1 startup clarification remains intact.
+Note: Checks 140–155 added for Feature Round 9 (v2.3 Governance audit fixes: PLAN display, conflict arbitration, triage reads, CHANGE deviation, §8/§8b bridging, §11 scope, FILE 4 checklist).
 
 ## What was validated
 
@@ -222,8 +224,8 @@ Changes: §1 Verbatim block "last occurring" precision + "does not substitute" s
 |---|---|---|---|
 | (112) "last occurring" definition in AGENTS.md | `grep -c "last occurring" AGENTS.md` | 1 | PASS |
 | (113) "last occurring" definition in INIT.md | `grep -c "last occurring" INIT.md` | 1 | PASS |
-| (114) "does not substitute" startup clarification in AGENTS.md | `grep -c "does not substitute" AGENTS.md` | 1 | PASS |
-| (115) "does not substitute" startup clarification in INIT.md | `grep -c "does not substitute" INIT.md` | 1 | PASS |
+| (114) "does not substitute" startup clarification in AGENTS.md | `grep -c "does not substitute" AGENTS.md` | 2 | PASS |
+| (115) "does not substitute" startup clarification in INIT.md | `grep -c "does not substitute" INIT.md` | 2 | PASS |
 
 ### §3 PERSIST DOC_SYNC Matrix Scan mandatory visible output
 
@@ -268,6 +270,67 @@ PROJECT_MASTER_SPEC.md in Opening line template: AGENTS.md=1 (§4 rule 5 only), 
 
 Fence counts unchanged: AGENTS.md=16 (even), INIT.md=28 (even) — verified by inspection (no fenced code blocks added in any change).
 
+## Feature round 9 (2026-04-08): v2.3 — Governance audit fixes (7+1)
+
+Root cause addressed: systematic audit of AGENTS.md identified 7 ambiguity/contradiction zones + 1 parity bug. All fixes stress-tested for net-positive impact before implementation. Changes: §3 PLAN display requirement (A1), §2 conflict arbitration rule (A2), §2b triage exploratory read (A4), §3 CHANGE deviation stop (A5), §8/§8b bridging (A3), §11 Output Contract scope narrowing (B1), INIT.md FILE 4 checklist CODEBASE_CONTEXT (parity fix).
+
+### A1: §3 PLAN display requirement
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (140) PLAN display "My understanding" in AGENTS.md | `grep -c "My understanding.*1-sentence restatement" AGENTS.md` | 1 | PASS |
+| (141) PLAN display "My understanding" in INIT.md | `grep -c "My understanding.*1-sentence restatement" INIT.md` | 1 | PASS |
+
+### A2: §2 conflict arbitration rule
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (142) Conflict arbitration in AGENTS.md | `grep -c "user instruction conflicts.*rule in this document" AGENTS.md` | 1 | PASS |
+| (143) Conflict arbitration in INIT.md | `grep -c "user instruction conflicts.*rule in this document" INIT.md` | 1 | PASS |
+
+### A4: §2b triage exploratory read
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (144) Triage read note in AGENTS.md | `grep -c "Targeted file reads.*during triage" AGENTS.md` | 1 | PASS |
+| (145) Triage read note in INIT.md | `grep -c "Targeted file reads.*during triage" INIT.md` | 1 | PASS |
+
+### A5: §3 CHANGE deviation stop
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (146) CHANGE deviation rule in AGENTS.md | `grep -c "diverges from PLAN.*stop.*report" AGENTS.md` | 1 | PASS |
+| (147) CHANGE deviation rule in INIT.md | `grep -c "diverges from PLAN.*stop.*report" INIT.md` | 1 | PASS |
+
+### A3: §8/§8b bridging
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (148) §8/§8b reconciliation in AGENTS.md | `grep -c "monitoring.*promote to rule if recurrence" AGENTS.md` | 1 | PASS |
+| (149) §8/§8b reconciliation in INIT.md | `grep -c "monitoring.*promote to rule if recurrence" INIT.md` | 1 | PASS |
+
+### B1: §11 Output Contract scope
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (150) §11 scope narrowing in AGENTS.md | `grep -c "CHANGE or PERSIST phase" AGENTS.md` | 1 | PASS |
+| (151) §11 scope narrowing in INIT.md | `grep -c "CHANGE or PERSIST phase" INIT.md` | 1 | PASS |
+| (152) §11 exemption note in AGENTS.md | `grep -c "clarifying questions.*status updates" AGENTS.md` | 1 | PASS |
+| (153) §11 exemption note in INIT.md | `grep -c "clarifying questions.*status updates" INIT.md` | 1 | PASS |
+
+### FILE 4: INIT.md template checklist parity fix
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (154) CODEBASE_CONTEXT in FILE 4 template checklist | `grep -c "Read.*CODEBASE_CONTEXT" INIT.md` | >=1 | PASS |
+| (155) FILE 4 checklist item count increased | `grep -c "^[0-9]\+\. " INIT.md` | >=10 | PASS |
+
+### Parity sentinel
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| Fence counts | `grep -c "^\x60\x60\x60" AGENTS.md` / `INIT.md` | AGENTS=16, INIT=28 | PASS |
+
 ## Notes
 
 - This report validates document and governance consistency at repository level.
@@ -279,6 +342,7 @@ Fence counts unchanged: AGENTS.md=16 (even), INIT.md=28 (even) — verified by i
 - Feature round 6 adds: DOC_SYNC_CHECKLIST.md registry (deterministic doc-sync via lookup table); section markers in AGENTS.md (MANDATORY/CONDITIONAL/REFERENCE); §3 PERSIST checklist trigger; §3c documentation sync definition; §4 vague "corresponding documents" sentence retired; §5a backup lists updated; §7 and §8 tightened with registry references; INIT.md FILE 6 bootstrap; INIT.md fence count updated to 28.
 - Feature round 7 adds: §1 "last occurring" Verbatim block definition + "does not substitute" startup clarification; §3 PERSIST DOC_SYNC Matrix Scan mandatory visible block (replaces silent trigger); §4 rule 5 Opening line verbatim template + PROJECT_MASTER_SPEC in sequence + "Post-startup first action:" label; total 14 new grep checks (112–125).
 - Feature round 8 adds: §4a Session Log Maintenance — auto-archive triggers (>800 lines or oldest entry >30 days), archive target (≤350 lines or entries older than 30 days), quarterly archive naming, first-run auto-transition, hard rules (never delete, archive not in §1 read list, retain latest Verbatim block); section markers updated to include §4a; total 14 new grep checks (126–139).
+- Feature round 9 adds: 7 governance clarifications + 1 parity bug fix from systematic audit — §3 PLAN must display "My understanding / Impact scope / Assumptions" (A1); §2 conflict arbitration rule for user-vs-governance conflicts (A2); §2b triage exploratory read allowance (A4); §3 CHANGE deviation stop-and-report (A5); §8/§8b reconciliation bridging sentence (A3); §11 Output Contract scoped to CHANGE/PERSIST responses (B1); INIT.md FILE 4 template checklist adds CODEBASE_CONTEXT (parity fix). Checks (114)/(115) expected values updated from 1 to 2. Total 16 new grep checks (140–155).
 
 ## Manual governance checks (cannot be automated with grep)
 
@@ -294,3 +358,7 @@ These require human or live-session verification:
 | DOC_SYNC_CHECKLIST merge on upgrade: re-running INIT.md on project with custom rows in DOC_SYNC_CHECKLIST.md preserves those rows and adds any missing universal rows without overwriting | Behavioral | Verify by running INIT.md on a project that already has DOC_SYNC_CHECKLIST.md with a project-specific row added |
 | PERSIST checklist trigger: agent outputs DOC_SYNC Matrix Scan block when CHANGE phase modified files; outputs SKIP notice when no file changes occurred | Behavioral | Verify in two live sessions: one with file changes (block appears), one without (SKIP output or absent) |
 | Re-install on existing project: dry-run plan shows merge/skip (not create) for existing files; backup created before first write; SESSION_HANDOFF.md and SESSION_LOG.md left untouched | Behavioral | Verify by running INIT.md on a project that already has governance files |
+| A1 — PLAN display: AI states "My understanding:", "Impact scope:", "Assumptions:" at PLAN phase before proceeding to READ; user can see and correct misinterpretation | Behavioral | Verify in a live session with an ambiguous task request |
+| A2 — Conflict arbitration: when user instruction conflicts with governance rule, AI states the conflict and risk before complying; override is recorded in SESSION_LOG | Behavioral | Verify by requesting AI to skip a mandatory step (e.g., "don't update session log") |
+| A5 — CHANGE deviation stop: when AI discovers mid-CHANGE that assumptions were wrong, it stops and reports instead of self-correcting | Behavioral | Verify by giving a task where the target file has unexpected state |
+| B1 — §11 scope: clarifying questions and simple lookups do not include forced "What was done / Why / Verification / Next" output | Behavioral | Verify by asking a simple question (e.g., "what's the build command?") in a governed session |
