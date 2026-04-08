@@ -5,8 +5,8 @@ Scope: v2.4 — PLAN self-challenge, lean session log format, archive thresholds
 
 ## Summary
 
-- Total checks: 163
-- Pass: 163
+- Total checks: 169
+- Pass: 169
 - Fail: 0
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
@@ -329,12 +329,18 @@ Root cause addressed: systematic audit of AGENTS.md identified 7 ambiguity/contr
 
 Root cause addressed: "lost in the middle" research (Stanford/Anthropic 2023) shows 30%+ accuracy drop for mid-context content. 800-line SESSION_LOG sits in the attention dead zone. Lean format reduces entry size ~60%. Self-challenge forces adversarial thinking at PLAN phase.
 
-### PLAN self-challenge
+### PLAN risk grading + conditional pause (replaces self-challenge)
 
 | Check | Command | Expected | Result |
 |---|---|---|---|
-| (156) Self-challenge rule in AGENTS.md | `grep -c "Challenge own assumptions" AGENTS.md` | 1 | PASS |
-| (157) Self-challenge rule in INIT.md | `grep -c "Challenge own assumptions" INIT.md` | 1 | PASS |
+| (156) Risk level criteria in AGENTS.md | `grep -c "Risk level.*HIGH or LOW" AGENTS.md` | 1 | PASS |
+| (157) Risk level criteria in INIT.md | `grep -c "Risk level.*HIGH or LOW" INIT.md` | 1 | PASS |
+| (164) HIGH wait-for-confirmation in AGENTS.md | `grep -c "wait for user confirmation" AGENTS.md` | 1 | PASS |
+| (165) HIGH wait-for-confirmation in INIT.md | `grep -c "wait for user confirmation" INIT.md` | 1 | PASS |
+| (166) Assumptions and risks merged in AGENTS.md | `grep -c "Assumptions and risks" AGENTS.md` | 1 | PASS |
+| (167) Assumptions and risks merged in INIT.md | `grep -c "Assumptions and risks" INIT.md` | 1 | PASS |
+| (168) Self-challenge standalone removed from AGENTS.md | `grep -c "Challenge own assumptions" AGENTS.md` | 0 | PASS |
+| (169) Self-challenge standalone removed from INIT.md | `grep -c "Challenge own assumptions" INIT.md` | 0 | PASS |
 
 ### Lean session log format
 
@@ -369,7 +375,7 @@ Root cause addressed: "lost in the middle" research (Stanford/Anthropic 2023) sh
 - Feature round 6 adds: DOC_SYNC_CHECKLIST.md registry (deterministic doc-sync via lookup table); section markers in AGENTS.md (MANDATORY/CONDITIONAL/REFERENCE); §3 PERSIST checklist trigger; §3c documentation sync definition; §4 vague "corresponding documents" sentence retired; §5a backup lists updated; §7 and §8 tightened with registry references; INIT.md FILE 6 bootstrap; INIT.md fence count updated to 28.
 - Feature round 7 adds: §1 "last occurring" Verbatim block definition + "does not substitute" startup clarification; §3 PERSIST DOC_SYNC Matrix Scan mandatory visible block (replaces silent trigger); §4 rule 5 Opening line verbatim template + PROJECT_MASTER_SPEC in sequence + "Post-startup first action:" label; total 14 new grep checks (112–125).
 - Feature round 8 adds: §4a Session Log Maintenance — auto-archive triggers (>800 lines or oldest entry >30 days), archive target (≤350 lines or entries older than 30 days), quarterly archive naming, first-run auto-transition, hard rules (never delete, archive not in §1 read list, retain latest Verbatim block); section markers updated to include §4a; total 14 new grep checks (126–139).
-- Feature round 10 adds: §3 PLAN self-challenge requirement; §4 lean session log format guideline (target ~20-30 lines/entry, omit empty sections, remove "Files read"); §4a archive thresholds lowered (800→400 trigger, 350→200 target); INIT.md FILE 5 template rewritten to lean key-value format. Checks (128)/(129) updated from "800 lines" to "400 lines", (132)/(133) from "350 lines" to "200 lines". Total 8 new grep checks (156–163).
+- Feature round 10 adds: §3 PLAN risk grading (HIGH/LOW with 5 concrete criteria + conditional pause for HIGH); "Assumptions and risks" merged display (replaces standalone self-challenge); self-challenge line removed; §4 lean session log format guideline (target ~20-30 lines/entry, omit empty sections, remove "Files read"); §4a archive thresholds lowered (800→400 trigger, 350→200 target); INIT.md FILE 5 template rewritten to lean key-value format. Checks (128)/(129) updated from "800 lines" to "400 lines", (132)/(133) from "350 lines" to "200 lines". Total 8 new grep checks (156–163).
 - Feature round 9 adds: 7 governance clarifications + 1 parity bug fix from systematic audit — §3 PLAN must display "My understanding / Impact scope / Assumptions" (A1); §2 conflict arbitration rule for user-vs-governance conflicts (A2); §2b triage exploratory read allowance (A4); §3 CHANGE deviation stop-and-report (A5); §8/§8b reconciliation bridging sentence (A3); §11 Output Contract scoped to CHANGE/PERSIST responses (B1); INIT.md FILE 4 template checklist adds CODEBASE_CONTEXT (parity fix). Checks (114)/(115) expected values updated from 1 to 2. Total 16 new grep checks (140–155).
 
 ## Manual governance checks (cannot be automated with grep)

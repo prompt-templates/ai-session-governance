@@ -226,9 +226,16 @@ Hard rules:
 Every task must follow this workflow and clearly label each phase in the response:
 
 1. PLAN
-   - Objective, scope, risks, acceptance criteria
-   - State explicitly: "My understanding: [1-sentence restatement of user intent]", "Impact scope: [files/modules to be modified]", "Assumptions: [any inferences not explicitly stated by user]"
-   - Challenge own assumptions: state at least one risk to the current approach, one alternative considered, or one way the plan could be wrong
+   - Objective, scope, acceptance criteria
+   - State explicitly: "My understanding: [1-sentence restatement of user intent]", "Impact scope: [files/modules to be modified]", "Assumptions and risks: [list inferences not stated by user, flag which are uncertain, and note at least one way this approach could be wrong]"
+   - Risk level — assess HIGH or LOW using these criteria (any one = HIGH):
+     (a) Likely affects ≥3 files
+     (b) User instruction does not specify target files, target behavior, or expected end state
+     (c) Involves deletion, rename, or irreversible operations
+     (d) Involves external systems (API calls, deploy, publish)
+     (e) Modifies governance rules (AGENTS.md, INIT.md, or similar)
+   - If HIGH: present PLAN and **wait for user confirmation** before proceeding to READ
+   - If LOW: present PLAN and proceed to READ
    - If task meets §3d trigger conditions: define test scenario matrix before proceeding to READ
 
 2. READ
