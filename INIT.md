@@ -47,8 +47,13 @@ Rule if exists: merge the governance sections into the existing file, preserving
 <INSTRUCTIONS>
 <!-- MANDATORY STARTUP — read every session: §0 §1 §2 -->
 <!-- MANDATORY WORKFLOW — execute every task/closeout: §3 §4 -->
-<!-- CONDITIONAL — apply when triggered: §0b §2b §2c §3b §3c §3d §4a §5 §6 §7 §8 §8b §9 -->
+<!-- CONDITIONAL — apply when triggered: §0b §2b §3b §3c §3d §4a §5 §5a §6 §7 §8 §8b §9 -->
 <!-- REFERENCE — consult when needed: §10 §11 §12 -->
+
+**CORE RULES — apply to every task without exception:**
+§3 Standard Workflow: PLAN → READ → CHANGE → QC → PERSIST
+§4 Session Close: update SESSION_HANDOFF.md + SESSION_LOG.md
+§5 File Safety: no destructive operations without explicit user approval
 
 ## 0) Purpose
 This project adopts a "sustainable session governance" model. The AI must be able to resume work in a new session using documentation alone, without requiring the user to repeat context.
@@ -75,66 +80,6 @@ Hard rules:
 Note:
 `dev/CODEBASE_CONTEXT.md` contains Product / System Layer content (tech stack, directory map, build commands, External Services, and Key Decisions).
 It is stored in `dev/` by path convention (so session tooling can locate it predictably), not because it belongs to the Development Governance Layer.
-
----
-
-## 0b) External Platform Alignment (Mandatory when applicable)
-Whenever a task involves external platforms, frameworks, APIs, CLIs, deployment systems, cloud services, third-party SDKs, package managers, or official toolchains, the AI must not guess commands, parameters, limitations, version differences, or platform behavior from memory.
-
-Before starting related work, alignment must be completed against:
-1. Official documentation
-2. Official release notes / changelog
-3. Official repo / original specifications
-4. Relevant SSOT / runbook / integration docs within this project
-
-If alignment is not completed:
-1. Do not treat guesses as conclusions
-2. Do not directly output high-risk operation commands
-3. Must clearly label which items have been verified and which are pending verification
-
-### External API Code Safety (Mandatory when writing API-calling code)
-
-Before writing any code that calls an external API endpoint, the AI must:
-0. If `dev/CODEBASE_CONTEXT.md` does not yet exist, generate it first per §1 rules before proceeding — the External Services section is required to record API facts.
-1. Fetch current official documentation for the specific endpoint
-2. Record the following in `dev/CODEBASE_CONTEXT.md` External Services before writing code:
-   - Base URL and endpoint path (do not assume from memory)
-   - Current API version in use
-   - Authentication method and header format
-   - Required parameters
-   - Forbidden / deprecated parameters
-   - Response schema and the exact parsing path for needed data
-   - Official documentation URL
-   - `Doc-reviewed: <date> (<session ID>)`
-3. If official documentation cannot be fetched:
-   - Do not write API-calling code
-   - State what is blocked and why
-   - Ask the user to provide the relevant documentation
-4. Training-data knowledge of any API must never be the sole source for endpoint paths, parameter names, or response structure. Always treat prior knowledge as "possibly outdated — verify first".
-
-External Services block format in `dev/CODEBASE_CONTEXT.md`:
-
-Each API uses one block:
-```
-### [API Name]
-- Base URL:
-- Version:
-- Auth:
-- Required params:
-- Forbidden params:
-- Response path:
-- Official docs:
-- Doc-reviewed:  (date + session ID — documentation read and fields recorded)
-- Test-verified: (date + session ID — API call made and response confirmed correct)
-- Notes:
-```
-
-When reading an existing External Services block before writing code:
-1. `Test-verified` present → reliable; re-verify the specific endpoint and params in use if entry is from a prior session
-2. Only `Doc-reviewed` present → use with caution; annotate generated code with a comment `awaiting test-verification` (using the target language's comment syntax) at the top of each function or method that calls the endpoint
-3. Both empty or missing → full verification ritual required before writing code
-4. After any re-verification: update the relevant date and session ID in the block
-5. If re-verification reveals API changes: update affected fields, record before/after in Notes, flag affected existing code for review
 
 ---
 
@@ -211,14 +156,9 @@ Boot Visual Cue - Style C
 ---
 
 ## 2) Source of Truth Priority
-When documents conflict, the priority order is as follows:
-
-1. `dev/SESSION_HANDOFF.md` (current baseline, execution thresholds, open items, current state)
-2. `dev/SESSION_LOG.md` (latest changes, historical decisions, most recent fixes and verifications)
-3. `dev/CODEBASE_CONTEXT.md` (if it exists; stable project facts — tech stack, External Services, Key Decisions)
-4. `dev/PROJECT_MASTER_SPEC.md` (if it exists; long-term stable specifications, architecture, runbook, release rules)
-5. Other README / docs / comments / tests
-6. Verbal memory and speculation (must not be used as a basis for decisions)
+When documents conflict, defer to the §1 read order as priority (first = highest), followed by:
+- Other README / docs / comments / tests
+- Verbal memory and speculation (must not be used as a basis for decisions)
 
 Supplementary rules:
 1. `SESSION_HANDOFF.md` and `SESSION_LOG.md` represent the "current state".
@@ -246,22 +186,7 @@ Before source classification is complete:
 2. Do not arbitrarily revert files
 3. Do not equate a single error message directly with the root cause
 
-Note: Targeted file reads for the purpose of determining issue source are permitted during triage. This does not substitute for the full §2c read coverage required before entering CHANGE.
-
----
-
-## 2c) Read Coverage Before Change (Mandatory)
-Before any modification enters the `CHANGE` phase, the following minimum read coverage must be completed:
-
-1. Read the full context of the section to be modified in the target file
-2. Search for other occurrences of the same term / rule / feature across the repo
-3. Check whether a single source of truth already exists (SSOT / master spec / runbook / baseline definition)
-4. Review the most recent `SESSION_LOG.md` entry related to the topic
-
-Hard rules:
-1. Do not modify after reading only a single fragment
-2. Do not add new rules without first checking for duplicates and performing integration assessment
-3. If content on the same topic already exists in multiple locations, first determine whether consolidation is needed before deciding how to modify
+Note: Targeted file reads for the purpose of determining issue source are permitted during triage. This does not substitute for the full §3 READ coverage required before entering CHANGE.
 
 ---
 
@@ -281,23 +206,33 @@ Every task must follow this workflow and clearly label each phase in the respons
    - If LOW: present PLAN and proceed to READ
    - If task meets §3d trigger conditions: define test scenario matrix before proceeding to READ
 
-2. READ
-   - Read necessary files, verify current state, classify sources, check for duplicates and confirm impact scope
+2. READ — minimum coverage before entering CHANGE:
+   - Read the full context of the section to be modified in the target file
+   - Search for other occurrences of the same term / rule / feature across the repo
+   - Check whether a single source of truth already exists (SSOT / master spec / runbook / baseline definition)
+   - Review the most recent `SESSION_LOG.md` entry related to the topic
+   - Hard rules: do not modify after reading only a single fragment; do not add new rules without first checking for duplicates and performing integration assessment; if content on the same topic exists in multiple locations, first determine whether consolidation is needed before deciding how to modify
 
 3. CHANGE
    - Minimal necessary modifications, no unrelated refactoring
    - If execution diverges from PLAN (unexpected state, wrong assumptions, scope change needed): stop, report the divergence to the user, and wait for direction rather than attempting self-correction
+   - After receiving user direction following a deviation stop: if scope or objective changed, restart from PLAN; if only approach changed, restart from CHANGE with updated context; in either case, state which phase is being re-entered and why
 
 4. QC
    - Run tests / checks, list results (test/check commands and key outcomes)
    - If a test scenario matrix was defined in PLAN (§3d): verify each scenario and record actual result; summarize overall as PASS / PASS with notes / FAIL
    - If the task involves batch deletion or batch modification, a dry-run (e.g. `ls` / `find` preview, PowerShell `-WhatIf`, etc.) with a "blast radius" list must be provided for confirmation first
+   - If QC reveals test failures or build errors: (a) report to user — what was attempted, what failed, and preliminary diagnosis; (b) do not return to CHANGE or retry without user direction; (c) provide failure summary, likely root cause, and proposed fix approach
 
 5. PERSIST
    - Update `dev/SESSION_HANDOFF.md` and `dev/SESSION_LOG.md`
    - Apply the same cross-document sync conditions as §4 closeout: if tech stack, directory structure, build commands, external services, or Key Decisions changed in this task — update `dev/CODEBASE_CONTEXT.md` now, do not defer to closeout
    - If `dev/PROJECT_MASTER_SPEC.md` exists and carries status for the completed work — update it in the same pass
-   - **DOC_SYNC Matrix Scan (mandatory visible output)**: Before completing PERSIST, output a `### DOC_SYNC Matrix Scan` block in the response. If no files were created or modified during CHANGE: output `### DOC_SYNC Matrix Scan — SKIP (no file changes this task)`. If `dev/DOC_SYNC_CHECKLIST.md` exists: query the registry and list every matched row with columns `Change Category | Required Doc Updates | Status` (Status = `✓ Done`, `N/A`, or `⚠ Skipped (reason)`); update all required docs. If no row matches the current change: add the missing row to the registry first (anti-pattern guard), then list it with Status `✓ Row added`. If the registry does not exist: output `### DOC_SYNC Matrix Scan — SKIP (registry not present)`. Absence of this block in the response = scan was skipped; user may immediately request the agent to complete it.
+   - **DOC_SYNC Matrix Scan (mandatory visible output):** Before completing PERSIST, output a `### DOC_SYNC Matrix Scan` block in the response:
+     - No file changes this task → `### DOC_SYNC Matrix Scan — SKIP (no file changes this task)`
+     - Registry exists → list matched rows: `Change Category | Required Doc Updates | Status` (`✓ Done` / `N/A` / `⚠ Skipped (reason)`); update all required docs; no matching row → add it first (`✓ Row added`)
+     - Registry absent → `### DOC_SYNC Matrix Scan — SKIP (registry not present)`
+     - Absence of this block in the response = scan was skipped; user may immediately request the agent to complete it.
 
 ---
 
@@ -396,6 +331,8 @@ When the user expresses any of the following (or similar) end-of-session intent,
 - "close session"
 - "that's it for today"
 - Any expression that can reasonably be interpreted as ending the current session
+
+If the expression is ambiguous (could refer to ending the current task rather than the session), confirm session-end intent before performing closeout.
 
 At closeout, the following must be updated at minimum:
 1. `dev/SESSION_HANDOFF.md`
@@ -531,6 +468,66 @@ If `dev/SESSION_LOG.md` has no archive pointer and either trigger condition is m
 1. Never delete session entries — only move to archive
 2. `dev/archive/` files are not part of the §1 mandatory read list; do not read them at startup unless the user explicitly requests historical lookup
 3. The most recent session entry's `### Next Session Handoff Prompt (Verbatim)` block must remain in `dev/SESSION_LOG.md`
+
+---
+
+## 0b) External Platform Alignment (Mandatory when applicable)
+Whenever a task involves external platforms, frameworks, APIs, CLIs, deployment systems, cloud services, third-party SDKs, package managers, or official toolchains, the AI must not guess commands, parameters, limitations, version differences, or platform behavior from memory.
+
+Before starting related work, alignment must be completed against:
+1. Official documentation
+2. Official release notes / changelog
+3. Official repo / original specifications
+4. Relevant SSOT / runbook / integration docs within this project
+
+If alignment is not completed:
+1. Do not treat guesses as conclusions
+2. Do not directly output high-risk operation commands
+3. Must clearly label which items have been verified and which are pending verification
+
+### External API Code Safety (Mandatory when writing API-calling code)
+
+Before writing any code that calls an external API endpoint, the AI must:
+0. If `dev/CODEBASE_CONTEXT.md` does not yet exist, generate it first per §1 rules before proceeding — the External Services section is required to record API facts.
+1. Fetch current official documentation for the specific endpoint
+2. Record the following in `dev/CODEBASE_CONTEXT.md` External Services before writing code:
+   - Base URL and endpoint path (do not assume from memory)
+   - Current API version in use
+   - Authentication method and header format
+   - Required parameters
+   - Forbidden / deprecated parameters
+   - Response schema and the exact parsing path for needed data
+   - Official documentation URL
+   - `Doc-reviewed: <date> (<session ID>)`
+3. If official documentation cannot be fetched:
+   - Do not write API-calling code
+   - State what is blocked and why
+   - Ask the user to provide the relevant documentation
+4. Training-data knowledge of any API must never be the sole source for endpoint paths, parameter names, or response structure. Always treat prior knowledge as "possibly outdated — verify first".
+
+External Services block format in `dev/CODEBASE_CONTEXT.md`:
+
+Each API uses one block:
+```
+### [API Name]
+- Base URL:
+- Version:
+- Auth:
+- Required params:
+- Forbidden params:
+- Response path:
+- Official docs:
+- Doc-reviewed:  (date + session ID — documentation read and fields recorded)
+- Test-verified: (date + session ID — API call made and response confirmed correct)
+- Notes:
+```
+
+When reading an existing External Services block before writing code:
+1. `Test-verified` present → reliable; re-verify the specific endpoint and params in use if entry is from a prior session
+2. Only `Doc-reviewed` present → use with caution; annotate generated code with a comment `awaiting test-verification` (using the target language's comment syntax) at the top of each function or method that calls the endpoint
+3. Both empty or missing → full verification ritual required before writing code
+4. After any re-verification: update the relevant date and session ID in the block
+5. If re-verification reveals API changes: update affected fields, record before/after in Notes, flag affected existing code for review
 
 ---
 

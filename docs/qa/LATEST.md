@@ -1,5 +1,6 @@
 # Latest QA Regression
 
 - Current report: [QA_REGRESSION_REPORT.md](QA_REGRESSION_REPORT.md)
-- Date (UTC): 2026-04-08
-- Result: 169 checks, 169 pass, 0 fail
+- **Run automated checks:** `bash docs/qa/run_checks.sh` (from project root)
+- Date (UTC): 2026-04-14
+- Result: 169 automated checks, 169 pass, 0 fail; 15 behavioral checks (manual)

@@ -46,6 +46,8 @@ It also catches a few common AI mistakes:
 | **Consolidation discipline** | Rule accumulation without checking whether existing rules should be updated first |
 | **Doc-sync registry** | Guessing which docs to update after a change — `DOC_SYNC_CHECKLIST.md` maps change category to required updates so AI looks up instead of self-assessing |
 | **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — auto-archives old entries to `dev/archive/` when `SESSION_LOG.md` exceeds 400 lines or has entries older than 30 days; no manual migration needed |
+| **QC fail-path** | AI silently retrying or abandoning failed tests — when tests or builds fail, AI must report what failed, diagnose the cause, and wait for user direction instead of auto-retrying |
+| **Closeout ambiguity guard** | Accidentally triggering full session closeout with casual remarks like "thanks, that's all I needed" — AI confirms session-end intent when the expression is ambiguous |
 
 ### :small_blue_diamond: How SESSION_LOG.md stays manageable
 
@@ -66,6 +68,7 @@ If you already have a large session log, it is trimmed automatically on the firs
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v2.5** | Core workflow rules repositioned for better AI attention (moved from attention dead zone to high-priority zone); redundant sections consolidated (net -3 lines); three workflow gaps filled — AI now reports test failures instead of silently retrying, states which phase it re-enters after a deviation stop, and confirms before triggering session closeout on ambiguous expressions | Core rules get more consistent AI compliance; less redundancy to maintain; fewer undefined AI behaviors during failures and handoffs |
 | **v2.4** | AI now grades task risk at PLAN phase — high-risk tasks (≥3 files, ambiguous scope, destructive ops, external systems) pause for user confirmation before proceeding; session log entries use a lean format (~60% smaller); archive threshold lowered from 800 to 400 lines, reducing irrelevant history the AI reads at startup | Misunderstood tasks caught before code changes; faster AI startup; more session history fits in less space |
 | **v2.3** | Seven clarity fixes from a systematic audit: AI now shows its understanding before acting (PLAN display), names conflicts when user instructions override governance rules, stops and reports when mid-task assumptions turn out wrong, and gives shorter answers to simple questions instead of forced 4-part output | Fewer misunderstood tasks, traceable overrides, less wasted work from wrong assumptions |
 | **v2.2** | Session log files no longer grow unbounded — when `SESSION_LOG.md` exceeds 400 lines or has entries older than 30 days, old entries are automatically moved to `dev/archive/`; the active log stays at the last 7–10 sessions | Long-running projects stay lean without manual cleanup; AI startup context is not consumed by months-old history |
@@ -230,6 +233,8 @@ This is the primary design target of this repo.
 | **Claude Code** | `CLAUDE.md` | pointer: `@AGENTS.md` | prepend `@AGENTS.md` |
 | **Gemini CLI** | `GEMINI.md` | pointer: `@./AGENTS.md` | prepend `@./AGENTS.md` |
 
+> **Codex users:** AGENTS.md exceeds the default 32 KiB context limit. Add `project_doc_max_bytes = 49152` to `~/.codex/config.toml` to load the full file.
+
 ---
 
 ## :bookmark_tabs: 3 scenarios
@@ -315,8 +320,8 @@ Full verification details:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-Snapshot status (as of 2026-04-08):
-- AGENTS/INIT rule parity: verified (169-check regression suite)
+Snapshot status (as of 2026-04-14):
+- AGENTS/INIT rule parity: verified (169-check automated regression suite + 15 behavioral checks)
 - Multi-platform pointer behavior: verified
 
 ---

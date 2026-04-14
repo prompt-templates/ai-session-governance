@@ -1,13 +1,16 @@
 # QA Regression Report
 
-Date: 2026-04-08 (UTC)
-Scope: v2.4 — PLAN self-challenge, lean session log format, archive thresholds 800→400/350→200; full regression
+Date: 2026-04-14 (UTC)
+Scope: v2.5 — Harness optimization: attention restructure, consolidation, gap fixes; full regression
 
 ## Summary
 
-- Total checks: 169
+- Total checks: 169 (automated via `docs/qa/run_checks.sh`)
 - Pass: 169
 - Fail: 0
+- Behavioral checks: 15 (manual, see end of report)
+
+**Run automated checks:** `bash docs/qa/run_checks.sh` (from project root, ~10 seconds)
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
 Note: Checks 112–125 added for Feature Round 7 (v2.1 Handoff chain fixes + DOC_SYNC Matrix Scan enforcement).
@@ -364,6 +367,72 @@ Root cause addressed: "lost in the middle" research (Stanford/Anthropic 2023) sh
 |---|---|---|---|
 | Fence counts | `grep -c "^\x60\x60\x60" AGENTS.md` / `INIT.md` | AGENTS=16, INIT=28 | PASS |
 
+## Feature round 11 (2026-04-14): v2.5 — Harness optimization (attention restructure + consolidation + gap fixes)
+
+Root cause addressed: "Lost in the Middle" U-shaped attention curve places §3 Standard Workflow (the core harness rule) in the attention dead zone (line 225 of 695). Consolidation reduces redundancy. Three behavioral gaps (QC fail-path, deviation resume, closeout ambiguity) filled.
+
+Changes: Attention anchor at file top (I); §0b moved to CONDITIONAL zone after §4a (H); §2 consolidated to reference §1 (F); §2c merged into §3 READ (E); DOC_SYNC block streamlined (G); QC fail-path added (A); deviation resume guidance added (B); closeout ambiguity protection added (D); Codex 32 KiB README note (C). Net: -4 lines AGENTS.md, §3 moved from line 225 to line 150.
+
+### Attention anchor + §0b position
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (R11-01) Attention anchor AGENTS.md | `grep -c "CORE RULES" AGENTS.md` | 1 | PASS |
+| (R11-02) Attention anchor INIT.md | `grep -c "CORE RULES" INIT.md` | 1 | PASS |
+| (R11-22) §0b after §4a AGENTS.md | `awk '/^## 4a\)/{a=NR} /^## 0b\)/{b=NR} END{print (b>a)?1:0}' AGENTS.md` | 1 | PASS |
+| (R11-23) §0b after §4a INIT.md | same awk pattern | 1 | PASS |
+| (R11-24) §2c not in CONDITIONAL marker | `grep 'CONDITIONAL.*apply when triggered' AGENTS.md \| grep -c '§2c'` | 0 | PASS |
+
+### §2 consolidated + §2c merged into §3
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (R11-03) §2 refs §1 AGENTS.md | `grep -c "defer to the §1 read order" AGENTS.md` | 1 | PASS |
+| (R11-04) §2 refs §1 INIT.md | `grep -c "defer to the §1 read order" INIT.md` | 1 | PASS |
+| (R11-05) Old §2 file list gone | `grep -c "current baseline, execution thresholds" AGENTS.md` | 0 | PASS |
+| (R11-06) §2c heading absent AGENTS.md | `grep -c "^## 2c)" AGENTS.md` | 0 | PASS |
+| (R11-07) §2c heading absent INIT.md | `grep -c "^## 2c)" INIT.md` | 0 | PASS |
+| (R11-08) §3 READ expanded AGENTS.md | `grep -c "full context of the section to be modified" AGENTS.md` | 1 | PASS |
+| (R11-09) §3 READ expanded INIT.md | `grep -c "full context of the section to be modified" INIT.md` | 1 | PASS |
+| (R11-10) §2b cross-ref updated AGENTS.md | `grep -c "§3 READ coverage" AGENTS.md` | 1 | PASS |
+| (R11-11) §2b cross-ref updated INIT.md | `grep -c "§3 READ coverage" INIT.md` | 1 | PASS |
+
+### Gap fixes (QC fail-path, deviation resume, closeout protection)
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (R11-12) QC fail-path AGENTS.md | `grep -c "QC reveals test failures" AGENTS.md` | 1 | PASS |
+| (R11-13) QC fail-path INIT.md | `grep -c "QC reveals test failures" INIT.md` | 1 | PASS |
+| (R11-14) Deviation resume AGENTS.md | `grep -c "receiving user direction following" AGENTS.md` | 1 | PASS |
+| (R11-15) Deviation resume INIT.md | `grep -c "receiving user direction following" INIT.md` | 1 | PASS |
+| (R11-16) Closeout protection AGENTS.md | `grep -c "confirm session-end intent" AGENTS.md` | 1 | PASS |
+| (R11-17) Closeout protection INIT.md | `grep -c "confirm session-end intent" INIT.md` | 1 | PASS |
+
+### Codex 32 KiB README note
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (R11-18) Codex note README.md | `grep -c "project_doc_max_bytes" README.md` | 1 | PASS |
+| (R11-19) Codex note README.zh-TW.md | `grep -c "project_doc_max_bytes" README.zh-TW.md` | 1 | PASS |
+| (R11-20) Codex note README.zh-CN.md | `grep -c "project_doc_max_bytes" README.zh-CN.md` | 1 | PASS |
+| (R11-21) Codex note README.ja.md | `grep -c "project_doc_max_bytes" README.ja.md` | 1 | PASS |
+
+### Structural integrity
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| (S03) Section count AGENTS.md | `grep -c "^## " AGENTS.md` | 22 | PASS |
+| (O01-O10) Section ordering | see `run_checks.sh` O01–O10 | all PASS | PASS |
+| (X01) No dead §2c refs AGENTS.md | `grep -c "§2c" AGENTS.md` | 0 | PASS |
+| (X02) No dead §2c refs INIT.md | `grep -c "§2c" INIT.md` | 0 | PASS |
+
+### Parity sentinel
+
+| Check | Command | Expected | Result |
+|---|---|---|---|
+| Fence counts | AGENTS.md / INIT.md | 16 / 28 | PASS |
+| Section count | AGENTS.md | 22 (was 23, §2c merged) | PASS |
+
 ## Notes
 
 - This report validates document and governance consistency at repository level.
@@ -377,6 +446,8 @@ Root cause addressed: "lost in the middle" research (Stanford/Anthropic 2023) sh
 - Feature round 8 adds: §4a Session Log Maintenance — auto-archive triggers (>800 lines or oldest entry >30 days), archive target (≤350 lines or entries older than 30 days), quarterly archive naming, first-run auto-transition, hard rules (never delete, archive not in §1 read list, retain latest Verbatim block); section markers updated to include §4a; total 14 new grep checks (126–139).
 - Feature round 10 adds: §3 PLAN risk grading (HIGH/LOW with 5 concrete criteria + conditional pause for HIGH); "Assumptions and risks" merged display (replaces standalone self-challenge); self-challenge line removed; §4 lean session log format guideline (target ~20-30 lines/entry, omit empty sections, remove "Files read"); §4a archive thresholds lowered (800→400 trigger, 350→200 target); INIT.md FILE 5 template rewritten to lean key-value format. Checks (128)/(129) updated from "800 lines" to "400 lines", (132)/(133) from "350 lines" to "200 lines". Total 8 new grep checks (156–163).
 - Feature round 9 adds: 7 governance clarifications + 1 parity bug fix from systematic audit — §3 PLAN must display "My understanding / Impact scope / Assumptions" (A1); §2 conflict arbitration rule for user-vs-governance conflicts (A2); §2b triage exploratory read allowance (A4); §3 CHANGE deviation stop-and-report (A5); §8/§8b reconciliation bridging sentence (A3); §11 Output Contract scoped to CHANGE/PERSIST responses (B1); INIT.md FILE 4 template checklist adds CODEBASE_CONTEXT (parity fix). Checks (114)/(115) expected values updated from 1 to 2. Total 16 new grep checks (140–155).
+- Feature round 11 adds: Attention anchor (CORE RULES block at file top); §0b relocated from MANDATORY zone (line 38) to CONDITIONAL zone (after §4a); §2 consolidated to reference §1 list (removes duplicated 4-file list); §2c merged into §3 READ phase (eliminates redundant section, section count 23→22); DOC_SYNC instruction block streamlined to bullet list; QC fail-path (§3 QC phase fail guidance); deviation resume (§3 CHANGE post-A5 resume path); closeout ambiguity protection (§4 false-positive guard); Codex 32 KiB config note in README ×4 languages. Section markers updated (§2c removed from CONDITIONAL). All automated checks migrated to executable script `docs/qa/run_checks.sh`. Total new checks: 24 automated (R11-01 through R11-24) + 10 structural (S01-S05, O01-O10, X01-X06). Check (86) updated to verify §2c absent from CONDITIONAL marker.
+- **Executable test suite**: `docs/qa/run_checks.sh` — runs all 167 automated checks in ~10 seconds. Run from project root: `bash docs/qa/run_checks.sh`.
 
 ## Manual governance checks (cannot be automated with grep)
 
@@ -396,3 +467,6 @@ These require human or live-session verification:
 | A2 — Conflict arbitration: when user instruction conflicts with governance rule, AI states the conflict and risk before complying; override is recorded in SESSION_LOG | Behavioral | Verify by requesting AI to skip a mandatory step (e.g., "don't update session log") |
 | A5 — CHANGE deviation stop: when AI discovers mid-CHANGE that assumptions were wrong, it stops and reports instead of self-correcting | Behavioral | Verify by giving a task where the target file has unexpected state |
 | B1 — §11 scope: clarifying questions and simple lookups do not include forced "What was done / Why / Verification / Next" output | Behavioral | Verify by asking a simple question (e.g., "what's the build command?") in a governed session |
+| QC fail-path: when tests fail during QC phase, AI reports failure summary + diagnosis + proposed fix, does NOT auto-retry or return to CHANGE without user direction | Behavioral | Test prompt: give a task that will produce a test failure (e.g., "add a function that divides by zero, then run tests"). Pass: AI reports what failed, does not silently retry. Fail: AI loops back to CHANGE or retries without asking |
+| Deviation resume: after A5 deviation-stop, when user gives new direction, AI explicitly states which phase it's re-entering (PLAN or CHANGE) and why | Behavioral | Test prompt: prepare a file whose state contradicts SESSION_HANDOFF description, then give a task to modify it. After AI stops (A5), say "ok, use approach B instead". Pass: AI says "Re-entering CHANGE because..." or "Restarting from PLAN because scope changed". Fail: AI continues silently without stating phase |
+| Closeout false-positive protection: ambiguous end-of-task expressions do NOT trigger full session closeout without confirmation | Behavioral | Test prompt: after completing a task, say "好，這個處理好了，謝謝" or "That's all I needed for this". Pass: AI asks whether to close session. Fail: AI immediately performs full closeout (writes SESSION_HANDOFF, SESSION_LOG, outputs 3-section format) |
