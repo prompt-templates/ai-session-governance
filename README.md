@@ -7,6 +7,7 @@ When your Codex / Claude / Gemini quota runs out, paste the handoff block into t
 - Handoff works across different AI CLIs
 - Standard workflow: `PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - Keeps governance from drifting, instead of just adding more rules
+- A [harness engineering](https://martinfowler.com/articles/harness-engineering.html) component focused on session continuity
 
 **[30-second Quick Start](#quickstart)** · **[Install](#install)** · **[Upgrade](#upgrade)** · **[Quick Operations](#quick-operations)**
 
@@ -271,6 +272,11 @@ There's a short read at startup. Usually less overhead than re-explaining contex
 
 ### :small_blue_diamond: 5) Can I keep my existing docs and internal rules?
 Yes. It merges with what you already have — it doesn't overwrite things.
+
+### :small_blue_diamond: 6) When is this overkill?
+If you're asking a quick question, doing one-off research, or running a single session you won't come back to — skip this. The startup reads and closeout writes add overhead that only pays off when you'll return to the same project across multiple sessions.
+
+This template was built for ongoing development work: codebases you'll touch again tomorrow, repos where multiple AI tools take turns, projects where "what did we decide last week" actually matters. If your workflow doesn't involve files that change over time, the PLAN→READ→CHANGE→QC→PERSIST cycle has nothing to wrap around.
 
 ## :bookmark_tabs: Repository source layout
 

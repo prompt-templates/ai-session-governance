@@ -7,6 +7,7 @@
 - 跨命令列工具交接
 - 統一工作流程：`PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - 防止治理規則漂移，而不是一直疊加新規則
+- 一個專注於 session 連續性的 [Harness Engineering](https://martinfowler.com/articles/harness-engineering.html) 組件
 
 **[30 秒快速開始](#quickstart)** · **[安裝](#install)** · **[升級](#upgrade)** · **[快速操作](#quick-operations)**
 
@@ -275,6 +276,11 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ### :small_blue_diamond: 5) 我已經有 README、既有文件與內部規則，仍然適用嗎？
 可以。它會跟你現有的合併，不會覆蓋掉。
+
+### :small_blue_diamond: 6) 什麼時候不需要用這個？
+如果你只是問一個問題、做一次性研究、或跑一個不會再回來的 session — 不用裝這個。啟動時要讀檔、收尾時要寫檔，這些 overhead 只有在你會跨多個 session 回到同一個專案時才值得。
+
+這套範本是為持續進行的開發工作設計的：明天還會碰的 codebase、多個 AI 工具輪流上的 repo、「上週我們決定了什麼」這句話真的很重要的專案。如果你的工作不涉及隨時間變化的檔案，PLAN→READ→CHANGE→QC→PERSIST 流程沒有東西可以包住。
 
 ## :bookmark_tabs: 此儲存庫原始佈局
 

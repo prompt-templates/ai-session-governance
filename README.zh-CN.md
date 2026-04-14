@@ -7,6 +7,7 @@
 - 跨命令行工具交接
 - 统一工作流程：`PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - 防止治理规则漂移，而不是一直叠加新规则
+- 一个专注于 session 连续性的 [Harness Engineering](https://martinfowler.com/articles/harness-engineering.html) 组件
 
 **[30 秒快速开始](#quickstart)** · **[安装](#install)** · **[升级](#upgrade)** · **[快速操作](#quick-operations)**
 
@@ -275,6 +276,11 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 
 ### :small_blue_diamond: 5) 我已经有 README、既有文档与内部规则，仍然适用吗？
 可以。它会跟你现有的合并，不会覆盖掉。
+
+### :small_blue_diamond: 6) 什么时候不需要用这个？
+如果你只是问一个问题、做一次性研究、或跑一个不会再回来的 session — 不用装这个。启动时要读文件、收尾时要写文件，这些 overhead 只有在你会跨多个 session 回到同一个项目时才值得。
+
+这套模板是为持续进行的开发工作设计的：明天还会碰的 codebase、多个 AI 工具轮流上的 repo、「上周我们决定了什么」这句话真的很重要的项目。如果你的工作不涉及随时间变化的文件，PLAN→READ→CHANGE→QC→PERSIST 流程没有东西可以包住。
 
 ## :bookmark_tabs: 此仓库原始布局
 
