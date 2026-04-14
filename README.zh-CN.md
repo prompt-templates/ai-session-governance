@@ -7,7 +7,7 @@
 - 跨命令行工具交接
 - 统一工作流程：`PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - 防止治理规则漂移，而不是一直叠加新规则
-- 一个专注于 session 连续性的 [Harness Engineering](https://martinfowler.com/articles/harness-engineering.html) 组件
+- 一个专注于 session 连续性的 Harness Engineering 组件
 
 **[30 秒快速开始](#quickstart)** · **[安装](#install)** · **[升级](#upgrade)** · **[快速操作](#quick-operations)**
 

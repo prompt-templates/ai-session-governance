@@ -7,7 +7,7 @@ When your Codex / Claude / Gemini quota runs out, paste the handoff block into t
 - Handoff works across different AI CLIs
 - Standard workflow: `PLAN -> READ -> CHANGE -> QC -> PERSIST`
 - Keeps governance from drifting, instead of just adding more rules
-- A [harness engineering](https://martinfowler.com/articles/harness-engineering.html) component focused on session continuity
+- A harness engineering component focused on session continuity
 
 **[30-second Quick Start](#quickstart)** · **[Install](#install)** · **[Upgrade](#upgrade)** · **[Quick Operations](#quick-operations)**
 
