@@ -86,8 +86,8 @@ check "R11-02" "Attention anchor INIT.md" "1" "$(grep -c 'CORE RULES' $I)"
 # ============================================================
 # Category 5: Startup & Entry (§0, §0a, §1)
 # ============================================================
-check "030" "External API Code Safety in AGENTS.md" "1" "$(grep -c 'External API Code Safety' $A)"
-check "031" "External API Code Safety in INIT.md" "1" "$(grep -c 'External API Code Safety' $I)"
+check "030" "External API Code Safety in AGENTS.md (heading + scope ref)" "2" "$(grep -c 'External API Code Safety' $A)"
+check "031" "External API Code Safety in INIT.md (heading + scope ref)" "2" "$(grep -c 'External API Code Safety' $I)"
 check "032" "Doc-reviewed field in AGENTS.md" "1" "$(grep -c '^- Doc-reviewed:' $A)"
 check "033" "Test-verified field in AGENTS.md" "1" "$(grep -c 'Test-verified:' $A)"
 check "036" "Cannot-fetch-docs rule in AGENTS.md" "1" "$(grep -c 'Do not write API-calling code' $A)"
@@ -95,7 +95,7 @@ check "037" "§0b parity: External Platform heading" "1" "$([ "$(grep -c 'Extern
 check "038" "§1 startup sequence order" "1" "$(grep -c 'SESSION_HANDOFF.md.*SESSION_LOG.md.*CODEBASE_CONTEXT.md.*PROJECT_MASTER_SPEC' $A)"
 check "039" "§10 intent-based trigger" "1" "$(grep -c 'architecture decisions.*tech stack\|tech stack choices.*core feature' $A)"
 check "040a" "CODEBASE_CONTEXT in backup AGENTS" "1" "$(grep -c 'CODEBASE_CONTEXT.*if present' $A)"
-check "040b" "CODEBASE_CONTEXT in backup INIT" "2" "$(grep -c 'CODEBASE_CONTEXT.*if present' $I)"
+check "040b" "CODEBASE_CONTEXT in backup INIT (in §5a)" "1" "$(grep -c 'CODEBASE_CONTEXT.*if present' $I)"
 check "042" "No 'key architectural' residue" "0" "$(grep -c 'key architectural' $A)"
 
 # ============================================================
@@ -151,7 +151,7 @@ check_gte "089" "DOC_SYNC_CHECKLIST referenced INIT.md" "1" "$(grep -c 'DOC_SYNC
 check "090" "Release gate doc sync AGENTS.md" "1" "$(grep -c 'DOC_SYNC_CHECKLIST.*entries affected' $A)"
 check "091" "Release gate doc sync INIT.md" "1" "$(grep -c 'DOC_SYNC_CHECKLIST.*entries affected' $I)"
 check "094" "DOC_SYNC in backup AGENTS.md" "1" "$(grep -c 'DOC_SYNC_CHECKLIST.md.*if present' $A)"
-check "095" "DOC_SYNC in backup INIT.md" "2" "$(grep -c 'DOC_SYNC_CHECKLIST.md.*if present' $I)"
+check "095" "DOC_SYNC in backup INIT.md (in §5a)" "1" "$(grep -c 'DOC_SYNC_CHECKLIST.md.*if present' $I)"
 check "100" "New checklist query AGENTS.md" "1" "$(grep -c 'Query.*DOC_SYNC_CHECKLIST' $A)"
 check "101" "New checklist query INIT.md" "1" "$(grep -c 'Query.*DOC_SYNC_CHECKLIST' $I)"
 check "102" "FILE 6 heading in INIT.md" "1" "$(grep -c 'FILE 6.*DOC_SYNC_CHECKLIST' $I)"
@@ -164,8 +164,8 @@ check "109" "Governance rule row in checklist" "1" "$(grep -c 'Governance rule c
 # ============================================================
 # Category 10: Handoff Chain Integrity (v2.1)
 # ============================================================
-check "112" "last occurring in AGENTS.md" "1" "$(grep -c 'last occurring' $A)"
-check "113" "last occurring in INIT.md" "1" "$(grep -c 'last occurring' $I)"
+check "112" "§1 Verbatim most-recent-dated AGENTS.md" "1" "$(grep -c 'most recent UTC date' $A)"
+check "113" "§1 Verbatim most-recent-dated INIT.md" "1" "$(grep -c 'most recent UTC date' $I)"
 check "114" "does not substitute AGENTS.md" "2" "$(grep -c 'does not substitute' $A)"
 check "115" "does not substitute INIT.md" "2" "$(grep -c 'does not substitute' $I)"
 check "116" "DOC_SYNC Matrix Scan mandatory AGENTS" "1" "$(grep -c 'DOC_SYNC Matrix Scan.*mandatory' $A)"
@@ -273,6 +273,71 @@ check "R11-23" "§0b after §4a INIT" "1" "$(awk '/^## 4a\)/{a=NR} /^## 0b\)/{b=
 check "R11-24" "§2c not in CONDITIONAL marker" "0" "$(grep 'CONDITIONAL.*apply when triggered' $A | grep -c '§2c')"
 check "R11-25" "§5a in CONDITIONAL marker AGENTS" "1" "$(grep 'CONDITIONAL.*apply when triggered' $A | grep -c '§5a')"
 check "R11-26" "§5a in CONDITIONAL marker INIT" "1" "$(grep 'CONDITIONAL.*apply when triggered' $I | grep -c '§5a')"
+
+# ============================================================
+# Category 16: Re-Audit Fixes (v2.6)
+# ============================================================
+# --- N5+N7: §1 Verbatim most-recent-dated + §2 cross-ref ---
+check "R26-01" "§1 no 'last occurring' residue AGENTS" "0" "$(grep -c 'last occurring such heading' $A)"
+check "R26-02" "§1 no 'last occurring' residue INIT" "0" "$(grep -c 'last occurring such heading' $I)"
+check "R26-03" "§1 regardless of physical position AGENTS" "1" "$(grep -c 'regardless of the entry' $A)"
+check "R26-04" "§1 regardless of physical position INIT" "1" "$(grep -c 'regardless of the entry' $I)"
+check "R26-05" "§1→§2 cross-ref AGENTS" "1" "$(grep -c 'subject to the precedence rules in §2 rule 5' $A)"
+check "R26-06" "§1→§2 cross-ref INIT" "1" "$(grep -c 'subject to the precedence rules in §2 rule 5' $I)"
+check "R26-05b" "§1 same-date tiebreaker AGENTS" "1" "$(grep -c 'physically topmost entry wins' $A)"
+check "R26-06b" "§1 same-date tiebreaker INIT" "1" "$(grep -c 'physically topmost entry wins' $I)"
+
+# --- N1: INIT.md root-safety collapsed to §5a pointer ---
+check "R26-07" "INIT top-block delegates to §5a" "1" "$(grep -c 'single source of truth for bootstrap root safety' $I)"
+# INSTALL_ROOT_OK presence (rule in §5a + pointer reference + QUICK START confirmation)
+check "R26-08" "INSTALL_ROOT_OK present in INIT" "1" "$(grep -c 'INSTALL_ROOT_OK' $I | awk '{print ($1>=1)?1:0}')"
+check "R26-09" "INSTALL_WRITE_OK present in INIT" "1" "$(grep -c 'INSTALL_WRITE_OK' $I | awk '{print ($1>=1)?1:0}')"
+
+# --- N2: cue randomization narrowed ---
+check "R26-10" "Boot cue uniform AGENTS" "1" "$(grep -c 'randomize across styles uniformly' $A)"
+check "R26-11" "Boot cue uniform INIT" "1" "$(grep -c 'randomize across styles uniformly' $I)"
+check "R26-12" "Closeout cue within-session AGENTS" "1" "$(grep -c 'within a single session, the Closeout Visual Cue must differ' $A)"
+check "R26-13" "Closeout cue within-session INIT" "1" "$(grep -c 'within a single session, the Closeout Visual Cue must differ' $I)"
+check "R26-14" "Boot cue no 'if the previous style is known' AGENTS" "0" "$(grep -c 'if the previous style is known' $A)"
+check "R26-15" "Boot cue no 'if the previous style is known' INIT" "0" "$(grep -c 'if the previous style is known' $I)"
+
+# --- N4: §0b scope clarification ---
+check "R26-16" "§0b scope clarification AGENTS" "1" "$(grep -c 'Editing documentation, governance rules, or templates' $A)"
+check "R26-17" "§0b scope clarification INIT" "1" "$(grep -c 'Editing documentation, governance rules, or templates' $I)"
+
+# --- §12 grandfather clause ---
+check "R26-18" "§12 grandfather clause AGENTS" "1" "$(grep -c 'not retroactively rewritten' $A)"
+check "R26-19" "§12 grandfather clause INIT" "1" "$(grep -c 'not retroactively rewritten' $I)"
+
+# --- N3: §12 HHMM format enforced-presence check (was coverage gap) ---
+check "R26-20" "§12 HHMM format present AGENTS" "1" "$(grep -c 'YYYYMMDD.*HHMM' $A | awk '{print ($1>=1)?1:0}')"
+check "R26-21" "§12 HHMM format present INIT" "1" "$(grep -c 'YYYYMMDD.*HHMM' $I | awk '{print ($1>=1)?1:0}')"
+
+# --- N3: §10 filename enforcement (was coverage gap) ---
+check "R26-22" "§10 filename enforcement heading AGENTS" "1" "$(grep -c 'Filename enforcement' $A)"
+check "R26-23" "§10 filename enforcement heading INIT" "1" "$(grep -c 'Filename enforcement' $I)"
+check "R26-24" "§10 forbidden alt-names list AGENTS" "1" "$(grep -c 'alternative names such as' $A)"
+check "R26-25" "§10 forbidden alt-names list INIT" "1" "$(grep -c 'alternative names such as' $I)"
+check "R26-26" "§10 forbids ARCHITECTURE alt AGENTS" "1" "$(grep -c 'ARCHITECTURE.md' $A)"
+check "R26-27" "§10 forbids ARCHITECTURE alt INIT" "1" "$(grep -c 'ARCHITECTURE.md' $I)"
+
+# --- N3: §5 forbidden ops list (was coverage gap) ---
+check "R26-28" "§5 forbids Remove-Item AGENTS" "1" "$(grep -c 'Remove-Item -Recurse -Force' $A)"
+check "R26-29" "§5 forbids Remove-Item INIT" "1" "$(grep -c 'Remove-Item -Recurse -Force' $I)"
+check "R26-30" "§5 forbids git reset --hard AGENTS" "1" "$(grep -c 'git reset --hard' $A)"
+check "R26-31" "§5 forbids git reset --hard INIT" "1" "$(grep -c 'git reset --hard' $I)"
+check "R26-32" "§5 forbids git clean -fdx AGENTS" "1" "$(grep -c 'git clean -fdx' $A)"
+check "R26-33" "§5 forbids git clean -fdx INIT" "1" "$(grep -c 'git clean -fdx' $I)"
+
+# --- N3: §5a step 10 presence (was coverage gap) ---
+check "R26-34" "§5a step 10 abort rule AGENTS" "1" "$(grep -c 'If high-risk markers are detected' $A)"
+check "R26-35" "§5a step 10 abort rule INIT" "1" "$(grep -c 'If high-risk markers are detected' $I)"
+
+# --- N3: §4 closeout layout separators (was coverage gap) ---
+check "R26-36" "§4 major separator rule AGENTS" "1" "$(grep -c 'Major separator:' $A)"
+check "R26-37" "§4 major separator rule INIT" "1" "$(grep -c 'Major separator:' $I)"
+check "R26-38" "§4 minor separator rule AGENTS" "1" "$(grep -c 'Minor separator:' $A)"
+check "R26-39" "§4 minor separator rule INIT" "1" "$(grep -c 'Minor separator:' $I)"
 
 # ============================================================
 # Category 15: README Asset & Localization

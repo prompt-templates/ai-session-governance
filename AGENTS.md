@@ -66,10 +66,10 @@ If `dev/CODEBASE_CONTEXT.md` does not exist, the AI must generate it during the 
 4. Record all source files scanned in the `AI Maintenance Log` section
 5. Never modify the source files during this scan — read only
 
-After reading `dev/SESSION_LOG.md`, the AI must locate the latest `### Next Session Handoff Prompt (Verbatim)` block — defined as the last occurring such heading in the entire file — and use that block as startup execution seed context for PLAN. Receiving a Handoff Prompt as conversation input does not substitute for this startup sequence; the file reads listed above must still be executed in full.
+After reading `dev/SESSION_LOG.md`, the AI must locate the latest `### Next Session Handoff Prompt (Verbatim)` block — defined as the block inside the session entry with the most recent UTC date (the `^## <YYYY-MM-DD>` heading with the latest date, regardless of the entry's physical position in the file; for multiple entries sharing the same date, the physically topmost entry wins — closeouts must prepend new entries above older ones) — and use that block as startup execution seed context for PLAN, subject to the precedence rules in §2 rule 5. Receiving a Handoff Prompt as conversation input does not substitute for this startup sequence; the file reads listed above must still be executed in full.
 
 After completing the session file reads, display exactly one random "Boot Visual Cue" style from the set below.
-Selection rule: randomize across styles; if the previous style is known, prefer a different style instead of repeating.
+Selection rule: randomize across styles uniformly. Cross-session memory of the previous style is not expected or required.
 
 Boot Visual Cue - Style A
 ```text
@@ -334,7 +334,7 @@ Supplementary rules:
    - Section 3: `CLOSEOUT VISUAL CUE`
 7. Section 2 must be a single fenced `text` block so the user can copy/paste directly without cleanup.
 8. Section 3 must display exactly one random closeout style from the set below.
-9. Randomization rule: if the previous closeout style is known, prefer a different style instead of repeating.
+9. Randomization rule: within a single session, the Closeout Visual Cue must differ from the Boot Visual Cue displayed earlier in the same session. Across sessions, randomize uniformly — the previous session's style is not tracked.
 10. Use separator lines between sections for visual alignment. Required separators:
     - Major separator: `========================================`
     - Minor separator: `----------------------------------------`
@@ -429,6 +429,8 @@ If `dev/SESSION_LOG.md` has no archive pointer and either trigger condition is m
 ---
 
 ## 0b) External Platform Alignment (Mandatory when applicable)
+Scope: §0b applies when the AI writes, executes, or debugs code/commands that interact with external systems at runtime. Editing documentation, governance rules, or templates that reference external services without making actual calls does not trigger §0b — in such cases the External API Code Safety preconditions (including CODEBASE_CONTEXT.md generation) do not apply.
+
 Whenever a task involves external platforms, frameworks, APIs, CLIs, deployment systems, cloud services, third-party SDKs, package managers, or official toolchains, the AI must not guess commands, parameters, limitations, version differences, or platform behavior from memory.
 
 Before starting related work, alignment must be completed against:
@@ -688,5 +690,7 @@ Examples:
 - `Gemini_20260227_1015`
 
 If the platform has its own runtime / thread / session identifier, it may be appended for reference, but must not replace this standard format.
+
+Historical entries: session IDs written before this format was formalized may appear in `SESSION_LOG.md` without an `_HHMM` suffix, or with alternate same-day disambiguators (e.g., `_YYYYMMDDa`, `_YYYYMMDDb`). These are not retroactively rewritten. New entries must comply with the current format.
 
 </INSTRUCTIONS>
