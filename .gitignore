@@ -5,6 +5,10 @@
 # Local development records — not for publication
 dev/SESSION_HANDOFF.md
 dev/SESSION_LOG.md
+dev/archive/
+dev/_selftest_work/
+__pycache__/
+*.py[cod]
 
 # Git worktrees
 .worktrees/

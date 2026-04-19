@@ -46,7 +46,7 @@
 | **测试计划治理** | 合并变更时未记录情景矩阵 — 预期结果与实际结果未被追踪 |
 | **整合纪律** | 持续叠加规则，却未先确认既有规则是否已涵盖或应更新 |
 | **文档同步注册表** | 变更后猜测要更新哪些文档 — `DOC_SYNC_CHECKLIST.md` 将变更类别映射到必要更新项，AI 查表而非自行判断 |
-| **工作日志自动维护** | 工作日志随时间增长到数千行，占用 AI 每次启动的 context — 当 `SESSION_LOG.md` 超过 400 行或有超过 30 天的旧记录时，自动归档到 `dev/archive/`；无需手动迁移 |
+| **工作日志自动维护** | 工作日志随时间增长到数千行，占用 AI 每次启动的 context — 通过 `docs/qa/session_log_maintenance.py` 执行化维护：启动时检查、收尾时应用；命中触发条件即自动归档到 `dev/archive/`，无需用户提醒 |
 | **QC 失败处理** | AI 静默重试或放弃失败的测试 — 测试或构建失败时，AI 必须报告失败内容、诊断原因，并等待用户指示，而非自动重试 |
 | **收尾误触保护** | 「好了谢谢」之类的日常用语意外触发完整 session closeout — 当语意模糊时，AI 会先确认是否真的要结束工作阶段 |
 
@@ -54,7 +54,11 @@
 
 `dev/SESSION_LOG.md` 在每次工作阶段启动时都会被读取。在活跃的项目中，这个文件可能增长到数千行——把几个月前已无关的历史记录全部载入 AI 的 context。
 
-本模板在每次工作阶段收尾时自动处理：
+本模板通过“可执行闸门”处理（不是只靠规则记忆）：
+
+- 启动 / 收尾前检查：`python docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md`
+- 收尾写入前应用：`python docs/qa/session_log_maintenance.py --apply --session-log dev/SESSION_LOG.md --archive-dir dev/archive`
+- 命令失败时必须停止 closeout 并报告（不可静默跳过）
 
 - 当日志超过 **400 行**或含有超过 **30 天**的旧记录时，旧 entries 会被移到 `dev/archive/`——不删除，只移动
 - 主动日志缩回最近 7–10 个工作阶段（≤ 200 行）
@@ -69,6 +73,7 @@
 
 | 版本 | 变更内容 | 对你的意义 |
 |---|---|---|
+| **v2.7** | 针对 handoff / log 膨胀完成 root-fix，并用可执行矩阵实验验证（5 个方案 × 6 个场景，使用真实 tokenizer 计数）。治理机制升级为双保险：`SESSION_HANDOFF` 字数预算 + §4a 可执行归档闸门（`session_log_maintenance.py --check/--apply`）。实验最终选择 `P3`（交接压缩 + 自动归档）作为最佳低风险方案；过度裁剪方案因 no-loss QC 失败被淘汰。回归检查已扩展并纳入 222-check 套件。 | 在不丢信息前提下实现可量化降本：平均每个 session 节省 **5921 tokens**（o200k），压力场景最高 **16096**，并且 **6/6 场景 QC 全通过**。line/date 两类触发都能自动归档，不再依赖用户提醒，长期项目可持续保持启动效率与交接可靠性。 |
 | **v2.6** | AI 接手旧 session 时，会读 `SESSION_LOG.md` 找「留给下一个 AI 的交接备注」。以前的规则是「找文件里最后出现的那段」— 日志经手动整理或归档后，物理位置最靠后的反而可能是旧的。现在改为找「日期最新那条记录里的那段」，日志怎么调整都能找对。`INIT.md` 安装前的 10 步安全确认流程，原本在文件里写了两份，且已累积 8 处以上措辞差异；现在顶部改成指向下方唯一版本的 3 行说明，两份不再冲突。Session 开始和结束时显示的装饰小图案，原本规则说「避免和上一次重复」— 但 AI 跨 session 根本记不住上次用了哪个，这条规则等于一纸空文。现在改为：同一次 session 内，结束小图必须和开始小图不同（AI 确实能做到）。单纯编辑治理文档时，不会再错误触发「安装前必须先生成 `CODEBASE_CONTEXT.md`」的要求。自动质量检查从 169 条增至 210 条，新增覆盖 Session ID 格式、禁用命令列表完整性、文件名规范等。 | 交接备注不再找错；安装说明只有一份不会互相矛盾；Session 启动与结束的小图案会切实轮换；日常编辑不再被安全流程拦住；自动拦截的异常情况更多，发布前更有把握。 |
 | **v2.5** | 核心工作流程规则重新定位以提升 AI 注意力权重（从注意力死区移至高优先区域）；冗余段落合并（净减 3 行）；填补三个工作流程缺口 — AI 测试失败时报告而非静默重试、deviation stop 后明确声明重入哪个阶段、模糊表达不再误触 session closeout | 核心规则获得更一致的 AI 遵守率；维护负担减轻；失败和交接时的 AI 行为更可预测 |
 | **v2.4** | AI 在 PLAN 阶段进行风险分级 — 高风险任务（≥3 文件、范围不明、破坏性操作、外部系统）暂停等用户确认才继续；工作日志改用精简格式（每条记录缩小约 60%）；归档门槛从 800 行降至 400 行，减少 AI 启动时读取的无关历史 | 误解任务在改 code 之前被拦截；AI 启动更快；相同空间容纳更多历史 |
@@ -291,6 +296,9 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 ├─ AGENTS.md
 ├─ CLAUDE.md
 ├─ GEMINI.md
+├─ docs/
+│  └─ qa/
+│     └─ session_log_maintenance.py  # §4a 可执行维护闸门
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
@@ -309,6 +317,7 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - `dev/SESSION_HANDOFF.md` - 当前基线与下一步优先事项
 - `dev/SESSION_LOG.md` - 逐工作阶段历史与验证结果（rolling window，自动整理）
 - `dev/archive/` - 自动归档的旧工作日志，按季度整理；启动时不读取
+- `docs/qa/session_log_maintenance.py` - 可执行归档维护工具（`--check` / `--apply` / `--self-test`）
 - `dev/DOC_SYNC_CHECKLIST.md` - 文档同步注册表：将变更类别映射到必须更新的文档
 - `dev/CODEBASE_CONTEXT.md` - 技术栈、外部服务、关键决策（首次工作阶段自动生成）
 - `dev/PROJECT_MASTER_SPEC.md` - 可选的长期权威规格
@@ -331,8 +340,9 @@ AI 自动处理并合并已有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新 QA 回归验收报告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-截至 2026-04-14 的摘要如下：
-- AGENTS/INIT 规则同步：已验证（169 项自动化回归测试 + 15 项行为测试）
+截至 2026-04-19 的摘要如下：
+- AGENTS/INIT 规则同步：已验证（222 项自动化回归测试）
+- Root-fix token matrix：已验证（5 个方案 × 6 个场景；最终选定 `P3_handoff_compact_plus_archive`）
 - 多平台指针文件行为：已验证
 
 ---

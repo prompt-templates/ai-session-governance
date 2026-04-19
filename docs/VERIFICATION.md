@@ -37,7 +37,7 @@ Verification date baseline: 2026-03-26 (UTC)
 
 - Latest QA pointer: [docs/qa/LATEST.md](qa/LATEST.md)
 - Current detailed report: [docs/qa/QA_REGRESSION_REPORT.md](qa/QA_REGRESSION_REPORT.md)
-- Latest run snapshot (UTC): 2026-04-14, 169 automated checks, 169 pass, 0 fail; 15 behavioral checks
+- Latest run snapshot (UTC): 2026-04-19, 222 automated checks, 222 pass, 0 fail; token matrix QC (5 packages × 6 scenarios) completed
 - **Run automated checks:** `bash docs/qa/run_checks.sh` (from project root)
 
 ## Not yet verified

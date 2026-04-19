@@ -307,6 +307,14 @@ Each closeout must record at minimum:
 
 **Session log entry format:** Use lean key-value style (see `dev/SESSION_LOG.md` template). Target ~20-30 lines per entry excluding the Handoff Prompt block. Omit conditional sections (Fix Record, Consolidation) when they have no content — do not write empty blocks. Do not record "Files read" — it has no value for future sessions.
 
+**Session handoff compactness budget** (mandatory at every closeout):
+1. `Current Baseline`: keep to concise state facts only; cap at 6 numbered lines
+2. `Open Priorities`: max 5 items, one line per item
+3. `Known Risks / Blockers`: unresolved active risks only; max 7 items
+4. `Last Session Record`: compact summary only; keep detailed evidence in `dev/SESSION_LOG.md`
+5. If content would exceed these limits: move detail to `dev/SESSION_LOG.md` (current entry) or `dev/SESSION_STATE_DETAIL.md` and leave a short reference in handoff
+6. No-loss rule: compaction must not discard information; detail is relocated, not deleted
+
 **Open Priorities regeneration** (mandatory at every closeout):
 The `Open Priorities` section of `dev/SESSION_HANDOFF.md` must be regenerated at every closeout — not copy-pasted forward:
 1. Remove any item completed this session
@@ -402,6 +410,15 @@ Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, ch
 2. The oldest session entry in `dev/SESSION_LOG.md` is dated more than 30 days ago
 
 **If neither condition is met:** proceed with writing the new session entry normally.
+
+**Mechanism enforcement (mandatory):**
+1. Startup / pre-closeout check command:
+   - `python docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md`
+2. Before writing the closeout entry, apply command:
+   - `python docs/qa/session_log_maintenance.py --apply --session-log dev/SESSION_LOG.md --archive-dir dev/archive`
+3. Do not rely on memory or user reminder for §4a execution; the script command is the execution gate.
+4. If the command fails, stop and report failure details; do not proceed with closeout writes until resolved.
+5. If the utility is missing (legacy install), create `docs/qa/session_log_maintenance.py` from template assets first, then re-run the command.
 
 **If triggered, perform archiving before writing the new entry:**
 
@@ -531,7 +548,7 @@ Before any bootstrap/setup task that creates or modifies multiple governance fil
    - `INSTALL_WRITE_OK`
 9. After `INSTALL_WRITE_OK` and before first write, create a lightweight backup snapshot:
    - Directory: `<PROJECT_ROOT>/dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/`
-   - Copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, if present)
+   - Copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, `docs/qa/session_log_maintenance.py`, if present)
    - Preserve relative paths under `<PROJECT_ROOT>`
    - Use native filesystem copy operations (cross-platform), no git required
 10. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly

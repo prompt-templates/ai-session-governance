@@ -46,7 +46,7 @@ It also catches a few common AI mistakes:
 | **Test plan governance** | Merging changes without a scenario matrix — expected vs. actual outcomes untracked |
 | **Consolidation discipline** | Rule accumulation without checking whether existing rules should be updated first |
 | **Doc-sync registry** | Guessing which docs to update after a change — `DOC_SYNC_CHECKLIST.md` maps change category to required updates so AI looks up instead of self-assessing |
-| **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — auto-archives old entries to `dev/archive/` when `SESSION_LOG.md` exceeds 400 lines or has entries older than 30 days; no manual migration needed |
+| **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — executable maintenance via `docs/qa/session_log_maintenance.py` checks at startup and applies at closeout; old entries are auto-archived to `dev/archive/` when triggers hit, without user reminder |
 | **QC fail-path** | AI silently retrying or abandoning failed tests — when tests or builds fail, AI must report what failed, diagnose the cause, and wait for user direction instead of auto-retrying |
 | **Closeout ambiguity guard** | Accidentally triggering full session closeout with casual remarks like "thanks, that's all I needed" — AI confirms session-end intent when the expression is ambiguous |
 
@@ -54,7 +54,11 @@ It also catches a few common AI mistakes:
 
 `dev/SESSION_LOG.md` is read at every session start. In an active project this file can grow to thousands of lines — loading months of history that has no relevance to today's work.
 
-The template handles this automatically at each session close:
+The template handles this with an executable gate (not memory-only rules):
+
+- Startup / pre-closeout check: `python docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md`
+- Closeout apply step: `python docs/qa/session_log_maintenance.py --apply --session-log dev/SESSION_LOG.md --archive-dir dev/archive`
+- If the command fails, closeout must stop and report (no silent skip)
 
 - When the log exceeds **400 lines** or contains entries older than **30 days**, old entries are moved to `dev/archive/` — never deleted, only relocated
 - The active log is trimmed back to the last 7–10 sessions (≤ 200 lines)
@@ -69,6 +73,7 @@ If you already have a large session log, it is trimmed automatically on the firs
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v2.7** | Root-fix for handoff/log bloat was validated with an executable simulation matrix (5 packages × 6 scenarios, real tokenizer counts). Governance now enforces two mechanisms together: (1) `SESSION_HANDOFF` compactness budget and (2) executable §4a archive gate (`session_log_maintenance.py --check/--apply`). Matrix result selected `P3` (`handoff compact + auto archive`) as best safe package; aggressive trim variants were rejected by no-loss QC. Regression harness now validates these rules in the 222-check suite. | Proven reduction without information loss: average save **5921 tokens/session** (o200k), up to **16096** in stress scenarios, with **6/6 scenario QC pass**. Archive triggers work on both line and date thresholds without user reminders, so long-running repos stay context-efficient and handoff-reliable. |
 | **v2.6** | When the AI resumes an older session, it reads `SESSION_LOG.md` to find the "handoff note left for the next AI." The old rule was "find the last such block in the file" — but once the log is manually reorganized or archived, the physically-last block might actually be an older one. Now: find the block inside the entry with the most recent date. The log can be rearranged and the AI still picks the right one. `INIT.md`'s 10-step safety confirmation before install used to be written twice in the same file, with 8+ places where the wording had started to differ; the top copy is now a 3-line pointer to the single authoritative version below, so the two can't drift apart anymore. The small decorative ASCII graphic shown at session start and session end: the old rule said "avoid repeating the previous one" — but AI has no way to remember across sessions, so this rule was wishful thinking. Now: within the same session, the closing graphic must differ from the opening one (AI can actually do this). Pure governance-document edits no longer accidentally trigger the "must generate `CODEBASE_CONTEXT.md` before install" requirement. Automated quality checks grew from 169 to 210 — the new ones cover Session ID format, forbidden-command list integrity, and filename enforcement. | Handoff notes no longer get picked wrong; install instructions have one copy instead of two that contradict each other; the start/end session graphics actually alternate; routine doc edits no longer get held up by safety flows; more types of mistakes get caught before release. |
 | **v2.5** | Core workflow rules repositioned for better AI attention (moved from attention dead zone to high-priority zone); redundant sections consolidated (net -3 lines); three workflow gaps filled — AI now reports test failures instead of silently retrying, states which phase it re-enters after a deviation stop, and confirms before triggering session closeout on ambiguous expressions | Core rules get more consistent AI compliance; less redundancy to maintain; fewer undefined AI behaviors during failures and handoffs |
 | **v2.4** | AI now grades task risk at PLAN phase — high-risk tasks (≥3 files, ambiguous scope, destructive ops, external systems) pause for user confirmation before proceeding; session log entries use a lean format (~60% smaller); archive threshold lowered from 800 to 400 lines, reducing irrelevant history the AI reads at startup | Misunderstood tasks caught before code changes; faster AI startup; more session history fits in less space |
@@ -287,6 +292,9 @@ This template was built for ongoing development work: codebases you'll touch aga
 ├─ AGENTS.md
 ├─ CLAUDE.md
 ├─ GEMINI.md
+├─ docs/
+│  └─ qa/
+│     └─ session_log_maintenance.py  # executable §4a maintenance gate
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
@@ -305,6 +313,7 @@ This template was built for ongoing development work: codebases you'll touch aga
 - `dev/SESSION_HANDOFF.md` - current baseline and next priorities
 - `dev/SESSION_LOG.md` - session-by-session history and validation (rolling window, auto-trimmed)
 - `dev/archive/` - auto-archived session log entries, organized by quarter; not read at startup
+- `docs/qa/session_log_maintenance.py` - executable archive maintenance utility (`--check` / `--apply` / `--self-test`)
 - `dev/DOC_SYNC_CHECKLIST.md` - doc-sync registry: maps change category to required doc updates
 - `dev/CODEBASE_CONTEXT.md` - tech stack, external services, key decisions (auto-generated first session)
 - `dev/PROJECT_MASTER_SPEC.md` - optional long-term authority
@@ -327,8 +336,9 @@ Full verification details:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-Snapshot status (as of 2026-04-14):
-- AGENTS/INIT rule parity: verified (169-check automated regression suite + 15 behavioral checks)
+Snapshot status (as of 2026-04-19):
+- AGENTS/INIT rule parity: verified (222-check automated regression suite)
+- Root-fix token matrix: verified (5 packages × 6 scenarios; selected `P3_handoff_compact_plus_archive`)
 - Multi-platform pointer behavior: verified
 
 ---

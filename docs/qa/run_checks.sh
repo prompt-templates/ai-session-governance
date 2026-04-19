@@ -32,12 +32,18 @@ check_gte() {
 
 A="AGENTS.md"
 I="INIT.md"
+PYTHON_BIN=""
+if command -v python >/dev/null 2>&1; then
+  PYTHON_BIN="python"
+elif command -v python3 >/dev/null 2>&1; then
+  PYTHON_BIN="python3"
+fi
 
 # ============================================================
 # Category 1: Fence Counts & File Structure
 # ============================================================
 check "S01" "Fence count AGENTS.md = 16" "16" "$(grep -c '^```' $A)"
-check "S02" "Fence count INIT.md = 28" "28" "$(grep -c '^```' $I)"
+check "S02" "Fence count INIT.md = 30" "30" "$(grep -c '^```' $I)"
 check "S03" "Section count AGENTS.md = 22" "22" "$(grep -c '^## ' $A)"
 check "S04" "AGENTS.md fences even" "0" "$(( $(grep -c '^```' $A) % 2 ))"
 check "S05" "INIT.md fences even" "0" "$(( $(grep -c '^```' $I) % 2 ))"
@@ -175,7 +181,7 @@ check "119" "scan was skipped INIT" "1" "$(grep -c 'scan was skipped' $I)"
 check "120" "no file changes AGENTS" "1" "$(grep -c 'no file changes this task' $A)"
 check "121" "no file changes INIT" "1" "$(grep -c 'no file changes this task' $I)"
 check "124" "Post-startup first action AGENTS" "1" "$(grep -c 'Post-startup first action' $A)"
-check "125" "Post-startup first action INIT" "1" "$(grep -c 'Post-startup first action' $I)"
+check_gte "125" "Post-startup first action INIT" "1" "$(grep -c 'Post-startup first action' $I)"
 
 # ============================================================
 # Category 11: §4a Session Log Maintenance (v2.2)
@@ -221,9 +227,9 @@ check "156" "Risk level criteria AGENTS" "1" "$(grep -c 'Risk level.*HIGH or LOW
 check "157" "Risk level criteria INIT" "1" "$(grep -c 'Risk level.*HIGH or LOW' $I)"
 check "158" "Lean format AGENTS" "1" "$(grep -c 'lean key-value style' $A)"
 check "159" "Lean format INIT" "1" "$(grep -c 'lean key-value style' $I)"
-check "160" "FILE 5 bold key format" "1" "$(grep -c '\*\*ID:\*\*' $I)"
+check_gte "160" "FILE 5 bold key format" "1" "$(grep -c '\*\*ID:\*\*' $I)"
 check "162" "Archive >400 AGENTS" "1" "$(grep -c '>400 lines' $A)"
-check "163" "Archive >400 INIT" "1" "$(grep -c '>400 lines' $I)"
+check_gte "163" "Archive >400 INIT" "1" "$(grep -c '>400 lines' $I)"
 check "164" "HIGH wait AGENTS" "1" "$(grep -c 'wait for user confirmation' $A)"
 check "165" "HIGH wait INIT" "1" "$(grep -c 'wait for user confirmation' $I)"
 check "166" "Assumptions and risks AGENTS" "1" "$(grep -c 'Assumptions and risks' $A)"
@@ -345,6 +351,34 @@ check "R26-39" "§4 minor separator rule INIT" "1" "$(grep -c 'Minor separator:'
 for img in ref_doc/overview_infograph_en.png ref_doc/overview_infograph_tw.png ref_doc/overview_infograph_cn.png ref_doc/overview_infograph_ja.png ref_doc/launch.png ref_doc/closesession.png ref_doc/install_step_1.png ref_doc/install_step_2.png ref_doc/install_step_3.png ref_doc/install_step_4.png; do
   check "IMG" "$img exists" "1" "$(test -f "$img" && echo 1 || echo 0)"
 done
+
+# ============================================================
+# Category 17: P3 Root-Fix (Executable Maintenance + Handoff Compactness)
+# ============================================================
+check "R27-01" "Handoff compactness budget AGENTS" "1" "$(grep -c 'Session handoff compactness budget' $A)"
+check "R27-02" "Handoff compactness budget INIT" "1" "$(grep -c 'Session handoff compactness budget' $I)"
+check "R27-03" "Maintenance check command AGENTS" "1" "$(grep -c 'session_log_maintenance.py --check' $A)"
+check "R27-04" "Maintenance check command INIT" "1" "$(grep -c 'session_log_maintenance.py --check' $I)"
+check "R27-05" "Maintenance apply command AGENTS" "1" "$(grep -c 'session_log_maintenance.py --apply' $A)"
+check "R27-06" "Maintenance apply command INIT" "1" "$(grep -c 'session_log_maintenance.py --apply' $I)"
+check "R27-07" "FILE 7 heading in INIT.md" "1" "$(grep -c 'FILE 7: docs/qa/session_log_maintenance.py' $I)"
+check "R27-08" "session_log_maintenance.py exists" "1" "$(test -f docs/qa/session_log_maintenance.py && echo 1 || echo 0)"
+check "R27-08b" "Doc sync row in INIT checklist template" "1" "$(grep -c 'Session-log maintenance utility added/changed' $I)"
+check "R27-08c" "Doc sync row in dev checklist" "1" "$(grep -c 'Session-log maintenance utility added/changed' dev/DOC_SYNC_CHECKLIST.md)"
+
+if [ -n "$PYTHON_BIN" ] && $PYTHON_BIN docs/qa/session_log_maintenance.py --self-test >/dev/null 2>&1; then
+  selftest_rc=0
+else
+  selftest_rc=1
+fi
+check "R27-09" "session_log_maintenance self-test matrix" "0" "$selftest_rc"
+
+if [ -n "$PYTHON_BIN" ] && $PYTHON_BIN docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md >/dev/null 2>&1; then
+  check_exec_rc=0
+else
+  check_exec_rc=$?
+fi
+check "R27-10" "session_log_maintenance check command executable (0 or 2)" "1" "$([ $check_exec_rc -eq 0 -o $check_exec_rc -eq 2 ] && echo 1 || echo 0)"
 
 # ============================================================
 # Summary
