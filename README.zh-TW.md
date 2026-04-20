@@ -186,6 +186,14 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 3. 依序確認：`INSTALL_ROOT_OK: <absolute_path>`，再回覆 `INSTALL_WRITE_OK`
 4. AI 先備份既有文件，再將治理章節合併至最新版本
 
+**安全升級通用 prompt（可直接複製）：**
+
+```text
+請用這份 INIT.md 執行治理升級，僅做 merge 整合。
+不得覆寫、刪除或重置我現有的自訂 governance 規則/內容/檔案。
+請先顯示 dry-run 計劃（create/merge/skip），再等待我確認 INSTALL_ROOT_OK 與 INSTALL_WRITE_OK。
+```
+
 **升級時 AI 的動作：**
 - 現有 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md` → **merge**（治理章節更新至最新，你的自定內容保留）
 - `dev/DOC_SYNC_CHECKLIST.md` → **merge**（專案自訂列保留，缺少的通用列自動補上）

@@ -184,6 +184,14 @@ Re-run `INIT.md` with the current version. The steps are identical to initial in
 3. Confirm: `INSTALL_ROOT_OK: <absolute_path>` then `INSTALL_WRITE_OK`
 4. AI backs up existing files, then merges governance sections to the latest version
 
+**Safe upgrade prompt (copy/paste):**
+
+```text
+Upgrade governance with this INIT.md in merge-only mode.
+Do not overwrite, delete, or reset any of my existing custom governance rules/content/files.
+Show the dry-run plan first (create/merge/skip), then wait for my confirmations: INSTALL_ROOT_OK and INSTALL_WRITE_OK.
+```
+
 **What the AI does during upgrade:**
 - Existing `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` → **merge** (governance sections updated, your custom content preserved)
 - `dev/DOC_SYNC_CHECKLIST.md` → **merge** (existing project-specific rows preserved, missing universal rows added)
