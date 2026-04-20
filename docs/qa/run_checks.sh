@@ -43,7 +43,7 @@ fi
 # Category 1: Fence Counts & File Structure
 # ============================================================
 check "S01" "Fence count AGENTS.md = 16" "16" "$(grep -c '^```' $A)"
-check "S02" "Fence count INIT.md = 30" "30" "$(grep -c '^```' $I)"
+check "S02" "Fence count INIT.md = 28" "28" "$(grep -c '^```' $I)"
 check "S03" "Section count AGENTS.md = 22" "22" "$(grep -c '^## ' $A)"
 check "S04" "AGENTS.md fences even" "0" "$(( $(grep -c '^```' $A) % 2 ))"
 check "S05" "INIT.md fences even" "0" "$(( $(grep -c '^```' $I) % 2 ))"
@@ -357,28 +357,42 @@ done
 # ============================================================
 check "R27-01" "Handoff compactness budget AGENTS" "1" "$(grep -c 'Session handoff compactness budget' $A)"
 check "R27-02" "Handoff compactness budget INIT" "1" "$(grep -c 'Session handoff compactness budget' $I)"
-check "R27-03" "Maintenance check command AGENTS" "1" "$(grep -c 'session_log_maintenance.py --check' $A)"
-check "R27-04" "Maintenance check command INIT" "1" "$(grep -c 'session_log_maintenance.py --check' $I)"
-check "R27-05" "Maintenance apply command AGENTS" "1" "$(grep -c 'session_log_maintenance.py --apply' $A)"
-check "R27-06" "Maintenance apply command INIT" "1" "$(grep -c 'session_log_maintenance.py --apply' $I)"
-check "R27-07" "FILE 7 heading in INIT.md" "1" "$(grep -c 'FILE 7: docs/qa/session_log_maintenance.py' $I)"
+check "R27-03" "Maintenance trigger evaluation AGENTS" "1" "$(grep -c 'evaluate triggers directly from `dev/SESSION_LOG.md`' $A)"
+check "R27-04" "Maintenance trigger evaluation INIT" "1" "$(grep -c 'evaluate triggers directly from `dev/SESSION_LOG.md`' $I)"
+check "R27-05" "No Python requirement in AGENTS §4a" "0" "$(grep -c 'python docs/qa/session_log_maintenance.py' $A)"
+check "R27-06" "No Python requirement in INIT §4a" "0" "$(grep -c 'python docs/qa/session_log_maintenance.py' $I)"
+check "R27-07" "FILE 7 heading removed from INIT.md" "0" "$(grep -c 'FILE 7: docs/qa/session_log_maintenance.py' $I)"
 check "R27-08" "session_log_maintenance.py exists" "1" "$(test -f docs/qa/session_log_maintenance.py && echo 1 || echo 0)"
-check "R27-08b" "Doc sync row in INIT checklist template" "1" "$(grep -c 'Session-log maintenance utility added/changed' $I)"
-check "R27-08c" "Doc sync row in dev checklist" "1" "$(grep -c 'Session-log maintenance utility added/changed' dev/DOC_SYNC_CHECKLIST.md)"
+check "R27-08b" "Doc sync row in INIT checklist template" "1" "$(grep -c 'Session-log maintenance policy changed' $I)"
+check "R27-08c" "Doc sync row in dev checklist" "1" "$(grep -c 'Session-log maintenance policy changed' dev/DOC_SYNC_CHECKLIST.md)"
 
-if [ -n "$PYTHON_BIN" ] && $PYTHON_BIN docs/qa/session_log_maintenance.py --self-test >/dev/null 2>&1; then
+if [ -n "$PYTHON_BIN" ] && [ -f docs/qa/session_log_maintenance.py ] && $PYTHON_BIN docs/qa/session_log_maintenance.py --self-test >/dev/null 2>&1; then
+  selftest_rc=0
+elif [ -z "$PYTHON_BIN" ]; then
   selftest_rc=0
 else
   selftest_rc=1
 fi
-check "R27-09" "session_log_maintenance self-test matrix" "0" "$selftest_rc"
+check "R27-09" "session_log_maintenance self-test matrix (skip if python unavailable)" "0" "$selftest_rc"
 
-if [ -n "$PYTHON_BIN" ] && $PYTHON_BIN docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md >/dev/null 2>&1; then
+if [ -n "$PYTHON_BIN" ] && [ -f docs/qa/session_log_maintenance.py ] && $PYTHON_BIN docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md >/dev/null 2>&1; then
+  check_exec_rc=0
+elif [ -z "$PYTHON_BIN" ]; then
   check_exec_rc=0
 else
   check_exec_rc=$?
 fi
-check "R27-10" "session_log_maintenance check command executable (0 or 2)" "1" "$([ $check_exec_rc -eq 0 -o $check_exec_rc -eq 2 ] && echo 1 || echo 0)"
+check "R27-10" "session_log_maintenance check command executable (0 or 2, skip if python unavailable)" "1" "$([ $check_exec_rc -eq 0 -o $check_exec_rc -eq 2 ] && echo 1 || echo 0)"
+check "R27-11" "README EN hides internal maintenance script" "0" "$(grep -c 'session_log_maintenance.py' README.md)"
+check "R27-12" "README zh-TW hides internal maintenance script" "0" "$(grep -c 'session_log_maintenance.py' README.zh-TW.md)"
+check "R27-13" "README zh-CN hides internal maintenance script" "0" "$(grep -c 'session_log_maintenance.py' README.zh-CN.md)"
+check "R27-14" "README ja hides internal maintenance script" "0" "$(grep -c 'session_log_maintenance.py' README.ja.md)"
+check "R27-15" "README EN hides Python maintenance commands" "0" "$(grep -c 'python docs/qa/session_log_maintenance.py' README.md)"
+check "R27-16" "README zh-TW hides Python maintenance commands" "0" "$(grep -c 'python docs/qa/session_log_maintenance.py' README.zh-TW.md)"
+check "R27-17" "README zh-CN hides Python maintenance commands" "0" "$(grep -c 'python docs/qa/session_log_maintenance.py' README.zh-CN.md)"
+check "R27-18" "README ja hides Python maintenance commands" "0" "$(grep -c 'python docs/qa/session_log_maintenance.py' README.ja.md)"
+check "R27-19" "INIT package self-containment: no docs/qa/run_checks.sh reference" "0" "$(grep -c 'docs/qa/run_checks.sh' $I)"
+check "R27-20" "INIT package self-containment: no docs/qa/session_log_maintenance.py reference" "0" "$(grep -c 'docs/qa/session_log_maintenance.py' $I)"
 
 # ============================================================
 # Summary

@@ -46,7 +46,7 @@ It also catches a few common AI mistakes:
 | **Test plan governance** | Merging changes without a scenario matrix — expected vs. actual outcomes untracked |
 | **Consolidation discipline** | Rule accumulation without checking whether existing rules should be updated first |
 | **Doc-sync registry** | Guessing which docs to update after a change — `DOC_SYNC_CHECKLIST.md` maps change category to required updates so AI looks up instead of self-assessing |
-| **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — executable maintenance via `docs/qa/session_log_maintenance.py` checks at startup and applies at closeout; old entries are auto-archived to `dev/archive/` when triggers hit, without user reminder |
+| **Session log maintenance** | Session history growing to thousands of lines and consuming AI context window — during closeout, AI applies built-in trigger rules to archive old entries and keep startup context lean |
 | **QC fail-path** | AI silently retrying or abandoning failed tests — when tests or builds fail, AI must report what failed, diagnose the cause, and wait for user direction instead of auto-retrying |
 | **Closeout ambiguity guard** | Accidentally triggering full session closeout with casual remarks like "thanks, that's all I needed" — AI confirms session-end intent when the expression is ambiguous |
 
@@ -54,16 +54,14 @@ It also catches a few common AI mistakes:
 
 `dev/SESSION_LOG.md` is read at every session start. In an active project this file can grow to thousands of lines — loading months of history that has no relevance to today's work.
 
-The template handles this with an executable gate (not memory-only rules):
+The template handles this with explicit closeout checks (not memory-only rules):
 
-- Startup / pre-closeout check: `python docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md`
-- Closeout apply step: `python docs/qa/session_log_maintenance.py --apply --session-log dev/SESSION_LOG.md --archive-dir dev/archive`
-- If the command fails, closeout must stop and report (no silent skip)
-
-- When the log exceeds **400 lines** or contains entries older than **30 days**, old entries are moved to `dev/archive/` — never deleted, only relocated
-- The active log is trimmed back to the last 7–10 sessions (≤ 200 lines)
-- Archive files are organized by quarter: `dev/archive/SESSION_LOG_YYYY_QN.md`
-- The AI reads only `SESSION_LOG.md` at startup — archive files are never loaded
+- At closeout, AI checks whether `SESSION_LOG.md` exceeds **400 lines** or contains entries older than **30 days**
+- If a trigger is hit, AI archives old entries before writing the new closeout entry
+- If no trigger is hit, AI skips archive and writes closeout normally
+- Archived entries are moved to `dev/archive/` (never deleted), organized by quarter: `SESSION_LOG_YYYY_QN.md`
+- The active log target is ≤ **200 lines** while retaining the 2 most recent sessions
+- AI reads only `SESSION_LOG.md` at startup — archive files are not loaded
 
 If you already have a large session log, it is trimmed automatically on the first session close after upgrading. No manual step needed.
 
@@ -73,6 +71,7 @@ If you already have a large session log, it is trimmed automatically on the firs
 
 | Version | What changed | Why it matters |
 |---|---|---|
+| **v2.8** | Hardened the INIT-only packaging boundary: removed references to internal maintainer tooling from `INIT.md` and README, and added regression checks that fail if INIT points to non-installed files. | Prevents first-time install failures in user environments where only `INIT.md` is provided, and automatically catches future boundary drift. |
 | **v2.7** | Added a full anti-bloat upgrade for handoff and session history, validated across 30 growth scenarios. Handoff output is now consistently concise, and older log content is automatically moved out of the active startup path when history grows. | Faster startup and lower context waste without losing key handoff information. In stress scenarios, startup payload was reduced by up to **16,096 tokens**, while all required handoff fields remained intact across all test scenarios. |
 | **v2.6** | When the AI resumes an older session, it reads `SESSION_LOG.md` to find the "handoff note left for the next AI." The old rule was "find the last such block in the file" — but once the log is manually reorganized or archived, the physically-last block might actually be an older one. Now: find the block inside the entry with the most recent date. The log can be rearranged and the AI still picks the right one. `INIT.md`'s 10-step safety confirmation before install used to be written twice in the same file, with 8+ places where the wording had started to differ; the top copy is now a 3-line pointer to the single authoritative version below, so the two can't drift apart anymore. The small decorative ASCII graphic shown at session start and session end: the old rule said "avoid repeating the previous one" — but AI has no way to remember across sessions, so this rule was wishful thinking. Now: within the same session, the closing graphic must differ from the opening one (AI can actually do this). Pure governance-document edits no longer accidentally trigger the "must generate `CODEBASE_CONTEXT.md` before install" requirement. Automated quality checks grew from 169 to 210 — the new ones cover Session ID format, forbidden-command list integrity, and filename enforcement. | Handoff notes no longer get picked wrong; install instructions have one copy instead of two that contradict each other; the start/end session graphics actually alternate; routine doc edits no longer get held up by safety flows; more types of mistakes get caught before release. |
 | **v2.5** | Core workflow rules repositioned for better AI attention (moved from attention dead zone to high-priority zone); redundant sections consolidated (net -3 lines); three workflow gaps filled — AI now reports test failures instead of silently retrying, states which phase it re-enters after a deviation stop, and confirms before triggering session closeout on ambiguous expressions | Core rules get more consistent AI compliance; less redundancy to maintain; fewer undefined AI behaviors during failures and handoffs |
@@ -232,7 +231,7 @@ This is the primary design target of this repo.
 
 ## :bookmark_tabs: Platform setup
 
-`AGENTS.md` is the SSOT. `CLAUDE.md` and `GEMINI.md` are thin pointers.
+`AGENTS.md` is the single governance source of truth. `CLAUDE.md` and `GEMINI.md` are thin pointers.
 
 | Platform | Native file | What ships | Existing file action |
 |---|---|---|---|
@@ -293,8 +292,7 @@ This template was built for ongoing development work: codebases you'll touch aga
 ├─ CLAUDE.md
 ├─ GEMINI.md
 ├─ docs/
-│  └─ qa/
-│     └─ session_log_maintenance.py  # executable §4a maintenance gate
+│  └─ ...
 └─ dev/
    ├─ SESSION_HANDOFF.md
    ├─ SESSION_LOG.md
@@ -307,13 +305,12 @@ This template was built for ongoing development work: codebases you'll touch aga
 ### :small_blue_diamond: Core files
 
 - `INIT.md` - bootstrap prompt (public entry point)
-- `AGENTS.md` - governance SSOT
+- `AGENTS.md` - governance source of truth
 - `CLAUDE.md` - Claude pointer to SSOT
 - `GEMINI.md` - Gemini pointer to SSOT
 - `dev/SESSION_HANDOFF.md` - current baseline and next priorities
 - `dev/SESSION_LOG.md` - session-by-session history and validation (rolling window, auto-trimmed)
 - `dev/archive/` - auto-archived session log entries, organized by quarter; not read at startup
-- `docs/qa/session_log_maintenance.py` - executable archive maintenance utility (`--check` / `--apply` / `--self-test`)
 - `dev/DOC_SYNC_CHECKLIST.md` - doc-sync registry: maps change category to required doc updates
 - `dev/CODEBASE_CONTEXT.md` - tech stack, external services, key decisions (auto-generated first session)
 - `dev/PROJECT_MASTER_SPEC.md` - optional long-term authority

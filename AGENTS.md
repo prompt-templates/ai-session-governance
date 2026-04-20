@@ -315,12 +315,32 @@ Each closeout must record at minimum:
 5. If content would exceed these limits: move detail to `dev/SESSION_LOG.md` (current entry) or `dev/SESSION_STATE_DETAIL.md` and leave a short reference in handoff
 6. No-loss rule: compaction must not discard information; detail is relocated, not deleted
 
+**Next Session Handoff Prompt budget** (mandatory at every closeout):
+1. The Section 2 fenced `text` block must be ≤24 lines (count only lines inside the fence)
+2. Keep the two required opening lines verbatim and include all required fields from §4 rule 5 in compact form
+3. `Key files changed in this session`: max 6 bullets; if overflow, add one bullet `- Additional files: see SESSION_LOG Changed`
+4. `Known risks / blockers / cautions`: max 5 bullets
+5. If details exceed this budget: move overflow to the current `dev/SESSION_LOG.md` entry and leave one short reference in the prompt block
+
 **Open Priorities regeneration** (mandatory at every closeout):
 The `Open Priorities` section of `dev/SESSION_HANDOFF.md` must be regenerated at every closeout — not copy-pasted forward:
 1. Remove any item completed this session
 2. Scan `dev/SESSION_LOG.md` recent entries for newly surfaced pending items — add those
 3. Re-rank and overwrite the previous list (replace, not append)
 Hard rule: do not copy-paste old priorities without re-checking against current project state.
+
+**Closeout smart-skip gate** (mandatory at every closeout):
+1. Before drafting closeout output, evaluate whether this session has meaningful deltas
+2. Use `No-Change Closeout` only if all are true:
+   - No files were created/modified/deleted in this session
+   - No new or updated decision/requirement/risk/blocker/pending item was introduced
+   - No DOC_SYNC row was triggered
+3. `No-Change Closeout` still requires:
+   - Run §4a check command
+   - Update `dev/SESSION_HANDOFF.md` and `dev/SESSION_LOG.md` with a concise no-change entry
+   - Generate and persist `Next Session Handoff Prompt (Verbatim)`
+   - Output `### DOC_SYNC Matrix Scan — SKIP (no file edits in this session)`
+4. If any condition above is false: run the full closeout flow
 
 Supplementary rules:
 1. Even if the session involved no substantive code changes (research / analysis / discussion / decisions only), the session record must still be updated
@@ -412,13 +432,14 @@ Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, ch
 **If neither condition is met:** proceed with writing the new session entry normally.
 
 **Mechanism enforcement (mandatory):**
-1. Startup / pre-closeout check command:
-   - `python docs/qa/session_log_maintenance.py --check --session-log dev/SESSION_LOG.md`
-2. Before writing the closeout entry, apply command:
-   - `python docs/qa/session_log_maintenance.py --apply --session-log dev/SESSION_LOG.md --archive-dir dev/archive`
-3. Do not rely on memory or user reminder for §4a execution; the script command is the execution gate.
-4. If the command fails, stop and report failure details; do not proceed with closeout writes until resolved.
-5. If the utility is missing (legacy install), create `docs/qa/session_log_maintenance.py` from template assets first, then re-run the command.
+1. At closeout, evaluate triggers directly from `dev/SESSION_LOG.md`:
+   - Line trigger: total lines > 400
+   - Date trigger: oldest session entry date (`## YYYY-MM-DD`) older than 30 days
+2. If either trigger is true, execute the archive steps below before writing the closeout entry.
+3. If both triggers are false, skip archive and proceed to closeout writes.
+4. User-facing closeout must not require Python or any non-default runtime installation.
+5. Do not rely on memory or user reminder for §4a execution; explicit trigger evaluation is the execution gate.
+6. If trigger evaluation fails due environment/tooling limits, continue closeout and record `§4a maintenance skipped: <reason>` in the current `SESSION_LOG` entry.
 
 **If triggered, perform archiving before writing the new entry:**
 
@@ -548,7 +569,7 @@ Before any bootstrap/setup task that creates or modifies multiple governance fil
    - `INSTALL_WRITE_OK`
 9. After `INSTALL_WRITE_OK` and before first write, create a lightweight backup snapshot:
    - Directory: `<PROJECT_ROOT>/dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/`
-   - Copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, `docs/qa/session_log_maintenance.py`, if present)
+   - Copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, if present)
    - Preserve relative paths under `<PROJECT_ROOT>`
    - Use native filesystem copy operations (cross-platform), no git required
 10. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly

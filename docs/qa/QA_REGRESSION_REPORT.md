@@ -1,18 +1,18 @@
 # QA Regression Report
 
-Date: 2026-04-19 (UTC)
-Scope: v2.7 — SESSION_HANDOFF compactness + executable §4a archive gate (root-fix for handoff/log bloat), with full regression + token matrix QC
+Date: 2026-04-20 (UTC)
+Scope: v2.8 — INIT-only package-boundary hardening + user-facing README alignment, with full regression on top of v2.7 baseline
 
 ## Summary
 
-- Total checks: 222 (automated via `docs/qa/run_checks.sh`)
-- Pass: 222
+- Total checks: 232 (automated via `docs/qa/run_checks.sh`)
+- Pass: 232
 - Fail: 0
 - Matrix add-on: 30 scenario-package runs (5 packages × 6 scenarios), using real tokenizer counts (`o200k_base`, `cl100k_base`)
 
 **Run automated checks:** `bash docs/qa/run_checks.sh` (from project root, ~10 seconds)
 
-Note: Feature round 16 (v2.6 re-audit fixes) and Feature round 17 (v2.7 root-fix executable maintenance + compactness budget) are now covered by automated checks `R26-*` and `R27-*`, bringing total checks to 222.
+Note: Feature round 16 (v2.6 re-audit fixes), Feature round 17 (v2.7 root-fix executable maintenance + compactness budget), and feature round 18 (v2.8 INIT-only package-boundary hardening) are covered by automated checks `R26-*` and `R27-*`, bringing total checks to 232.
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
 Note: Checks 112–125 added for Feature Round 7 (v2.1 Handoff chain fixes + DOC_SYNC Matrix Scan enforcement).
@@ -441,9 +441,9 @@ Root cause addressed: handoff payload growth and non-executable archive rules ca
 
 Changes validated:
 - `SESSION_HANDOFF` compactness budget rules added and mirrored.
-- §4a execution gate enforced via `python docs/qa/session_log_maintenance.py --check/--apply`.
+- §4a execution gate enforced via direct trigger evaluation from `SESSION_LOG.md` (no Python requirement in user closeout path).
 - Archive logic validation via self-test matrix (line trigger, date trigger, both triggers, retain-two safeguard).
-- QA harness includes Category 17 checks (`R27-*`) for utility existence, command references, checklist row parity, and executable behavior.
+- QA harness includes Category 17 checks (`R27-*`) for trigger-evaluation wording, package-boundary enforcement, checklist row parity, and executable behavior.
 
 ### Matrix simulation (token impact, real tokenizer counts)
 
@@ -468,6 +468,23 @@ Changes validated:
 
 Decision: adopt `P3_handoff_compact_plus_archive` as the production root-fix package (best valid token reduction under no-loss constraints).
 
+## Feature round 13 (2026-04-20): v2.8 — INIT-only package-boundary hardening
+
+Root cause addressed: user installs rely on `INIT.md` only; references to non-installed internal tooling caused avoidable first-run failures.
+
+Changes validated:
+- Removed INIT template block for `FILE 7: docs/qa/session_log_maintenance.py` from user install flow.
+- Removed user-facing README references to internal maintenance script/commands.
+- Updated checklist row wording from utility-centric to policy-centric to avoid reintroducing non-shipped paths.
+- Added hard regression guards:
+  - `R27-19`: INIT must not reference `docs/qa/run_checks.sh`
+  - `R27-20`: INIT must not reference `docs/qa/session_log_maintenance.py`
+
+Outcome:
+- INIT-only installation path is now self-contained.
+- README stays user-facing and does not expose internal maintainer tooling.
+- Regression baseline increased to 232 checks with package-boundary drift detection built in.
+
 ## Notes
 
 - This report validates document and governance consistency at repository level.
@@ -482,7 +499,7 @@ Decision: adopt `P3_handoff_compact_plus_archive` as the production root-fix pac
 - Feature round 10 adds: §3 PLAN risk grading (HIGH/LOW with 5 concrete criteria + conditional pause for HIGH); "Assumptions and risks" merged display (replaces standalone self-challenge); self-challenge line removed; §4 lean session log format guideline (target ~20-30 lines/entry, omit empty sections, remove "Files read"); §4a archive thresholds lowered (800→400 trigger, 350→200 target); INIT.md FILE 5 template rewritten to lean key-value format. Checks (128)/(129) updated from "800 lines" to "400 lines", (132)/(133) from "350 lines" to "200 lines". Total 8 new grep checks (156–163).
 - Feature round 9 adds: 7 governance clarifications + 1 parity bug fix from systematic audit — §3 PLAN must display "My understanding / Impact scope / Assumptions" (A1); §2 conflict arbitration rule for user-vs-governance conflicts (A2); §2b triage exploratory read allowance (A4); §3 CHANGE deviation stop-and-report (A5); §8/§8b reconciliation bridging sentence (A3); §11 Output Contract scoped to CHANGE/PERSIST responses (B1); INIT.md FILE 4 template checklist adds CODEBASE_CONTEXT (parity fix). Checks (114)/(115) expected values updated from 1 to 2. Total 16 new grep checks (140–155).
 - Feature round 11 adds: Attention anchor (CORE RULES block at file top); §0b relocated from MANDATORY zone (line 38) to CONDITIONAL zone (after §4a); §2 consolidated to reference §1 list (removes duplicated 4-file list); §2c merged into §3 READ phase (eliminates redundant section, section count 23→22); DOC_SYNC instruction block streamlined to bullet list; QC fail-path (§3 QC phase fail guidance); deviation resume (§3 CHANGE post-A5 resume path); closeout ambiguity protection (§4 false-positive guard); Codex 32 KiB config note in README ×4 languages. Section markers updated (§2c removed from CONDITIONAL). All automated checks migrated to executable script `docs/qa/run_checks.sh`. Total new checks: 24 automated (R11-01 through R11-24) + 10 structural (S01-S05, O01-O10, X01-X06). Check (86) updated to verify §2c absent from CONDITIONAL marker.
-- **Executable test suite**: `docs/qa/run_checks.sh` — runs all 222 automated checks in ~10 seconds. Run from project root: `bash docs/qa/run_checks.sh`.
+- **Executable test suite**: `docs/qa/run_checks.sh` — runs all 232 automated checks in ~10 seconds. Run from project root: `bash docs/qa/run_checks.sh`.
 
 ## Manual governance checks (cannot be automated with grep)
 
