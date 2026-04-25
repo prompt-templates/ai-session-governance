@@ -34,10 +34,6 @@ Hard rules:
 3. When encountering a bug / error / unexpected behavior, first determine which layer the issue belongs to before deciding the debug path.
 4. Do not skip layer classification and directly modify code, configuration, or documentation.
 
-Note:
-`dev/CODEBASE_CONTEXT.md` contains Product / System Layer content (tech stack, directory map, build commands, External Services, and Key Decisions).
-It is stored in `dev/` by path convention (so session tooling can locate it predictably), not because it belongs to the Development Governance Layer.
-
 ---
 
 ## 1) Single Entry (Mandatory)
@@ -55,16 +51,12 @@ At the start of every new session, the AI must read the following files in this 
 
 If `dev/SESSION_HANDOFF.md` or `dev/SESSION_LOG.md` is missing, the AI must create a minimal version before beginning development.
 
-If `dev/CODEBASE_CONTEXT.md` does not exist, the AI must generate it during the first session:
-0. If the file already exists for any reason, back it up to `dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/` before making any changes
-1. Scan existing project files — include all of the following that are present (do not limit to this list):
-   - Documentation: `README*.md`, `CONTRIBUTING.md`, `DEVELOPMENT.md`, `docs/**/*.md` (architecture, design, API, integration docs)
-   - Package manifests: `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `Gemfile`, `requirements.txt`, `composer.json`
-   - Service / environment clues: `.env.example`, `docker-compose*.yml`, `*.yaml` / `*.yml` config files in root or `config/` (for external service names and env vars)
-2. Extract and integrate — if the same service, dependency, or decision appears in multiple files, consolidate into one entry; do not duplicate
-3. Fill in sections: Stack, Directory Map, Key Entry Points, Build & Run, External Services, Key Decisions (leave blank if none), AI Maintenance Log
-4. Record all source files scanned in the `AI Maintenance Log` section
-5. Never modify the source files during this scan — read only
+If `dev/CODEBASE_CONTEXT.md` does not exist, generate it on first session:
+0. If the file already exists for any reason, back it up to `dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/` before changes
+1. Scan present project files (not limited to): docs (`README*.md`, `CONTRIBUTING.md`, `DEVELOPMENT.md`, `docs/**/*.md`); package manifests (`package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `Gemfile`, `requirements.txt`, `composer.json`); service / env clues (`.env.example`, `docker-compose*.yml`, `*.yaml` / `*.yml` in root or `config/`)
+2. Extract and integrate — consolidate same service / dep / decision across files; do not duplicate
+3. Fill: Stack, Directory Map, Key Entry Points, Build & Run, External Services, Key Decisions, AI Maintenance Log
+4. Record scanned files in `AI Maintenance Log`; never modify source files (read-only scan)
 
 After reading `dev/SESSION_LOG.md`, the AI must locate the latest `### Next Session Handoff Prompt (Verbatim)` block — defined as the block inside the session entry with the most recent UTC date (the `^## <YYYY-MM-DD>` heading with the latest date, regardless of the entry's physical position in the file; for multiple entries sharing the same date, the physically topmost entry wins — closeouts must prepend new entries above older ones) — and use that block as startup execution seed context for PLAN, subject to the precedence rules in §2 rule 5. Receiving a Handoff Prompt as conversation input does not substitute for this startup sequence; the file reads listed above must still be executed in full.
 
@@ -113,34 +105,24 @@ Boot Visual Cue - Style C
 ---
 
 ## 2) Source of Truth Priority
-When documents conflict, defer to the §1 read order as priority (first = highest), followed by:
-- Other README / docs / comments / tests
-- Verbal memory and speculation (must not be used as a basis for decisions)
+When documents conflict, defer to the §1 read order as priority (first = highest), then other README / docs / comments / tests. Verbal memory and speculation must not be used as a basis for decisions.
 
 Supplementary rules:
-1. `SESSION_HANDOFF.md` and `SESSION_LOG.md` represent the "current state".
-2. `CODEBASE_CONTEXT.md` represents stable project facts that change only when the tech stack, External Services, or Key Decisions change.
-3. `PROJECT_MASTER_SPEC.md` represents "long-term stable rules and the complete authoritative reference".
-4. If the current state is inconsistent with an older specification, defer to the handoff/log first, and remediate specification drift during the PERSIST phase.
-5. If `SESSION_LOG.md` contains a latest `Next Session Handoff Prompt (Verbatim)` block, treat it as operational seed context, but do not let it override higher-priority current-state facts in `SESSION_HANDOFF.md` / latest log facts.
-6. When a user instruction conflicts with a rule in this document: (a) state which rule is in conflict, (b) explain the risk of overriding, (c) if user confirms override — comply and record the override in `SESSION_LOG.md`.
+1. `SESSION_HANDOFF.md` and `SESSION_LOG.md` represent the "current state"
+2. `CODEBASE_CONTEXT.md` represents stable project facts that change only when tech stack, External Services, or Key Decisions change
+3. `PROJECT_MASTER_SPEC.md` represents long-term stable rules and the complete authoritative reference
+4. If current state is inconsistent with older specification, defer to handoff / log first; remediate specification drift during PERSIST
+5. Latest `Next Session Handoff Prompt (Verbatim)` block in SESSION_LOG = operational seed context, but does not override higher-priority current-state facts in SESSION_HANDOFF / latest log
+6. When a user instruction conflicts with a rule in this document: (a) state which rule is in conflict; (b) explain risk of overriding; (c) if user confirms override → comply and record override in `SESSION_LOG.md`
 
 ---
 
 ## 2b) Issue Triage (Mandatory)
-Whenever a bug / error / regression / unexpected behavior is encountered, source classification must be performed before reading files or making changes.
+On any bug / error / regression / unexpected behavior: classify source before reading files or making changes. Categories: code logic / configuration / environment-permissions-runtime / external dependency or platform behavior / usage error / documentation drift.
 
-At minimum, first determine whether the issue falls into one of the following categories:
-1. Code logic issue
-2. Configuration issue
-3. Environment / permissions / runtime issue
-4. External dependency / platform behavior issue
-5. Usage / operator error
-6. Documentation drift / stale instruction issue
-
-Before source classification is complete:
-1. Do not make large-scale code changes
-2. Do not arbitrarily revert files
+Before classification is complete:
+1. No large-scale code changes
+2. No arbitrary reverts
 3. Do not equate a single error message directly with the root cause
 
 Note: Targeted file reads for the purpose of determining issue source are permitted during triage. This does not substitute for the full §3 READ coverage required before entering CHANGE.
@@ -152,23 +134,16 @@ Every task must follow this workflow and clearly label each phase in the respons
 
 1. PLAN
    - Objective, scope, acceptance criteria
-   - State explicitly: "My understanding: [1-sentence restatement of user intent]", "Impact scope: [files/modules to be modified]", "Assumptions and risks: [list inferences not stated by user, flag which are uncertain, and note at least one way this approach could be wrong]"
-   - Risk level — assess HIGH or LOW using these criteria (any one = HIGH):
-     (a) Likely affects ≥3 files
-     (b) User instruction does not specify target files, target behavior, or expected end state
-     (c) Involves deletion, rename, or irreversible operations
-     (d) Involves external systems (API calls, deploy, publish)
-     (e) Modifies governance rules (AGENTS.md, INIT.md, or similar)
-   - If HIGH: present PLAN and **wait for user confirmation** before proceeding to READ
-   - If LOW: present PLAN and proceed to READ
-   - If task meets §3d trigger conditions: define test scenario matrix before proceeding to READ
+   - State explicitly: "My understanding: [1-sentence restatement of user intent]", "Impact scope: [files / modules to modify]", "Assumptions and risks: [list inferences, flag uncertainty, note at least one way the approach could be wrong]"
+   - Risk level — HIGH or LOW (any one = HIGH): (a) likely affects ≥3 files; (b) user instruction lacks target files / behavior / end state; (c) involves deletion, rename, or irreversible operations; (d) involves external systems (API calls, deploy, publish); (e) modifies governance rules (AGENTS.md, INIT.md, or similar)
+   - HIGH → present PLAN and **wait for user confirmation** before READ; LOW → proceed to READ
+   - §3d trigger met → define test scenario matrix before READ
 
 2. READ — minimum coverage before entering CHANGE:
    - Read the full context of the section to be modified in the target file
    - Search for other occurrences of the same term / rule / feature across the repo
    - Check whether a single source of truth already exists (SSOT / master spec / runbook / baseline definition)
    - Review the most recent `SESSION_LOG.md` entry related to the topic
-   - Hard rules: do not modify after reading only a single fragment; do not add new rules without first checking for duplicates and performing integration assessment; if content on the same topic exists in multiple locations, first determine whether consolidation is needed before deciding how to modify
 
 3. CHANGE
    - Minimal necessary modifications, no unrelated refactoring
@@ -183,44 +158,25 @@ Every task must follow this workflow and clearly label each phase in the respons
 
 5. PERSIST
    - Update `dev/SESSION_HANDOFF.md` and `dev/SESSION_LOG.md`
-   - Apply the same cross-document sync conditions as §4 closeout: if tech stack, directory structure, build commands, external services, or Key Decisions changed in this task — update `dev/CODEBASE_CONTEXT.md` now, do not defer to closeout
+   - Apply the same cross-document sync conditions as §4 closeout: if tech stack, directory structure, build commands, external services, or Key Decisions changed in this task — update `dev/CODEBASE_CONTEXT.md` now, not at closeout
    - If `dev/PROJECT_MASTER_SPEC.md` exists and carries status for the completed work — update it in the same pass
-   - **DOC_SYNC Matrix Scan (mandatory visible output):** Before completing PERSIST, output a `### DOC_SYNC Matrix Scan` block in the response:
-     - No file changes this task → `### DOC_SYNC Matrix Scan — SKIP (no file changes this task)`
-     - Registry exists → list matched rows: `Change Category | Required Doc Updates | Status` (`✓ Done` / `N/A` / `⚠ Skipped (reason)`); update all required docs; no matching row → add it first (`✓ Row added`)
-     - Registry absent → `### DOC_SYNC Matrix Scan — SKIP (registry not present)`
-     - Absence of this block in the response = scan was skipped; user may immediately request the agent to complete it.
+   - **DOC_SYNC Matrix Scan (mandatory visible output):** Before completing PERSIST, output a `### DOC_SYNC Matrix Scan` block: No file changes this task → `### DOC_SYNC Matrix Scan — SKIP (no file changes this task)`. Registry exists → list matched rows `Change Category | Required Doc Updates | Status` (`✓ Done` / `N/A` / `⚠ Skipped (reason)`); update all required docs; no matching row → add it first (`✓ Row added`). Registry absent → `### DOC_SYNC Matrix Scan — SKIP (registry not present)`. Absence of this block in the response = scan was skipped; user may immediately request the agent to complete it.
 
 ---
 
 ## 3b) Consolidation / Integration Discipline (Mandatory)
-"Minimal necessary modification" does not mean "only stack, never integrate".
+Minimal modification ≠ stack-only. Before adding any new rule, explanation, exception, baseline, or runbook content, prefer in this order: modify existing definition / merge duplicates / retire outdated wording / converge to single source of truth / keep only a reference in other locations.
 
-Before adding any new rule, explanation, exception, baseline, or runbook content, first check whether the correct action is to:
-1. Modify the existing single definition
-2. Merge duplicate content
-3. Retire outdated wording
-4. Converge the definition to a single source of truth
-5. Keep only a reference in other locations, rather than copying the content again
+Hard rule: same rule, threshold, enumeration, or operational standard = one-rule-one-place. If new content supersedes old, retire old simultaneously; two competing standards must not coexist long-term.
 
-Core principles:
-1. Integrate first, add later
-2. If an existing statement can be updated, do not add a parallel new statement
-3. The same rule, threshold, enumeration, or operational standard must maintain one-rule-one-place
-4. If new content supersedes old content, the old wording must be retired simultaneously; two competing standards must not coexist long-term
-
-If any of the following conditions apply, a Consolidation Pass must be performed before entering CHANGE:
-1. The same rule already appears in 2 or more files
-2. The same issue has been patched more than 2 times
+Trigger a Consolidation Pass before CHANGE if any apply:
+1. The same rule already appears in ≥2 files
+2. The same issue has been patched >2 times
 3. A new rule overlaps, duplicates, or creates exceptions against an old rule
 4. README / handoff / spec / tests show inconsistent wording
-5. Continuing to stack would clearly increase comprehension cost or maintenance cost
+5. Continuing to stack would increase comprehension or maintenance cost
 
-A Consolidation Pass includes at minimum:
-1. Identifying the primary definition location
-2. Merging duplicate content
-3. Retiring or rewriting outdated wording
-4. Recording the consolidation rationale and outcome in `SESSION_LOG.md`
+A Consolidation Pass: identify primary location → merge duplicates → retire outdated wording → record rationale in `SESSION_LOG.md`.
 
 ---
 
@@ -233,6 +189,7 @@ Whenever a task involves a merge, release, deploy, publish, GA, or hotfix comple
 
 2. Machine Verification
    - Run the project's applicable build / type-check / lint / tests / regression / consistency checks
+   - If the project has multiple harness layers (e.g. main + legacy / extended quarantine), all layers must execute; bypass flags (e.g. `LEGACY_SKIP`) are forbidden during release verification
 
 3. Evidence Check
    - To claim ready / merged / released / GA, corresponding verification evidence must exist
@@ -244,28 +201,11 @@ Whenever a task involves a merge, release, deploy, publish, GA, or hotfix comple
 
 ## 3d) Test Plan Design (Mandatory when applicable)
 
-### Trigger conditions
-Apply §3d when the task involves any of the following:
-1. New user-facing features, commands, or behaviors
-2. Changes to existing behavior (including governance rule changes)
-3. External API or service integrations
-4. Multi-step user flows (install, onboarding, upgrade paths)
+**Trigger conditions:** apply §3d when task involves new user-facing features / commands / behaviors; changes to existing behavior (incl. governance rule changes); external API / service integrations; multi-step user flows (install, onboarding, upgrade paths). Not required for session log updates, whitespace / formatting only, or comment-only changes.
 
-Not required for: session log updates, whitespace / formatting only, comment-only changes.
+**Scenario categories:** identify ≥1 scenario per relevant category — Normal flow (happy path); Boundary / edge (limits, empty inputs, first-run vs. repeat-run); Error / failure path; Regression (existing behavior must remain unchanged). Adapt to project type: code (unit / integration / E2E); governance / documentation (rule presence, parity, grep-verifiable assertions); prompt engineering (output format, behavioral assertions).
 
-### Scenario categories
-For every applicable task, identify at least one scenario per relevant category:
-1. Normal flow — expected inputs, happy path
-2. Boundary / edge conditions — limits, empty inputs, first-run vs. repeat-run
-3. Error / failure path — what happens when something is unavailable or wrong
-4. Regression — existing behavior that must remain unchanged
-
-Adapt categories to project type:
-- Code projects: unit, integration, or E2E as appropriate
-- Governance / documentation projects: rule presence checks, parity checks, grep-verifiable assertions
-- Prompt engineering projects: output format checks, behavioral assertions
-
-### Scenario format (fill Actual column at QC phase)
+**Scenario format (fill Actual column at QC phase):**
 
 | Scenario | Precondition | Action / input | Expected | Actual | Result |
 |---|---|---|---|---|---|
@@ -273,37 +213,16 @@ Adapt categories to project type:
 
 Result values: PASS, PASS with notes (minor gaps but does not block), or FAIL.
 
-### Recording location
-- ≤5 scenarios: inline in current SESSION_LOG entry under `### Test Scenarios`
-- >5 scenarios or spanning multiple sessions: reference in SESSION_HANDOFF `Regression / Verification Notes`; full matrix in SESSION_LOG
-- At QC phase: fill in Actual column; summarize overall result in SESSION_LOG
+**Recording location:** ≤5 scenarios → inline in current SESSION_LOG entry under `### Test Scenarios`; >5 or spanning multiple sessions → reference in SESSION_HANDOFF `Regression / Verification Notes` + full matrix in SESSION_LOG. At QC phase: fill Actual column; summarize overall result in SESSION_LOG.
 
 ---
 
 ## 4) Session Close Rules (Mandatory)
-When the user expresses any of the following (or similar) end-of-session intent, the AI must automatically perform closeout without requesting item-by-item confirmation:
+On end-of-session intent ("wrap up" / "handover" / "close session" / "that's it for today" / similar), perform closeout automatically without item-by-item confirmation. If ambiguous (task vs session end), confirm session-end intent first.
 
-- "wrap up"
-- "handover"
-- "close session"
-- "that's it for today"
-- Any expression that can reasonably be interpreted as ending the current session
+At closeout, update minimum: `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`. If session changed tech stack / directory / build commands / external services / Key Decisions, also update `dev/CODEBASE_CONTEXT.md` (append `AI Maintenance Log` entry with session ID + summary).
 
-If the expression is ambiguous (could refer to ending the current task rather than the session), confirm session-end intent before performing closeout.
-
-At closeout, the following must be updated at minimum:
-1. `dev/SESSION_HANDOFF.md`
-2. `dev/SESSION_LOG.md`
-
-If the session's changes involve tech stack, directory structure, build commands, external services, or Key Decisions, `dev/CODEBASE_CONTEXT.md` must also be updated and a new entry appended to the `AI Maintenance Log` section with the current session ID and a brief change summary.
-
-Each closeout must record at minimum:
-1. Date (UTC)
-2. Session Identifier
-3. Completed items
-4. Pending items
-5. Next priorities (max 3 — SESSION_LOG summary field only; full prioritized list lives in `dev/SESSION_HANDOFF.md` Open Priorities)
-6. Risks or blockers
+Each closeout records at minimum: Date (UTC); Session ID; Completed items; Pending items; Next priorities (max 3 — SESSION_LOG summary field only; full prioritized list in `dev/SESSION_HANDOFF.md` Open Priorities); Risks / blockers.
 
 **Session log entry format:** Use lean key-value style (see `dev/SESSION_LOG.md` template). Target ~20-30 lines per entry excluding the Handoff Prompt block. Omit conditional sections (Fix Record, Consolidation) when they have no content — do not write empty blocks. Do not record "Files read" — it has no value for future sessions.
 
@@ -315,19 +234,9 @@ Each closeout must record at minimum:
 5. If content would exceed these limits: move detail to `dev/SESSION_LOG.md` (current entry) or `dev/SESSION_STATE_DETAIL.md` and leave a short reference in handoff
 6. No-loss rule: compaction must not discard information; detail is relocated, not deleted
 
-**Next Session Handoff Prompt budget** (mandatory at every closeout):
-1. The Section 2 fenced `text` block must be ≤24 lines (count only lines inside the fence)
-2. Keep the two required opening lines verbatim and include all required fields from §4 rule 5 in compact form
-3. `Key files changed in this session`: max 6 bullets; if overflow, add one bullet `- Additional files: see SESSION_LOG Changed`
-4. `Known risks / blockers / cautions`: max 5 bullets
-5. If details exceed this budget: move overflow to the current `dev/SESSION_LOG.md` entry and leave one short reference in the prompt block
+**Next Session Handoff Prompt budget** (mandatory at every closeout): Section 2 fenced `text` block ≤24 lines (lines inside fence only); keep two required opening lines verbatim + required fields from §4 rule 5 in compact form; `Key files changed`: max 6 bullets (overflow → one bullet `- Additional files: see SESSION_LOG Changed`); `Known risks / blockers / cautions`: max 5 bullets; overflow → relocate to current `dev/SESSION_LOG.md` entry with short reference in prompt block.
 
-**Open Priorities regeneration** (mandatory at every closeout):
-The `Open Priorities` section of `dev/SESSION_HANDOFF.md` must be regenerated at every closeout — not copy-pasted forward:
-1. Remove any item completed this session
-2. Scan `dev/SESSION_LOG.md` recent entries for newly surfaced pending items — add those
-3. Re-rank and overwrite the previous list (replace, not append)
-Hard rule: do not copy-paste old priorities without re-checking against current project state.
+**Open Priorities regeneration** (mandatory at every closeout): regenerate `dev/SESSION_HANDOFF.md` Open Priorities — not copy-pasted forward. Remove items completed this session; scan recent `dev/SESSION_LOG.md` entries for new pending items; re-rank and overwrite previous list (replace, not append). Hard rule: do not copy-paste old priorities without re-checking current project state.
 
 **Closeout smart-skip gate** (mandatory at every closeout):
 1. Before drafting closeout output, evaluate whether this session has meaningful deltas
@@ -343,11 +252,8 @@ Hard rule: do not copy-paste old priorities without re-checking against current 
 4. If any condition above is false: run the full closeout flow
 
 Supplementary rules:
-1. Even if the session involved no substantive code changes (research / analysis / discussion / decisions only), the session record must still be updated
-2. After closeout is complete, the response must list: which files were updated, and what was updated in each
-3. After closeout is complete, the response must include a copy-paste-ready "Next Session Handoff Prompt" for the next agent
-4. The "Next Session Handoff Prompt" must be generated from the project's actual current state; fixed or hardcoded handoff sentences are prohibited
-5. The "Next Session Handoff Prompt" must include at minimum:
+1. Update session record even if no code changes (research / analysis / discussion / decisions count). After closeout, response lists files updated + what changed; includes copy-paste-ready "Next Session Handoff Prompt" generated from actual project state (no hardcoded sentences).
+2. The "Next Session Handoff Prompt" must include at minimum:
    - Opening line: use this verbatim template — do not paraphrase or omit any file — paste as two consecutive lines to ensure cross-tool handoffs work even when the receiving tool does not auto-load `AGENTS.md`:
      `Read AGENTS.md first (governance SSOT), then follow its §1 startup sequence:`
      `dev/SESSION_HANDOFF.md → dev/SESSION_LOG.md → dev/CODEBASE_CONTEXT.md (if exists) → dev/PROJECT_MASTER_SPEC.md (if exists)`
@@ -355,18 +261,13 @@ Supplementary rules:
    - Pending tasks in priority order
    - Key files changed in this session
    - Known risks / blockers / cautions
-   - Validation status and the first concrete action after completing the full §1 startup sequence, labeled `Post-startup first action:` — this is executed only after §1 is complete, not before
-6. After closeout is complete, the response must be formatted in exactly three sections in this order:
-   - Section 1: `SESSION CLOSEOUT SUMMARY`
-   - Section 2: `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)`
-   - Section 3: `CLOSEOUT VISUAL CUE`
-7. Section 2 must be a single fenced `text` block so the user can copy/paste directly without cleanup.
-8. Section 3 must display exactly one random closeout style from the set below.
-9. Randomization rule: within a single session, the Closeout Visual Cue must differ from the Boot Visual Cue displayed earlier in the same session. Across sessions, randomize uniformly — the previous session's style is not tracked.
-10. Use separator lines between sections for visual alignment. Required separators:
+   - Validation status + `Post-startup first action:` (executed only after §1 startup complete, not before)
+3. Closeout response = exactly 3 sections in order: Section 1 `SESSION CLOSEOUT SUMMARY`; Section 2 `NEXT SESSION HANDOFF PROMPT (COPY/PASTE)` as single fenced `text` block (copy/paste-ready); Section 3 `CLOSEOUT VISUAL CUE` (one random style from set below).
+4. Randomization rule: within a single session, the Closeout Visual Cue must differ from the Boot Visual Cue displayed earlier in the same session. Across sessions, randomize uniformly — previous session's style is not tracked.
+5. Use separator lines between sections:
     - Major separator: `========================================`
     - Minor separator: `----------------------------------------`
-11. Closeout output skeleton must follow this layout:
+6. Closeout output skeleton must follow this layout:
 ```text
 ========================================
 SESSION CLOSEOUT SUMMARY
@@ -383,10 +284,7 @@ CLOSEOUT VISUAL CUE
 ----------------------------------------
 <one random style from A/B/C>
 ```
-12. After generating Section 2, write the exact same fenced `text` block verbatim into the current session entry in `dev/SESSION_LOG.md` under:
-    - `### Next Session Handoff Prompt (Verbatim)`
-13. If that subsection already exists in the current session entry, replace it with the latest block instead of appending duplicates.
-14. The block persisted in `SESSION_LOG.md` must be the same content as Section 2 output (no paraphrase, no truncation, no reformatting).
+7. After generating Section 2, write the exact same fenced `text` block verbatim into current `dev/SESSION_LOG.md` entry under `### Next Session Handoff Prompt (Verbatim)` — replace if already exists (no duplicates, no paraphrase, no truncation, no reformatting).
 
 Closeout Visual Cue - Style A
 ```text
@@ -423,88 +321,41 @@ Closeout Visual Cue - Style C
 
 ## 4a) Session Log Maintenance (Conditional — auto-triggered at closeout)
 
-Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, check the following trigger conditions:
+Before writing the new session entry to `dev/SESSION_LOG.md` during closeout, evaluate triggers.
 
-**Trigger (either condition):**
-1. `dev/SESSION_LOG.md` exceeds 400 lines
-2. The oldest session entry in `dev/SESSION_LOG.md` is dated more than 30 days ago
+**Trigger (either):** `dev/SESSION_LOG.md` exceeds 400 lines; OR oldest session entry is dated more than 30 days ago. If neither: proceed normally.
 
-**If neither condition is met:** proceed with writing the new session entry normally.
-
-**Mechanism enforcement (mandatory):**
-1. At closeout, evaluate triggers directly from `dev/SESSION_LOG.md`:
-   - Line trigger: total lines > 400
-   - Date trigger: oldest session entry date (`## YYYY-MM-DD`) older than 30 days
-2. If either trigger is true, execute the archive steps below before writing the closeout entry.
-3. If both triggers are false, skip archive and proceed to closeout writes.
-4. User-facing closeout must not require Python or any non-default runtime installation.
-5. Do not rely on memory or user reminder for §4a execution; explicit trigger evaluation is the execution gate.
-6. If trigger evaluation fails due environment/tooling limits, continue closeout and record `§4a maintenance skipped: <reason>` in the current `SESSION_LOG` entry.
+**Mechanism enforcement (mandatory):** At closeout, evaluate triggers directly from `dev/SESSION_LOG.md` — Line trigger: total lines > 400; Date trigger: oldest `## YYYY-MM-DD` heading older than 30 days. If either is true → execute archive before writing closeout entry; if both false → skip archive. User-facing closeout must not require Python or any non-default runtime. Do not rely on memory or user reminder; explicit trigger evaluation is the execution gate. If evaluation fails due to environment / tooling limits: continue closeout and record `§4a maintenance skipped: <reason>` in current SESSION_LOG entry.
 
 **If triggered, perform archiving before writing the new entry:**
-
-1. Create `dev/archive/` directory if it does not exist
-2. Identify entries to archive:
-   - Line-count trigger: archive oldest entries until `dev/SESSION_LOG.md` ≤ 200 lines; always retain the 2 most recent session entries regardless of size
-   - Date trigger: archive all entries older than 30 days; always retain the 2 most recent session entries regardless of date
-3. Determine the archive filename by year and quarter of the archived entries:
-   - Format: `dev/archive/SESSION_LOG_YYYY_QN.md` (e.g., `SESSION_LOG_2026_Q1.md` for Jan–Mar 2026)
-   - If archived entries span multiple quarters, create one file per quarter
-   - If the target archive file already exists, append to it (do not overwrite)
-4. Move the identified entries from `dev/SESSION_LOG.md` into the archive file(s)
-5. Add or update an archive pointer comment immediately after the file header in `dev/SESSION_LOG.md`:
-   `<!-- Archives: dev/archive/ — entries moved when >400 lines or oldest entry >30 days -->`
+1. Create `dev/archive/` if it does not exist
+2. Identify entries to archive: Line-count trigger → archive oldest until `dev/SESSION_LOG.md` ≤ 200 lines (always retain 2 most recent regardless of size); Date trigger → archive all entries older than 30 days (always retain 2 most recent regardless of date)
+3. Archive filename by year and quarter: `dev/archive/SESSION_LOG_YYYY_QN.md` (e.g., `SESSION_LOG_2026_Q1.md` for Jan–Mar 2026); span multiple quarters → one file per quarter; existing target file → append (do not overwrite)
+4. Move identified entries to archive file(s)
+5. Add / update archive pointer comment immediately after file header in `dev/SESSION_LOG.md`: `<!-- Archives: dev/archive/ — entries moved when >400 lines or oldest entry >30 days -->`
 6. Proceed with writing the new session entry to the now-trimmed `dev/SESSION_LOG.md`
 
-**First-run auto-transition:**
-If `dev/SESSION_LOG.md` has no archive pointer and either trigger condition is met, apply the same steps above. Existing large files are trimmed automatically on the first closeout after upgrading — no manual migration needed.
+**First-run auto-transition:** If `dev/SESSION_LOG.md` has no archive pointer and either trigger applies, apply the same steps. Existing large files are trimmed automatically on the first closeout after upgrading — no manual migration needed.
 
-**Hard rules:**
-1. Never delete session entries — only move to archive
-2. `dev/archive/` files are not part of the §1 mandatory read list; do not read them at startup unless the user explicitly requests historical lookup
-3. The most recent session entry's `### Next Session Handoff Prompt (Verbatim)` block must remain in `dev/SESSION_LOG.md`
+**Hard rules:** Never delete session entries — archive only. `dev/archive/` files are not part of §1 mandatory read list; do not read at startup unless user explicitly requests historical lookup. The most recent session entry's `### Next Session Handoff Prompt (Verbatim)` block must remain in `dev/SESSION_LOG.md`.
 
 ---
 
 ## 0b) External Platform Alignment (Mandatory when applicable)
-Scope: §0b applies when the AI writes, executes, or debugs code/commands that interact with external systems at runtime. Editing documentation, governance rules, or templates that reference external services without making actual calls does not trigger §0b — in such cases the External API Code Safety preconditions (including CODEBASE_CONTEXT.md generation) do not apply.
+Scope: §0b applies when the AI writes, executes, or debugs code / commands that interact with external systems at runtime. Editing documentation, governance rules, or templates that reference external services without making actual calls does not trigger §0b — External API Code Safety preconditions (including CODEBASE_CONTEXT.md generation) do not apply in such cases.
 
-Whenever a task involves external platforms, frameworks, APIs, CLIs, deployment systems, cloud services, third-party SDKs, package managers, or official toolchains, the AI must not guess commands, parameters, limitations, version differences, or platform behavior from memory.
-
-Before starting related work, alignment must be completed against:
-1. Official documentation
-2. Official release notes / changelog
-3. Official repo / original specifications
-4. Relevant SSOT / runbook / integration docs within this project
-
-If alignment is not completed:
-1. Do not treat guesses as conclusions
-2. Do not directly output high-risk operation commands
-3. Must clearly label which items have been verified and which are pending verification
+When a task involves external platforms, frameworks, APIs, CLIs, deployment systems, cloud services, third-party SDKs, package managers, or official toolchains: do not guess commands, parameters, limitations, version differences, or platform behavior from memory. Before related work, align against: official documentation; release notes / changelog; official repo / original specifications; relevant SSOT / runbook / integration docs in this project. If alignment is not completed: do not treat guesses as conclusions; do not output high-risk commands; label what is verified vs pending.
 
 ### External API Code Safety (Mandatory when writing API-calling code)
 
-Before writing any code that calls an external API endpoint, the AI must:
-0. If `dev/CODEBASE_CONTEXT.md` does not yet exist, generate it first per §1 rules before proceeding — the External Services section is required to record API facts.
+Before writing any code that calls an external API endpoint:
+0. If `dev/CODEBASE_CONTEXT.md` does not yet exist, generate it first per §1 — External Services section is required to record API facts
 1. Fetch current official documentation for the specific endpoint
-2. Record the following in `dev/CODEBASE_CONTEXT.md` External Services before writing code:
-   - Base URL and endpoint path (do not assume from memory)
-   - Current API version in use
-   - Authentication method and header format
-   - Required parameters
-   - Forbidden / deprecated parameters
-   - Response schema and the exact parsing path for needed data
-   - Official documentation URL
-   - `Doc-reviewed: <date> (<session ID>)`
-3. If official documentation cannot be fetched:
-   - Do not write API-calling code
-   - State what is blocked and why
-   - Ask the user to provide the relevant documentation
-4. Training-data knowledge of any API must never be the sole source for endpoint paths, parameter names, or response structure. Always treat prior knowledge as "possibly outdated — verify first".
+2. Record in `dev/CODEBASE_CONTEXT.md` External Services before writing code: Base URL + endpoint path (do not assume from memory); Current API version; Auth method + header format; Required params; Forbidden / deprecated params; Response schema + exact parsing path for needed data; Official docs URL; `Doc-reviewed: <date> (<session ID>)`
+3. If official documentation cannot be fetched: Do not write API-calling code; state what is blocked and why; ask user for documentation
+4. Training-data knowledge must never be the sole source for endpoint paths, parameter names, or response structure — treat prior knowledge as "possibly outdated — verify first"
 
-External Services block format in `dev/CODEBASE_CONTEXT.md`:
-
-Each API uses one block:
+External Services block format in `dev/CODEBASE_CONTEXT.md` (one block per API):
 ```
 ### [API Name]
 - Base URL:
@@ -519,12 +370,7 @@ Each API uses one block:
 - Notes:
 ```
 
-When reading an existing External Services block before writing code:
-1. `Test-verified` present → reliable; re-verify the specific endpoint and params in use if entry is from a prior session
-2. Only `Doc-reviewed` present → use with caution; annotate generated code with a comment `awaiting test-verification` (using the target language's comment syntax) at the top of each function or method that calls the endpoint
-3. Both empty or missing → full verification ritual required before writing code
-4. After any re-verification: update the relevant date and session ID in the block
-5. If re-verification reveals API changes: update affected fields, record before/after in Notes, flag affected existing code for review
+When reading an existing External Services block before writing code: `Test-verified` present → reliable (re-verify the specific endpoint + params if from prior session); `Doc-reviewed` only → use with caution and annotate generated code with `awaiting test-verification` comment at top of each calling function / method; both empty or missing → full verification ritual required first. After any re-verification: update date + session ID. If re-verification reveals API changes: update affected fields, record before/after in Notes, flag affected code for review.
 
 ---
 
@@ -541,57 +387,25 @@ The AI is prohibited from executing high-risk destructive operations, including 
 8. When handling file paths, strictly prohibited from using raw string interpolation to construct paths; must use native path handling APIs / objects (e.g. `Join-Path`, `path.join`, `Path.Combine`, etc.)
 
 ## 5a) Root Scope Guard for Bootstrap / Multi-File Setup (Mandatory)
-Before any bootstrap/setup task that creates or modifies multiple governance files (e.g. executing `INIT.md`), the AI must complete the following preflight and must not write any file before explicit user confirmation:
+Before any bootstrap / setup task creating or modifying multiple governance files (e.g. executing `INIT.md`), complete this preflight; do not write any file before explicit user confirmation:
 
-1. Detect and print paths in this exact order:
-   - `pwd` absolute path
-   - `git root` absolute path (or `none`)
-2. If `pwd` and `git root` both exist and are different:
-   - Hard stop before any write
-   - Print exactly two root options in this order:
-     1) Use `pwd`
-     2) Use `git root`
-   - Require user to explicitly choose one option
-   - Strictly prohibited for AI to auto-select root in this mismatch case
-3. After root is explicitly chosen, print chosen `<PROJECT_ROOT>` as absolute path
-4. Run and print root risk checks at minimum:
-   - Whether the path appears to be a shared workspace / runtime / tool-internal directory
-   - Whether parent/sibling directories contain governance files suggesting the scope may be too high
-   - Whether the target seems to be a framework/tool runtime repo instead of the user's intended project
-5. Print a dry-run install plan:
-   - `create`: files that will be newly created
-   - `merge`: files that will be merged/prepended
-   - `skip`: files that will be left unchanged
-6. Require exact confirmation reply from user:
-   - `INSTALL_ROOT_OK: <absolute_path>`
+1. Detect and print paths in this order: `pwd` absolute; `git root` absolute (or `none`)
+2. If `pwd` and `git root` both exist and differ: hard stop before any write; print exactly two options (1) Use `pwd` (2) Use `git root`; require explicit user choice; AI must not auto-select in mismatch case
+3. After root is chosen, print chosen `<PROJECT_ROOT>` as absolute path
+4. Run and print root risk checks: shared workspace / runtime / tool-internal directory? parent / sibling directories contain governance files suggesting scope too high? target appears to be framework / tool runtime repo instead of user's intended project?
+5. Print dry-run install plan: `create` (newly created files); `merge` (merged / prepended); `skip` (left unchanged)
+6. Require exact confirmation reply: `INSTALL_ROOT_OK: <absolute_path>`
 7. If the confirmation path does not exactly match the proposed absolute path, abort setup (no writes)
-8. After step 6 passes, require second confirmation reply before first write:
-   - `INSTALL_WRITE_OK`
-9. After `INSTALL_WRITE_OK` and before first write, create a lightweight backup snapshot:
-   - Directory: `<PROJECT_ROOT>/dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/`
-   - Copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, if present)
-   - Preserve relative paths under `<PROJECT_ROOT>`
-   - Use native filesystem copy operations (cross-platform), no git required
+8. After step 6 passes, require second confirmation reply before first write: `INSTALL_WRITE_OK`
+9. After `INSTALL_WRITE_OK` and before first write, create a lightweight backup snapshot: directory `<PROJECT_ROOT>/dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/`; copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, if present); preserve relative paths under `<PROJECT_ROOT>`; native filesystem copy (cross-platform), no git required
 10. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly
 
 ---
 
 ## 6) No Escalation Deletion Policy
-When encountering "file is locked, insufficient permissions, cannot delete, cannot overwrite":
+On "file is locked / insufficient permissions / cannot delete / cannot overwrite": do not escalate privileges; do not use high-risk commands to bypass; do not use OS low-level APIs, COM objects, WMI, AppleScript, unconventional syscall wrappers, or other opaque means to force-remove files; output a "manual action list" to the user containing: file / directory path; failure reason; safe methods already attempted; recommended manual steps.
 
-1. Do not escalate privileges
-2. Do not use high-risk commands to bypass
-3. Do not use OS low-level APIs, COM objects, WMI, AppleScript, unconventional syscall wrappers, or other opaque means to force-remove files
-4. Output a "manual action list" to the user
-
-The manual action list must include at minimum:
-1. File / directory path
-2. Failure reason
-3. Safe methods already attempted
-4. Recommended manual steps for the user
-
-Note:
-Normal external network service APIs / Web SDKs required for project feature development are exempt from this rule; this clause applies only to high-risk file system force-removal.
+Note: normal external network service APIs / Web SDKs for project feature development are exempt; this clause applies only to high-risk file system force-removal.
 
 ---
 
@@ -606,129 +420,68 @@ Normal external network service APIs / Web SDKs required for project feature dev
 ---
 
 ## 8) Regression + Lessons-to-Rule Discipline
-Whenever a bug, process issue, incident root cause, or recurring error is fixed, the following must also be done:
-
+On any bug / process issue / incident root cause / recurring error fix:
 1. Add / update a regression case
 2. Query `dev/DOC_SYNC_CHECKLIST.md` (if it exists) for doc impact scope; update all listed entries for this change category
-3. Record in `dev/SESSION_LOG.md`:
-   - Problem
-   - Root Cause
-   - Fix
-   - Verification
+3. Record in `dev/SESSION_LOG.md`: Problem; Root Cause; Fix; Verification
 
-If the issue caused any of the following consequences, the lesson must also be codified as a rule:
-1. Release incident
-2. Wasted version
-3. User-visible error
-4. Data risk / security risk
-5. Multiple rework cycles / repeated mistakes
-6. Long-term drift between documentation and implementation
-
-Codification methods include but are not limited to:
-1. Adding an SOP clause
-2. Adding a check step
-3. Adding a consistency / policy check
-4. Updating `PROJECT_MASTER_SPEC.md` (if it exists)
-5. Updating `SESSION_HANDOFF.md` baseline / known risks / start checklist
+Codify the lesson as a rule if the issue caused: release incident; wasted version; user-visible error; data risk / security risk; multiple rework cycles / repeated mistakes; long-term drift between documentation and implementation. Codification methods (any combination): add SOP clause; add check step; add consistency / policy check; update `PROJECT_MASTER_SPEC.md` (if exists); update `SESSION_HANDOFF.md` baseline / known risks / start checklist.
 
 ---
 
 ## 8b) Rule Promotion Threshold (Mandatory)
-Not every issue should be promoted to a long-term rule.
-
-Only when an issue meets any of the following criteria is it appropriate to promote it to an SOP / long-term governance clause:
-1. Has occurred repeatedly
-2. Can cause a release incident
+Not every issue is rule-worthy. Promote to long-term SOP only if any apply:
+1. Recurring
+2. Can cause release incident
 3. Can cause data / security risk
-4. Would significantly waste versions, labor, or regression cost
-5. Cannot be fundamentally resolved by individual patches alone
-6. Is prone to recurring when multiple agents / sessions collaborate
+4. Significantly wastes versions, labor, or regression cost
+5. Cannot be resolved by individual patches alone
+6. Recurs across multi-agent / multi-session collaboration
 
-If the issue does not meet the above thresholds, the preferred actions should be:
-1. Fix the original definition
-2. Add regression
-3. Update the log
-4. Fix the runbook / spec
-Rather than adding a new permanent rule
+Otherwise: fix original definition / add regression / update log / fix runbook or spec — not a new permanent rule.
 
-Hard rules:
-1. Do not substitute adding new rules for fixing root causes
-2. Do not allow SOPs to expand without limit
-3. Each time a new long-term rule is added, check whether old rules can be integrated or retired
+Hard rule: do not substitute new rules for root-cause fixes; do not let SOPs grow without limit; when adding a long-term rule, check whether old ones can be integrated or retired.
 
-Reconciling §8 and §8b: §8 ensures lessons are captured; §8b prevents overreaction. When §8 triggers (e.g. first-time user-visible error) but §8b criteria suggest no promotion: record the full lesson in `SESSION_LOG.md` and mark as `monitoring — promote to rule if recurrence is observed`.
+If §8 triggers but §8b promotion criteria not met: record in `SESSION_LOG.md` and mark `monitoring — promote to rule if recurrence is observed`.
 
 ---
 
 ## 9) Toolchain / Policy Compatibility (Conditional Mandatory)
-If this project has any of the following mechanisms, the AI must run the corresponding checks and report results after every modification to affected files:
-
-1. Static scanners
-2. Linter / formatter
-3. Type checker
-4. Packaging / publishing constraints
-5. Security / policy checks
-6. Framework-specific compile checks
-7. CI-required local parity checks
-
-The AI must not assume "it should be fine" and skip compatibility verification.
+If the project has any of these mechanisms, run the corresponding checks and report results after every modification to affected files: static scanners; linter / formatter; type checker; packaging / publishing constraints; security / policy checks; framework-specific compile checks; CI-required local parity checks. Do not assume "it should be fine" and skip compatibility verification.
 
 ---
 
 ## 10) Optional Master Spec Mode
-If this project meets any of the following conditions, creating `dev/PROJECT_MASTER_SPEC.md` is recommended:
-
+Recommended when project qualifies on any of:
 1. Multi-module / multi-agent collaboration
 2. Long-term maintenance
-3. Has a release / deploy / support lifecycle
+3. Has release / deploy / support lifecycle
 4. Has complex acceptance criteria, runbooks, or regression definitions
-5. The same rule is referenced across multiple files
+5. Same rule referenced across multiple files
 
 Positioning:
-1. `SESSION_HANDOFF.md`: current baseline, latest thresholds, current open items
-2. `SESSION_LOG.md`: session-by-session historical decisions and verifications
-3. `PROJECT_MASTER_SPEC.md`: complete, stable, long-term authoritative specification
+- `SESSION_HANDOFF.md`: current state
+- `SESSION_LOG.md`: session-by-session history
+- `PROJECT_MASTER_SPEC.md`: complete, stable, long-term authoritative specification
 
-Active trigger rule:
-At the PERSIST phase, if `dev/PROJECT_MASTER_SPEC.md` does not yet exist, the AI must suggest creating it when either of the following applies:
-1. The user explicitly requested it during this session
-2. This session involved the user and AI establishing architecture decisions, tech stack choices, or core feature requirements, AND at least one condition from the list above is met (i.e., the project qualifies as multi-module, long-term, has a release lifecycle, or has complex spec/runbook needs)
+Active trigger (at PERSIST): if `dev/PROJECT_MASTER_SPEC.md` does not exist, suggest creation when either applies:
+1. User explicitly requested it this session
+2. Session established architecture decisions, tech stack choices, or core feature requirements, AND at least one condition above is met
 
-The suggestion must state: which trigger applied, what decisions from this session are ready to consolidate, and a ready-to-use prompt the user can paste to initiate creation.
-When the suggestion is made, record a line in `dev/SESSION_HANDOFF.md` under **Known Risks** (not Open Priorities — that section is regenerated and would lose the entry): `PROJECT_MASTER_SPEC suggestion issued: [session ID] [date].`
-Do not repeat the suggestion in subsequent sessions unless new major architecture or requirement decisions were made after that recorded date.
+Suggestion must state: which trigger applied, decisions ready to consolidate, and a ready-to-use creation prompt. Record under **Known Risks** (not Open Priorities — that section is regenerated and would lose the entry): `PROJECT_MASTER_SPEC suggestion issued: [session ID] [date].` Do not re-suggest unless new major decisions appear after that date.
 
-Filename enforcement:
-If creating this file, the path must be exactly `dev/PROJECT_MASTER_SPEC.md`.
-Do not use alternative names such as `SPEC.md`, `MASTER_SPEC.md`, `ARCHITECTURE.md`, or `PROJECT_SPEC.md`.
+Filename enforcement: path must be exactly `dev/PROJECT_MASTER_SPEC.md`. Do not use alternative names such as `SPEC.md`, `MASTER_SPEC.md`, `ARCHITECTURE.md`, or `PROJECT_SPEC.md`.
 
 ---
 
 ## 11) Output Contract
-Every AI response that includes a CHANGE or PERSIST phase must include at minimum:
-
-1. What was done
-2. Why it was done that way
-3. Verification results
-4. Next-step recommendations (if any)
-
-Responses that contain only clarifying questions, status updates, or simple information lookups are not bound by this contract but should remain clear and useful.
+Every AI response in CHANGE or PERSIST phase must include at minimum: What was done; Why it was done that way; Verification results; Next-step recommendations (if any). Responses that contain only clarifying questions, status updates, or simple information lookups are not bound by this contract but should remain clear and useful.
 
 ---
 
 ## 12) Multi-Agent Session ID Standard
-Every AI agent must use the following format to generate a Session ID when recording in `SESSION_LOG.md`:
+Format: `<AgentName>_<YYYYMMDD>_<HHMM>` (UTC). Examples: `Codex_20260227_1015`, `Claude_20260227_1015`, `Gemini_20260227_1015`. Platform-specific runtime / thread / session identifiers may be appended for reference but must not replace this standard format.
 
-Format:
-`<AgentName>_<YYYYMMDD>_<HHMM>` (UTC)
-
-Examples:
-- `Codex_20260227_1015`
-- `Claude_20260227_1015`
-- `Gemini_20260227_1015`
-
-If the platform has its own runtime / thread / session identifier, it may be appended for reference, but must not replace this standard format.
-
-Historical entries: session IDs written before this format was formalized may appear in `SESSION_LOG.md` without an `_HHMM` suffix, or with alternate same-day disambiguators (e.g., `_YYYYMMDDa`, `_YYYYMMDDb`). These are not retroactively rewritten. New entries must comply with the current format.
+Historical entries (no `_HHMM` suffix or alt forms like `_YYYYMMDDa`) are not retroactively rewritten; new entries must follow `<AgentName>_<YYYYMMDD>_<HHMM>`.
 
 </INSTRUCTIONS>

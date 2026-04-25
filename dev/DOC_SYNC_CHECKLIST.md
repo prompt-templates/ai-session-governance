@@ -19,6 +19,8 @@
 | New governance file added to install | §5a backup list in AGENTS.md; INIT.md ROOT SAFETY CHECK backup list; INIT.md FILE 1 §5a | grep check |
 | Session-log maintenance policy changed | AGENTS.md §4a mechanism enforcement; INIT.md FILE 1 §4a + §5a backup list; README*.md safeguards section | grep + policy parity check |
 | New project doc added | This file — add a row for the new doc's update triggers | row presence check |
+| Workspace cleanup (delete untracked scratch / `_tmp_*` artifacts) | dev/SESSION_HANDOFF.md if Open Priorities, Current Baseline, or Known Risks referenced the deleted artifacts | manual review |
+| Harness restructure (legacy quarantine / split / new harness layer) | docs/qa/MIGRATION_NOTES.md series table; AGENTS.md §3c Machine Verification clause; INIT.md FILE 1 mirror; run_checks.sh + legacy_checks.sh sync | bash docs/qa/run_checks.sh full chain |
 | _[Add project-specific rows below this line]_ | | |
 
 ## Anti-pattern: No Matching Row

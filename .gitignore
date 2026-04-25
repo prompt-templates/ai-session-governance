@@ -10,6 +10,9 @@ dev/_selftest_work/
 __pycache__/
 *.py[cod]
 
+# Harness runtime artifacts — regenerated on each run
+docs/qa/.legacy_last_run
+
 # Git worktrees
 .worktrees/
 
