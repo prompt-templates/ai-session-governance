@@ -342,9 +342,12 @@ Full verification details:
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - Latest QA regression report: [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-Snapshot status (as of 2026-04-19):
-- AGENTS/INIT rule parity: verified (222-check automated regression suite)
-- Handoff efficiency validation: verified (30-scenario matrix; required handoff fields preserved while startup payload decreased)
+Snapshot status (as of 2026-04-25 — v3.0):
+- AGENTS/INIT rule parity: verified (245-check automated regression — 156 main + 89 legacy auto-chain)
+- AGENTS.md L4 reduction: 734 → 487 lines (−33.7%), with all rules and 212 grep-anchors preserved through 14 verification rounds
+- Sandbox install QC: 3 HIGH-risk scenarios PASS (re-install with user overflow files / §5a `pwd ≠ git root` mismatch / §4 closeout end-to-end)
+- Matrix QC audit (10-dimension) on sandbox install: PASS (LOW finding from rc.1 resolved by rc.2 hotfix)
+- Handoff efficiency validation: still valid (30-scenario matrix from v2.7; required handoff fields preserved while startup payload decreased)
 - Multi-platform pointer behavior: verified
 
 ---

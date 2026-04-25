@@ -255,9 +255,15 @@ check "R29-05" "docs/releases/${LATEST_STABLE_TAG}.md release notes file exists"
 check_gte "R29-06" "docs/qa/LATEST.md references latest stable tag" "1" "$(grep -c "$LATEST_STABLE_TAG" docs/qa/LATEST.md)"
 # index.html stat counter must reflect total checks (main + legacy);
 # value is hardcoded against current run total so any harness check change forces an update.
-EXPECTED_INDEX_COUNTER="245"
+EXPECTED_INDEX_COUNTER="249"
 check "R29-07" "docs/site/index.html stat counter = $EXPECTED_INDEX_COUNTER" "1" "$(grep -c "data-target=\"$EXPECTED_INDEX_COUNTER\"" docs/site/index.html)"
 check "R29-08" "DOC_SYNC_CHECKLIST has Release published row" "1" "$(grep -c 'Release published' dev/DOC_SYNC_CHECKLIST.md)"
+# README must mention latest stable tag in ≥2 places (version-table row + Snapshot/text body) — guards against
+# the regression where the tag row is updated but the rest of the README still describes a previous version.
+check_gte "R29-09" "README.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$(grep -c "$LATEST_STABLE_TAG" README.md)"
+check_gte "R29-10" "README.zh-TW.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$(grep -c "$LATEST_STABLE_TAG" README.zh-TW.md)"
+check_gte "R29-11" "README.zh-CN.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$(grep -c "$LATEST_STABLE_TAG" README.zh-CN.md)"
+check_gte "R29-12" "README.ja.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$(grep -c "$LATEST_STABLE_TAG" README.ja.md)"
 
 # ============================================================
 # Category 15: Legacy Harness Health (staleness detection)

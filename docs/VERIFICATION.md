@@ -41,7 +41,7 @@ Verification date baseline: 2026-03-26 (UTC); v3.0 baseline confirmed 2026-04-25
 
 - Latest QA pointer: [docs/qa/LATEST.md](qa/LATEST.md)
 - Current detailed report: [docs/qa/QA_REGRESSION_REPORT.md](qa/QA_REGRESSION_REPORT.md)
-- Latest run snapshot (UTC): 2026-04-25, 245 automated checks (156 main + 89 legacy auto-chain), 245 pass, 0 fail; includes Phase 1 legacy quarantine + Phase 2 L4 reduction + v3.0-rc.2 §5a backup hotfix + v3.0.1 release-doc sync R29 series
+- Latest run snapshot (UTC): 2026-04-25, 249 automated checks (160 main + 89 legacy auto-chain), 249 pass, 0 fail; includes Phase 1 legacy quarantine + Phase 2 L4 reduction + v3.0-rc.2 §5a backup hotfix + v3.0.1 release-doc sync R29 series (12 checks)
 - **Run automated checks:** `bash docs/qa/run_checks.sh` (from project root)
 
 ## Not yet verified

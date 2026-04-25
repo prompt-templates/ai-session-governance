@@ -346,9 +346,12 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新 QA 回歸驗收報告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-截至 2026-04-19 的摘要如下：
-- AGENTS/INIT 規則同步：已驗證（222 項自動化回歸測試）
-- 交接效率驗證：已驗證（30 組情景；在保留必要交接欄位下，啟動 payload 顯著下降）
+截至 2026-04-25（v3.0）的摘要如下：
+- AGENTS/INIT 規則同步：已驗證（245 項自動化回歸 — 156 主 + 89 legacy auto-chain）
+- AGENTS.md L4 削減：734 → 487 行（−33.7%），所有規則與 212 個 grep-anchor 經 14 輪驗證完整保留
+- Sandbox 安裝實戰驗收：3 個 HIGH 風險情景 PASS（含 user 自建檔的 re-install / §5a `pwd ≠ git root` mismatch / §4 closeout 端到端）
+- Matrix QC 10 維審計（sandbox install）：PASS（rc.1 的 LOW finding 已由 rc.2 hotfix 解除）
+- 交接效率驗證：仍有效（v2.7 的 30 組情景矩陣；在保留必要交接欄位下，啟動 payload 顯著下降）
 - 多平台指標檔行為：已驗證
 
 ---
