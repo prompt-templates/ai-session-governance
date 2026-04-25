@@ -239,7 +239,28 @@ for img in ref_doc/overview_infograph_en.png ref_doc/overview_infograph_tw.png r
 done
 
 # ============================================================
-# Category 14: Legacy Harness Health (staleness detection)
+# Category 14: Release-Doc Sync Governance (R29 series — v3.0.1)
+# Guards against the "release published but README/index.html not updated" drift.
+# DOC_SYNC_CHECKLIST.md `Release published` row enumerates required updates.
+# ============================================================
+# Latest stable tag string — bump explicitly when releasing a new stable version.
+# This single-source variable is what regression checks below assert against.
+LATEST_STABLE_TAG="v3.0"
+
+check "R29-01" "README.md contains latest stable tag row ($LATEST_STABLE_TAG)" "1" "$(grep -c "^| \*\*$LATEST_STABLE_TAG\*\*" README.md)"
+check "R29-02" "README.zh-TW.md contains latest stable tag row" "1" "$(grep -c "^| \*\*$LATEST_STABLE_TAG\*\*" README.zh-TW.md)"
+check "R29-03" "README.zh-CN.md contains latest stable tag row" "1" "$(grep -c "^| \*\*$LATEST_STABLE_TAG\*\*" README.zh-CN.md)"
+check "R29-04" "README.ja.md contains latest stable tag row" "1" "$(grep -c "^| \*\*$LATEST_STABLE_TAG\*\*" README.ja.md)"
+check "R29-05" "docs/releases/${LATEST_STABLE_TAG}.md release notes file exists" "1" "$(test -f docs/releases/${LATEST_STABLE_TAG}.md && echo 1 || echo 0)"
+check_gte "R29-06" "docs/qa/LATEST.md references latest stable tag" "1" "$(grep -c "$LATEST_STABLE_TAG" docs/qa/LATEST.md)"
+# index.html stat counter must reflect total checks (main + legacy);
+# value is hardcoded against current run total so any harness check change forces an update.
+EXPECTED_INDEX_COUNTER="245"
+check "R29-07" "docs/site/index.html stat counter = $EXPECTED_INDEX_COUNTER" "1" "$(grep -c "data-target=\"$EXPECTED_INDEX_COUNTER\"" docs/site/index.html)"
+check "R29-08" "DOC_SYNC_CHECKLIST has Release published row" "1" "$(grep -c 'Release published' dev/DOC_SYNC_CHECKLIST.md)"
+
+# ============================================================
+# Category 15: Legacy Harness Health (staleness detection)
 # ============================================================
 LEGACY_TS_FILE="docs/qa/.legacy_last_run"
 LEGACY_SCRIPT="docs/qa/legacy_checks.sh"

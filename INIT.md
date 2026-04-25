@@ -204,6 +204,7 @@ Whenever a task involves a merge, release, deploy, publish, GA, or hotfix comple
 2. Machine Verification
    - Run the project's applicable build / type-check / lint / tests / regression / consistency checks
    - If the project has multiple harness layers (e.g. main + legacy / extended quarantine), all layers must execute; bypass flags (e.g. `LEGACY_SKIP`) are forbidden during release verification
+   - Doc-sync verification: query `dev/DOC_SYNC_CHECKLIST.md` for the `Release published` row and confirm every listed file has been updated to reflect the new version (README variants, release notes, QA reports, public site / introduction pages, etc.); regression checks for these files must PASS
 
 3. Evidence Check
    - To claim ready / merged / released / GA, corresponding verification evidence must exist

@@ -21,6 +21,7 @@
 | New project doc added | This file — add a row for the new doc's update triggers | row presence check |
 | Workspace cleanup (delete untracked scratch / `_tmp_*` artifacts) | dev/SESSION_HANDOFF.md if Open Priorities, Current Baseline, or Known Risks referenced the deleted artifacts | manual review |
 | Harness restructure (legacy quarantine / split / new harness layer) | docs/qa/MIGRATION_NOTES.md series table; AGENTS.md §3c Machine Verification clause; INIT.md FILE 1 mirror; run_checks.sh + legacy_checks.sh sync | bash docs/qa/run_checks.sh full chain |
+| **Release published (tag + GitHub release + version bump)** | README.md + 3 localized variants (zh-TW/zh-CN/ja) version table; docs/releases/<version>.md (release notes); docs/qa/LATEST.md (date + check count + tag); docs/qa/QA_REGRESSION_REPORT.md (current run summary); docs/VERIFICATION.md (claim baseline, if changed); docs/site/index.html stat-counter (`data-target` for total checks); any other public-facing site/landing pages | grep regression (R29 series) + manual review |
 | _[Add project-specific rows below this line]_ | | |
 
 ## Anti-pattern: No Matching Row

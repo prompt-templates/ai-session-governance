@@ -2,7 +2,7 @@
 
 This document keeps the detailed claim mapping and platform compatibility checks referenced by README files.
 
-Verification date baseline: 2026-03-26 (UTC)
+Verification date baseline: 2026-03-26 (UTC); v3.0 baseline confirmed 2026-04-25
 
 ## Claim-to-mechanism mapping
 
@@ -24,6 +24,10 @@ Verification date baseline: 2026-03-26 (UTC)
 | Deviation resume path | AGENTS.md section 3 CHANGE phase — restart from PLAN or CHANGE after deviation stop | Yes |
 | Closeout ambiguity guard | AGENTS.md section 4 Session Close — confirm intent on ambiguous expressions | Yes |
 | Core rules attention anchor | AGENTS.md top-level CORE RULES block — critical rules in highest attention position | Yes |
+| Legacy quarantine + auto-chain harness | docs/qa/legacy_checks.sh; main run_checks.sh auto-chain; AGENTS.md §3c forbids `LEGACY_SKIP=1` during release | Yes (v3.0) |
+| H01 staleness governance trigger | AGENTS.md mtime vs `.legacy_last_run`; >30d gap fails main harness automatically | Yes (v3.0) |
+| Re-install backup list completeness | AGENTS.md §5a step 9 covers `dev/SESSION_STATE_DETAIL.md` + `dev/PROJECT_MASTER_SPEC.md` (v3.0-rc.2 hotfix) | Yes (v3.0-rc.2) |
+| Release-doc sync governance | dev/DOC_SYNC_CHECKLIST.md `Release published` row; AGENTS.md §3c Machine Verification doc-sync clause; R29 regression series | Yes (v3.0.1) |
 
 ## Platform compatibility verified
 
@@ -37,7 +41,7 @@ Verification date baseline: 2026-03-26 (UTC)
 
 - Latest QA pointer: [docs/qa/LATEST.md](qa/LATEST.md)
 - Current detailed report: [docs/qa/QA_REGRESSION_REPORT.md](qa/QA_REGRESSION_REPORT.md)
-- Latest run snapshot (UTC): 2026-04-20, 232 automated checks, 232 pass, 0 fail; includes INIT-only package-boundary guards (`R27-19`, `R27-20`)
+- Latest run snapshot (UTC): 2026-04-25, 245 automated checks (156 main + 89 legacy auto-chain), 245 pass, 0 fail; includes Phase 1 legacy quarantine + Phase 2 L4 reduction + v3.0-rc.2 §5a backup hotfix + v3.0.1 release-doc sync R29 series
 - **Run automated checks:** `bash docs/qa/run_checks.sh` (from project root)
 
 ## Not yet verified

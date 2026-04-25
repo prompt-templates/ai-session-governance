@@ -1,18 +1,22 @@
 # QA Regression Report
 
-Date: 2026-04-20 (UTC)
-Scope: v2.8 — INIT-only package-boundary hardening + user-facing README alignment, with full regression on top of v2.7 baseline
+Date: 2026-04-25 (UTC)
+Scope: v3.0 GA + v3.0.1 root-fix — Phase 1 legacy quarantine, Phase 2 AGENTS.md L4 reduction, §5a backup-list completeness hotfix, release-doc sync governance + R29 regression series, on top of v2.8 baseline
 
 ## Summary
 
-- Total checks: 232 (automated via `docs/qa/run_checks.sh`)
-- Pass: 232
+- Total checks: 245 — 156 main (`docs/qa/run_checks.sh`) + 89 legacy auto-chain (`docs/qa/legacy_checks.sh`)
+- Pass: 245
 - Fail: 0
-- Matrix add-on: 30 scenario-package runs (5 packages × 6 scenarios), using real tokenizer counts (`o200k_base`, `cl100k_base`)
+- Sandbox install QC: 3 HIGH-risk scenarios PASS (re-install with user overflow files / §5a pwd≠git-root mismatch / §4 closeout end-to-end)
+- Matrix QC audit (10-dim) on sandbox: PASS (LOW finding from v3.0-rc.1 resolved by v3.0-rc.2)
 
-**Run automated checks:** `bash docs/qa/run_checks.sh` (from project root, ~10 seconds)
+**Run automated checks:** `bash docs/qa/run_checks.sh` (from project root, ~10 seconds, auto-chains legacy)
 
-Note: Feature round 16 (v2.6 re-audit fixes), Feature round 17 (v2.7 root-fix executable maintenance + compactness budget), and feature round 18 (v2.8 INIT-only package-boundary hardening) are covered by automated checks `R26-*` and `R27-*`, bringing total checks to 232.
+Note: Feature round 16 (v2.6 re-audit fixes), Feature round 17 (v2.7 root-fix executable maintenance + compactness budget), Feature round 18 (v2.8 INIT-only package-boundary hardening) → all 89 R11/R26/R27 checks moved to legacy harness in v3.0 (see `docs/qa/MIGRATION_NOTES.md`).
+Note: Feature round 19 (v3.0 Phase 1 legacy quarantine) — added `H01` staleness health check + `LEGACY_SKIP=1` bypass governance.
+Note: Feature round 20 (v3.0-rc.2 §5a backup hotfix) — added `041a`/`041b`/`041c`/`041d` checks for `SESSION_STATE_DETAIL.md` + `PROJECT_MASTER_SPEC.md` in §5a backup list; tightened check `038` grep anchor.
+Note: Feature round 21 (v3.0.1 release-doc sync governance) — added `R29` series checks for README/index.html/LATEST.md release-tag sync.
 
 Note: Check (82) expected value updated — INIT.md fence count changed from 26 to 28 (+2 from FILE 6).
 Note: Checks 112–125 added for Feature Round 7 (v2.1 Handoff chain fixes + DOC_SYNC Matrix Scan enforcement).
