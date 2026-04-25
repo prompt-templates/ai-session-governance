@@ -397,7 +397,7 @@ Before any bootstrap / setup task creating or modifying multiple governance file
 6. Require exact confirmation reply: `INSTALL_ROOT_OK: <absolute_path>`
 7. If the confirmation path does not exactly match the proposed absolute path, abort setup (no writes)
 8. After step 6 passes, require second confirmation reply before first write: `INSTALL_WRITE_OK`
-9. After `INSTALL_WRITE_OK` and before first write, create a lightweight backup snapshot: directory `<PROJECT_ROOT>/dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/`; copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, if present); preserve relative paths under `<PROJECT_ROOT>`; native filesystem copy (cross-platform), no git required
+9. After `INSTALL_WRITE_OK` and before first write, create a lightweight backup snapshot: directory `<PROJECT_ROOT>/dev/init_backup/<YYYYMMDD_HHMMSS_UTC>/`; copy only existing target files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `dev/SESSION_HANDOFF.md`, `dev/SESSION_LOG.md`, `dev/CODEBASE_CONTEXT.md`, `dev/DOC_SYNC_CHECKLIST.md`, `dev/SESSION_STATE_DETAIL.md`, `dev/PROJECT_MASTER_SPEC.md`, if present); preserve relative paths under `<PROJECT_ROOT>`; native filesystem copy (cross-platform), no git required
 10. If high-risk markers are detected, default action is abort and ask user to specify a safer subdirectory explicitly
 
 ---

@@ -88,10 +88,14 @@ check "032" "Doc-reviewed field in AGENTS.md" "1" "$(grep -c '^- Doc-reviewed:' 
 check "033" "Test-verified field in AGENTS.md" "1" "$(grep -c 'Test-verified:' $A)"
 check "036" "Cannot-fetch-docs rule in AGENTS.md" "1" "$(grep -c 'Do not write API-calling code' $A)"
 check "037" "§0b parity: External Platform heading" "1" "$([ "$(grep -c 'External Platform Alignment' $A)" = "$(grep -c 'External Platform Alignment' $I)" ] && echo 1 || echo 0)"
-check "038" "§1 startup sequence order" "1" "$(grep -c 'SESSION_HANDOFF.md.*SESSION_LOG.md.*CODEBASE_CONTEXT.md.*PROJECT_MASTER_SPEC' $A)"
+check "038" "§1 startup sequence order (anchored to §4 verbatim arrow line)" "1" "$(grep -c 'SESSION_HANDOFF.md → dev/SESSION_LOG.md → dev/CODEBASE_CONTEXT.md' $A)"
 check "039" "§10 intent-based trigger" "1" "$(grep -c 'architecture decisions.*tech stack\|tech stack choices.*core feature' $A)"
 check "040a" "CODEBASE_CONTEXT in backup AGENTS" "1" "$(grep -c 'CODEBASE_CONTEXT.*if present' $A)"
 check "040b" "CODEBASE_CONTEXT in backup INIT (in §5a)" "1" "$(grep -c 'CODEBASE_CONTEXT.*if present' $I)"
+check "041a" "SESSION_STATE_DETAIL in §5a backup AGENTS" "1" "$(grep -c 'SESSION_STATE_DETAIL.md.*if present' $A)"
+check "041b" "SESSION_STATE_DETAIL in §5a backup INIT" "1" "$(grep -c 'SESSION_STATE_DETAIL.md.*if present' $I)"
+check "041c" "PROJECT_MASTER_SPEC in §5a backup AGENTS" "1" "$(grep -c 'PROJECT_MASTER_SPEC.md.*if present' $A)"
+check "041d" "PROJECT_MASTER_SPEC in §5a backup INIT" "1" "$(grep -c 'PROJECT_MASTER_SPEC.md.*if present' $I)"
 check "042" "No 'key architectural' residue" "0" "$(grep -c 'key architectural' $A)"
 
 # ============================================================
