@@ -244,6 +244,109 @@
     </div>
   </div>
 </section>
+
+<section id="arch">
+  <div class="reveal">
+    <span class="section-label" data-i18n="arch_label"></span>
+    <h2 class="section-title" data-i18n="arch_title"></h2>
+    <p class="section-desc" data-i18n="arch_desc"></p>
+  </div>
+  <div class="reveal" style="margin-top:1rem">
+    <svg viewBox="0 0 900 740" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:0 auto" role="img" aria-label="ai-session-governance architecture diagram">
+      <defs>
+        <marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#6c63ff"/></marker>
+        <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#4ecdc4"/></marker>
+        <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#ff6b6b"/></marker>
+      </defs>
+      <text x="450" y="22" text-anchor="middle" fill="#707085" font-size="11" letter-spacing="2">ANY AI TOOL · 任何 AI 工具</text>
+      <rect x="50" y="40" width="140" height="50" rx="10" fill="#16162a" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="120" y="62" text-anchor="middle" fill="#e8e8ed" font-size="13" font-weight="600">Claude Code</text>
+      <text x="120" y="78" text-anchor="middle" fill="#707085" font-size="10">CLAUDE.md</text>
+      <rect x="210" y="40" width="140" height="50" rx="10" fill="#16162a" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="280" y="62" text-anchor="middle" fill="#e8e8ed" font-size="13" font-weight="600">Codex CLI</text>
+      <text x="280" y="78" text-anchor="middle" fill="#707085" font-size="10">AGENTS.md</text>
+      <rect x="370" y="40" width="140" height="50" rx="10" fill="#16162a" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="440" y="62" text-anchor="middle" fill="#e8e8ed" font-size="13" font-weight="600">Gemini CLI</text>
+      <text x="440" y="78" text-anchor="middle" fill="#707085" font-size="10">GEMINI.md</text>
+      <rect x="530" y="40" width="140" height="50" rx="10" fill="#16162a" stroke="#6c63ff" stroke-width="1.5"/>
+      <text x="600" y="62" text-anchor="middle" fill="#e8e8ed" font-size="13" font-weight="600">Cowork</text>
+      <text x="600" y="78" text-anchor="middle" fill="#707085" font-size="10">CLAUDE.md</text>
+      <rect x="690" y="40" width="160" height="50" rx="10" fill="#16162a" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="770" y="62" text-anchor="middle" fill="#e8e8ed" font-size="13" font-weight="600">Web LLM</text>
+      <text x="770" y="78" text-anchor="middle" fill="#707085" font-size="10">paste handoff</text>
+      <g stroke="#6c63ff" stroke-width="1.5" fill="none">
+        <path d="M120 90 L450 130" marker-end="url(#ar1)"/>
+        <path d="M280 90 L450 130" marker-end="url(#ar1)"/>
+        <path d="M450 90 L450 130" marker-end="url(#ar1)"/>
+        <path d="M600 90 L450 130" marker-end="url(#ar1)"/>
+        <path d="M770 90 L450 130" marker-end="url(#ar1)"/>
+      </g>
+      <text x="450" y="153" text-anchor="middle" fill="#a0a0b0" font-size="11" font-style="italic">all read AGENTS.md (single source of truth)</text>
+      <rect x="120" y="170" width="660" height="170" rx="14" fill="#1a1a28" stroke="#4ecdc4" stroke-width="2"/>
+      <text x="450" y="200" text-anchor="middle" fill="#4ecdc4" font-size="16" font-weight="700">📜 AGENTS.md — Governance Rules</text>
+      <text x="450" y="225" text-anchor="middle" fill="#a0a0b0" font-size="12">Each task follows the 5-phase workflow</text>
+      <circle cx="190" cy="290" r="32" fill="#6c63ff"/>
+      <text x="190" y="294" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">PLAN</text>
+      <line x1="225" y1="290" x2="265" y2="290" stroke="#a0a0b0" stroke-width="2" marker-end="url(#ar1)"/>
+      <circle cx="300" cy="290" r="32" fill="#6c63ff"/>
+      <text x="300" y="294" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">READ</text>
+      <line x1="335" y1="290" x2="375" y2="290" stroke="#a0a0b0" stroke-width="2" marker-end="url(#ar1)"/>
+      <circle cx="410" cy="290" r="32" fill="#6c63ff"/>
+      <text x="410" y="294" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">CHANGE</text>
+      <line x1="445" y1="290" x2="485" y2="290" stroke="#a0a0b0" stroke-width="2" marker-end="url(#ar1)"/>
+      <circle cx="520" cy="290" r="32" fill="#6c63ff"/>
+      <text x="520" y="294" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">QC</text>
+      <line x1="555" y1="290" x2="595" y2="290" stroke="#a0a0b0" stroke-width="2" marker-end="url(#ar1)"/>
+      <circle cx="630" cy="290" r="32" fill="#ff6b6b"/>
+      <text x="630" y="294" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">PERSIST</text>
+      <line x1="630" y1="325" x2="630" y2="378" stroke="#ff6b6b" stroke-width="2" marker-end="url(#ar3)"/>
+      <text x="643" y="362" fill="#ff6b6b" font-size="11" font-style="italic">writes</text>
+      <path d="M 270 385 Q 270 365 290 360 Q 300 358 300 325" stroke="#4ecdc4" stroke-width="2" fill="none" marker-end="url(#ar2)" stroke-dasharray="5,3"/>
+      <text x="155" y="375" fill="#4ecdc4" font-size="11" font-style="italic">reads at session start</text>
+      <rect x="60" y="385" width="240" height="100" rx="12" fill="#16162a" stroke="#f7d794" stroke-width="2"/>
+      <text x="180" y="412" text-anchor="middle" fill="#f7d794" font-size="13" font-weight="700">📋 SESSION_HANDOFF.md</text>
+      <text x="180" y="436" text-anchor="middle" fill="#a0a0b0" font-size="11">Current state · Open Priorities</text>
+      <text x="180" y="455" text-anchor="middle" fill="#a0a0b0" font-size="11">Known Risks · Last Session Record</text>
+      <text x="180" y="473" text-anchor="middle" fill="#707085" font-size="10">[compactness budget enforced]</text>
+      <rect x="330" y="385" width="240" height="100" rx="12" fill="#16162a" stroke="#f7d794" stroke-width="2"/>
+      <text x="450" y="412" text-anchor="middle" fill="#f7d794" font-size="13" font-weight="700">📓 SESSION_LOG.md</text>
+      <text x="450" y="436" text-anchor="middle" fill="#a0a0b0" font-size="11">Session history · Verbatim handoff</text>
+      <text x="450" y="455" text-anchor="middle" fill="#a0a0b0" font-size="11">Auto-archive at 400 lines / 30 days</text>
+      <text x="450" y="473" text-anchor="middle" fill="#707085" font-size="10">[archived not deleted]</text>
+      <rect x="600" y="385" width="240" height="100" rx="12" fill="#16162a" stroke="#f7d794" stroke-width="2"/>
+      <text x="720" y="412" text-anchor="middle" fill="#f7d794" font-size="13" font-weight="700">🗂 CODEBASE_CONTEXT.md</text>
+      <text x="720" y="436" text-anchor="middle" fill="#a0a0b0" font-size="11">Tech stack · External APIs</text>
+      <text x="720" y="455" text-anchor="middle" fill="#a0a0b0" font-size="11">Auto-generated on first session</text>
+      <text x="720" y="473" text-anchor="middle" fill="#707085" font-size="10">[scans README, manifests, .env]</text>
+      <path d="M 840 435 Q 885 435 885 250 Q 885 55 775 55" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,4" marker-end="url(#ar3)"/>
+      <text x="878" y="250" fill="#ff6b6b" font-size="11" font-style="italic" text-anchor="end">paste handoff</text>
+      <text x="878" y="265" fill="#ff6b6b" font-size="11" font-style="italic" text-anchor="end">→ next AI continues</text>
+      <text x="450" y="525" text-anchor="middle" fill="#707085" font-size="11" letter-spacing="2">AUTO SAFEGUARDS · 自動防護（governance enforces, AI can't skip）</text>
+      <rect x="50" y="545" width="260" height="160" rx="12" fill="#12121a" stroke="#2a2a40" stroke-width="1"/>
+      <text x="180" y="572" text-anchor="middle" fill="#4ecdc4" font-size="13" font-weight="700">🛡 Legacy quarantine</text>
+      <text x="180" y="600" text-anchor="middle" fill="#a0a0b0" font-size="11">89 historical drift checks</text>
+      <text x="180" y="618" text-anchor="middle" fill="#a0a0b0" font-size="11">isolated in 2nd-layer harness</text>
+      <text x="180" y="640" text-anchor="middle" fill="#a0a0b0" font-size="11">main run auto-chains them</text>
+      <text x="180" y="660" text-anchor="middle" fill="#ff6b6b" font-size="11">LEGACY_SKIP forbidden at release</text>
+      <text x="180" y="685" text-anchor="middle" fill="#707085" font-size="10">[history bugs can't silently revive]</text>
+      <rect x="320" y="545" width="260" height="160" rx="12" fill="#12121a" stroke="#2a2a40" stroke-width="1"/>
+      <text x="450" y="572" text-anchor="middle" fill="#4ecdc4" font-size="13" font-weight="700">⏰ Staleness check</text>
+      <text x="450" y="600" text-anchor="middle" fill="#a0a0b0" font-size="11">If 30+ days no legacy run</text>
+      <text x="450" y="618" text-anchor="middle" fill="#a0a0b0" font-size="11">→ main harness fails</text>
+      <text x="450" y="640" text-anchor="middle" fill="#a0a0b0" font-size="11">forces re-verification</text>
+      <text x="450" y="660" text-anchor="middle" fill="#ff6b6b" font-size="11">can't drift over time</text>
+      <text x="450" y="685" text-anchor="middle" fill="#707085" font-size="10">[zero human-memory dependency]</text>
+      <rect x="590" y="545" width="260" height="160" rx="12" fill="#12121a" stroke="#2a2a40" stroke-width="1"/>
+      <text x="720" y="572" text-anchor="middle" fill="#4ecdc4" font-size="13" font-weight="700">📚 Release-doc sync</text>
+      <text x="720" y="600" text-anchor="middle" fill="#a0a0b0" font-size="11">After each release, AI verifies</text>
+      <text x="720" y="618" text-anchor="middle" fill="#a0a0b0" font-size="11">README × 4 · index.html · notes</text>
+      <text x="720" y="640" text-anchor="middle" fill="#a0a0b0" font-size="11">DOC_SYNC_CHECKLIST entries</text>
+      <text x="720" y="660" text-anchor="middle" fill="#ff6b6b" font-size="11">any drift → harness fails</text>
+      <text x="720" y="685" text-anchor="middle" fill="#707085" font-size="10">[R29 + R30 series, 18 checks]</text>
+    </svg>
+  </div>
+</section>
+
 <section id="features">
   <div class="reveal">
     <span class="section-label" data-i18n="feat_label"></span>
@@ -377,7 +480,8 @@ qs5:"下次換工具時，直接貼上上一輪輸出的交接區塊：",qs5_c1:
 faq_label:"常見問題",faq_title:"FAQ",
 faqs:[{q:"這只適合大型專案嗎？",a:"不是。小型專案馬上就有效果，大型專案時間拉長效益更明顯。"},{q:"第一天就需要 PROJECT_MASTER_SPEC.md 嗎？",a:"不用。先用 AGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.md 就夠了，日後需要再加。"},{q:"這是編碼標準嗎？",a:"不是。它規範 AI 怎麼讀、改、驗證、交接——不管你怎麼寫程式。"},{q:"這會拖慢 AI 嗎？",a:"開始時有一小段讀取時間，通常比重複交代情況和修正錯誤省時得多。"},{q:"能跟我現有的 README 和內部規則共存嗎？",a:"可以。安裝時會跟你現有檔案合併，不會覆蓋掉你的內容。"}],
 cta_title:"準備好讓 AI 交接<br>不再從零開始了嗎？",cta_desc:"開源、免費、30 秒安裝。讓你的每一次 AI 工作階段都建立在上一次的基礎上。",cta_btn:"前往 GitHub 開始使用",cta_readme:"📖 閱讀完整 README →",
-footer_by:"由",footer_tagline:"Vibe Coding 的時代，人人都能打造屬於自己的 AI 世界。"
+footer_by:"由",footer_tagline:"Vibe Coding 的時代，人人都能打造屬於自己的 AI 世界。",
+arch_label:"架構",arch_title:"完整流程一目了然",arch_desc:"由任何 AI 工具，到治理規則、交接檔案、自動防護——全部串起來。"
 },
 en:{
 nav_pain:"Pain Points",nav_compare:"Compare",nav_how:"How It Works",nav_features:"Features",nav_start:"Start",
@@ -436,7 +540,8 @@ qs5:"Next time you switch tools, paste the handoff block from last session:",qs5
 faq_label:"FAQ",faq_title:"Frequently Asked Questions",
 faqs:[{q:"Is this only for large projects?",a:"No. Small projects benefit immediately; larger ones see more gain over time."},{q:"Do I need PROJECT_MASTER_SPEC.md on day one?",a:"No. Start with AGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.md. Add more later as needed."},{q:"Is this a coding standard?",a:"No. It governs how AI reads, changes, verifies, and hands over work — not how you write code."},{q:"Will this slow sessions down?",a:"There\'s a short read at startup. Usually less overhead than re-explaining context and redoing mistakes."},{q:"Can I keep my existing docs and internal rules?",a:"Yes. It merges with what you already have — it doesn\'t overwrite."}],
 cta_title:"Ready to Stop AI Sessions<br>From Starting at Zero?",cta_desc:"Open source, free, 30-second install. Make every AI session build on the last one.",cta_btn:"Get Started on GitHub",cta_readme:"📖 Read the Full README →",
-footer_by:"By",footer_tagline:"In the Vibe Coding era, everyone can build their own AI-powered world."
+footer_by:"By",footer_tagline:"In the Vibe Coding era, everyone can build their own AI-powered world.",
+arch_label:"ARCHITECTURE",arch_title:"How It All Connects",arch_desc:"From any AI tool down to handoff files, with auto safeguards built in."
 },
 cn:{
 nav_pain:"痛点",nav_compare:"对比",nav_how:"原理",nav_features:"功能",nav_start:"开始",
@@ -495,7 +600,8 @@ qs5:"下次换工具时，直接粘贴上一轮输出的交接区块：",qs5_c1:
 faq_label:"常见问题",faq_title:"FAQ",
 faqs:[{q:"这只适合大型项目吗？",a:"不是。小型项目马上就有效果，大型项目时间拉长效益更明显。"},{q:"第一天就需要 PROJECT_MASTER_SPEC.md 吗？",a:"不用。先用 AGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.md 就够了，日后需要再加。"},{q:"这是编码标准吗？",a:"不是。它规范 AI 怎么读、改、验证、交接——不管你怎么写代码。"},{q:"这会拖慢 AI 吗？",a:"开始时有一小段读取时间，通常比重复交代情况和修正错误省时得多。"},{q:"能跟我现有的 README 和内部规则共存吗？",a:"可以。安装时会跟你现有文件合并，不会覆盖掉你的内容。"}],
 cta_title:"准备好让 AI 交接<br>不再从零开始了吗？",cta_desc:"开源、免费、30 秒安装。让你的每一次 AI 工作阶段都建立在上一次的基础上。",cta_btn:"前往 GitHub 开始使用",cta_readme:"📖 阅读完整 README →",
-footer_by:"由",footer_tagline:"Vibe Coding 的时代，人人都能打造属于自己的 AI 世界。"
+footer_by:"由",footer_tagline:"Vibe Coding 的时代，人人都能打造属于自己的 AI 世界。",
+arch_label:"架构",arch_title:"完整流程一览",arch_desc:"从任何 AI 工具，到治理规则、交接文件、自动防护——全部串起来。"
 },
 ja:{
 nav_pain:"課題",nav_compare:"比較",nav_how:"仕組み",nav_features:"機能",nav_start:"開始",
@@ -554,7 +660,8 @@ qs5:"次にツールを切り替える時、前回出力の引き継ぎブロッ
 faq_label:"FAQ",faq_title:"よくある質問",
 faqs:[{q:"大規模プロジェクト向けですか？",a:"違います。小規模でもすぐ効果があり、長期運用では規模が大きいほど差が出ます。"},{q:"初日からPROJECT_MASTER_SPEC.mdは必要？",a:"不要です。まずAGENTS.md + SESSION_HANDOFF.md + SESSION_LOG.mdだけで始められます。"},{q:"これはコーディング規約ですか？",a:"違います。AIがどう読み・変更し・検証し・引き継ぐかを決めるもので、コードの書き方は関係ありません。"},{q:"セッションは遅くなりますか？",a:"開始時に少し読み込みが増えます。再説明や修正のやり直しより通常は短いです。"},{q:"既存のREADMEや内部規則は残せますか？",a:"残せます。既存のものに合わせてマージします。上書きはしません。"}],
 cta_title:"AIセッションをゼロから<br>始めるのをやめる準備はできましたか？",cta_desc:"オープンソース、無料、30秒インストール。すべてのAIセッションを前回の続きから始めましょう。",cta_btn:"GitHubで始める",cta_readme:"📖 完全なREADMEを読む →",
-footer_by:"デザイン：",footer_tagline:"Vibe Codingの時代、誰もが自分だけのAI世界をつくれる。"
+footer_by:"デザイン：",footer_tagline:"Vibe Codingの時代、誰もが自分だけのAI世界をつくれる。",
+arch_label:"アーキテクチャ",arch_title:"全体の流れを一目で",arch_desc:"あらゆるAIツールから引き継ぎファイルへ、自動セーフガードも一緒に。"
 }
 };
 let lang="tw";

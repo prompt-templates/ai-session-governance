@@ -71,7 +71,7 @@
 
 | 版本 | 變更內容 | 對你的意義 |
 |---|---|---|
-| **v3.0** | 治理檔案大幅精簡：AGENTS.md 從 734 行縮減至 487 行（−33.7%），所有規則完整保留；每 session 啟動的系統 prompt token 成本下降約 15.6%。Legacy quarantine 機制把 89 條歷史防漂移檢查隔離到自動 chain 的第二層 harness — 主檢查套件變輕，但 release 時禁止 bypass legacy，歷史保險不會無聲丟失。已建立 `dev/SESSION_STATE_DETAIL.md` 或 `dev/PROJECT_MASTER_SPEC.md` 的用戶 re-install 時也會被自動備份，升級路徑資料安全。 | 系統 prompt 中的治理文字變少 → 規則遵守率提升（業界數據：短規則約 89% vs 冗長約 35%）；本機檔案在升級時被保留；跨 LLM 通用相容（Claude Code、Claude Cowork、OpenAI Codex CLI、Gemini CLI 與 Web LLMs）— 零 hook 依賴。 |
+| **v3.0**（含 v3.0.1 / v3.0.2 patches） | 治理檔案大幅精簡：AGENTS.md 從 734 行縮減至 504 行（−31.3%），所有規則完整保留；每 session 啟動的系統 prompt token 成本下降約 15.6%。Legacy quarantine 機制把 89 條歷史防漂移檢查隔離到自動 chain 的第二層 harness — 主檢查套件變輕，但 release 時禁止 bypass legacy，歷史保險不會無聲丟失。v3.0.1 加入 release 後文檔同步治理（R29 系列檢查），防止 README / index.html 漂走。v3.0.2 把 release / merge gate 擴充為 4 階段生命週期（發前驗證 / 發 release / 發後執手尾 / 觀察期），加 R30 系列 enforcement。已建立 `dev/SESSION_STATE_DETAIL.md` 或 `dev/PROJECT_MASTER_SPEC.md` 的用戶 re-install 時也會被自動備份，升級路徑資料安全。 | 系統 prompt 中的治理文字變少 → 規則遵守率提升（業界數據：短規則約 89% vs 冗長約 35%）；release 後相關文件漂走會自動 catch（README、release notes、公開頁 stat counter 同步）；本機檔案在升級時被保留；跨 LLM 通用相容（Claude Code、Claude Cowork、OpenAI Codex CLI、Gemini CLI 與 Web LLMs）— 零 hook 依賴。 |
 | **v2.8** | 強化 INIT-only 封裝邊界：移除 `INIT.md` 與 README 對內部維護工具的引用，並新增回歸檢查，若 INIT 指向未附帶檔案即判定失敗。 | 避免只提供 `INIT.md` 的安裝情境出錯，並可自動攔截後續封裝邊界漂移。 |
 | **v2.7** | 完成交接與工作日誌膨脹治理升級，並用 30 組成長情景完成驗證。交接輸出更穩定精簡，當日誌變大時，舊內容會自動移出啟動主路徑。 | 啟動更快、context 浪費更少，同時保留關鍵交接資訊。壓力情景下啟動 payload 最多降低 **16,096 tokens**，且所有測試情景都維持必要交接欄位完整。 |
 | **v2.6** | AI 接手舊 session 時，會讀 `SESSION_LOG.md` 找「留給下一個 AI 的交接筆記」。以前的規則是「找檔案裡最後出現的那段」— 日誌手動整理或歸檔後，物理位置最後的反而可能是舊的。現在改為找「日期最新那筆記錄裡的那段」，日誌怎麼動都找得對。`INIT.md` 安裝前的 10 步安全確認程序，原本在檔案裡寫了兩份，且已累積 8 處以上用詞差異；現在頂部改成指向下方唯一版本的 3 行說明，兩份不再打架。Session 開始和結束時出現的裝飾小圖案，原本規則說「避免跟上一次重複」— 但 AI 跨 session 根本記不住上次用了哪個，這條規則形同虛設。現在改為：同一次 session 內，結束小圖必須跟開始小圖不同（AI 確實做得到）。純粹編輯治理文檔時，不會再誤觸發「安裝前必須先建立 `CODEBASE_CONTEXT.md`」的規定。自動品質檢查從 169 條增至 210 條，新增涵蓋 Session ID 格式、禁用指令列表完整性、檔名規範等。 | 交接筆記找錯的情況不再發生；安裝說明只有一份不會互相矛盾；Session 啟動與結束的小圖案會確實輪替；日常編輯不再被安全流程卡住；自動攔截的異常情況更多，release 前的信心更足。 |
@@ -346,9 +346,9 @@ AI 自動處理並合併既有的 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`。
 - [docs/VERIFICATION.md](docs/VERIFICATION.md)
 - 最新 QA 回歸驗收報告： [docs/qa/LATEST.md](docs/qa/LATEST.md)
 
-截至 2026-04-25（v3.0）的摘要如下：
-- AGENTS/INIT 規則同步：已驗證（245 項自動化回歸 — 156 主 + 89 legacy auto-chain）
-- AGENTS.md L4 削減：734 → 487 行（−33.7%），所有規則與 212 個 grep-anchor 經 14 輪驗證完整保留
+截至 2026-04-26（v3.0.2）的摘要如下：
+- AGENTS/INIT 規則同步：已驗證（255 項自動化回歸 — 166 主 + 89 legacy auto-chain）
+- AGENTS.md L4 削減：734 → 504 行（−31.3%），所有規則與 218 個 grep-anchor 完整保留（212 baseline + R29×12 release-doc sync + R30×6 release-lifecycle 4-phase enforcement）
 - Sandbox 安裝實戰驗收：3 個 HIGH 風險情景 PASS（含 user 自建檔的 re-install / §5a `pwd ≠ git root` mismatch / §4 closeout 端到端）
 - Matrix QC 10 維審計（sandbox install）：PASS（rc.1 的 LOW finding 已由 rc.2 hotfix 解除）
 - 交接效率驗證：仍有效（v2.7 的 30 組情景矩陣；在保留必要交接欄位下，啟動 payload 顯著下降）
