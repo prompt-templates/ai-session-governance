@@ -272,8 +272,8 @@ check_gte "R29-12" "README.ja.md mentions $LATEST_STABLE_TAG in ≥2 places" "2"
 # ============================================================
 check "R30-01" "§3c Phase 3: Merge-source branch cleanup rule (AGENTS)" "1" "$(grep -c 'Merge-source branch cleanup' $A)"
 check "R30-02" "§3c Phase 3: Merge-source branch cleanup rule (INIT mirror)" "1" "$(grep -c 'Merge-source branch cleanup' $I)"
-check "R30-03" "§3c Phase 3: Sandbox install validation rule (AGENTS)" "1" "$(grep -c 'Sandbox install validation' $A)"
-check "R30-04" "§3c Phase 3: Sandbox install validation rule (INIT mirror)" "1" "$(grep -c 'Sandbox install validation' $I)"
+check "R30-03" "§3c Phase 3: Fresh-environment validation rule (AGENTS)" "1" "$(grep -c 'Fresh-environment validation' $A)"
+check "R30-04" "§3c Phase 3: Fresh-environment validation rule (INIT mirror)" "1" "$(grep -c 'Fresh-environment validation' $I)"
 check "R30-05" "§3c Phase 4: Track production fail modes rule (AGENTS)" "1" "$(grep -c 'Track production fail modes' $A)"
 check "R30-06" "§3c Phase 4: Track production fail modes rule (INIT mirror)" "1" "$(grep -c 'Track production fail modes' $I)"
 

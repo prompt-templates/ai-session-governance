@@ -222,7 +222,7 @@ Whenever a task involves a merge, release, deploy, publish, GA, or hotfix comple
 
 6. Merge-source branch cleanup: if release shipped via PR, delete merge-source branch from both local and remote (`git branch -d <branch>` + `git push origin --delete <branch>`). PR永久保留於 GitHub 作歷史，不可刪除. Verify `git branch -a` shows only `main` plus any protected branches.
 
-7. Sandbox install validation (recommended for major releases): build fresh + re-install sandbox simulating real user scenarios; run install QC (e.g. `matrix-qc-universal` audit or equivalent); confirm hotfix真實 effective vs merely theoretical (if hotfix is in scope).
+7. Fresh-environment validation (recommended for major releases): exercise the release artifact in a clean environment that simulates real user or production conditions — e.g. fresh sandbox install for repos shipping installers/templates; staging deploy for services; canary release for libraries. Run release-specific QC; confirm fixes真實 effective vs merely theoretical (if hotfix is in scope).
 
 **Phase 4 — Observability:**
 
