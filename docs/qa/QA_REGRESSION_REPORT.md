@@ -5,8 +5,8 @@ Scope: v3.0 GA + v3.0.1 root-fix — Phase 1 legacy quarantine, Phase 2 AGENTS.m
 
 ## Summary
 
-- Total checks: 249 — 160 main (`docs/qa/run_checks.sh`) + 89 legacy auto-chain (`docs/qa/legacy_checks.sh`)
-- Pass: 249
+- Total checks: 255 — 166 main (`docs/qa/run_checks.sh`) + 89 legacy auto-chain (`docs/qa/legacy_checks.sh`)
+- Pass: 255
 - Fail: 0
 - Sandbox install QC: 3 HIGH-risk scenarios PASS (re-install with user overflow files / §5a pwd≠git-root mismatch / §4 closeout end-to-end)
 - Matrix QC audit (10-dim) on sandbox: PASS (LOW finding from v3.0-rc.1 resolved by v3.0-rc.2)

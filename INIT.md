@@ -195,7 +195,9 @@ A Consolidation Pass: identify primary location → merge duplicates → retire 
 ---
 
 ## 3c) Release / Merge Gate (Mandatory when applicable)
-Whenever a task involves a merge, release, deploy, publish, GA, or hotfix completion claim, the following gates must be cleared first; none may be skipped:
+Whenever a task involves a merge, release, deploy, publish, GA, or hotfix completion claim, all phases below must be completed; no step may be skipped. Failure in any phase blocks completion claim until resolved.
+
+**Phase 1 — Pre-release Verification:**
 
 1. Independent Review Pass
    - Conduct an independent review (may be performed by a second agent, a review mode, or a structured self-check checklist)
@@ -211,6 +213,20 @@ Whenever a task involves a merge, release, deploy, publish, GA, or hotfix comple
 
 4. Failure Rule
    - If any critical check fails, do not claim ready / release / GA
+
+**Phase 2 — Release Execution:**
+
+5. Publish: annotated tag (`git tag -a <tag> -m "..."`) + GitHub release notes; `isPrerelease` flag correctly set (RC = true, GA = false); `--latest` explicit on GA promotion. Verify `origin/main` HEAD = local HEAD; verify tag pushed via `git ls-remote --tags origin <tag>`.
+
+**Phase 3 — Post-Release Cleanup:**
+
+6. Merge-source branch cleanup: if release shipped via PR, delete merge-source branch from both local and remote (`git branch -d <branch>` + `git push origin --delete <branch>`). PR永久保留於 GitHub 作歷史，不可刪除. Verify `git branch -a` shows only `main` plus any protected branches.
+
+7. Sandbox install validation (recommended for major releases): build fresh + re-install sandbox simulating real user scenarios; run install QC (e.g. `matrix-qc-universal` audit or equivalent); confirm hotfix真實 effective vs merely theoretical (if hotfix is in scope).
+
+**Phase 4 — Observability:**
+
+8. Track production fail modes: append Open Priority entry "Observe N sessions for unexpected fail modes" covering newly-deployed mechanisms (legacy chain, staleness checks, regression series, etc.). For RC → GA promotion, set explicit observation period before promotion (e.g. 1–2 weeks of real production sessions, not calendar time alone).
 
 ---
 

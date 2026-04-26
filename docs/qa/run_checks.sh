@@ -255,7 +255,7 @@ check "R29-05" "docs/releases/${LATEST_STABLE_TAG}.md release notes file exists"
 check_gte "R29-06" "docs/qa/LATEST.md references latest stable tag" "1" "$(grep -c "$LATEST_STABLE_TAG" docs/qa/LATEST.md)"
 # index.html stat counter must reflect total checks (main + legacy);
 # value is hardcoded against current run total so any harness check change forces an update.
-EXPECTED_INDEX_COUNTER="249"
+EXPECTED_INDEX_COUNTER="255"
 check "R29-07" "docs/site/index.html stat counter = $EXPECTED_INDEX_COUNTER" "1" "$(grep -c "data-target=\"$EXPECTED_INDEX_COUNTER\"" docs/site/index.html)"
 check "R29-08" "DOC_SYNC_CHECKLIST has Release published row" "1" "$(grep -c 'Release published' dev/DOC_SYNC_CHECKLIST.md)"
 # README must mention latest stable tag in ≥2 places (version-table row + Snapshot/text body) — guards against
@@ -264,6 +264,18 @@ check_gte "R29-09" "README.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$
 check_gte "R29-10" "README.zh-TW.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$(grep -c "$LATEST_STABLE_TAG" README.zh-TW.md)"
 check_gte "R29-11" "README.zh-CN.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$(grep -c "$LATEST_STABLE_TAG" README.zh-CN.md)"
 check_gte "R29-12" "README.ja.md mentions $LATEST_STABLE_TAG in ≥2 places" "2" "$(grep -c "$LATEST_STABLE_TAG" README.ja.md)"
+
+# ============================================================
+# R30 series — §3c Release Lifecycle 4-Phase Governance (v3.0.2)
+# Guards against the "release-shipped but post-release lifecycle skipped" drift.
+# Without these, branch cleanup / sandbox validation / observability stay advisory.
+# ============================================================
+check "R30-01" "§3c Phase 3: Merge-source branch cleanup rule (AGENTS)" "1" "$(grep -c 'Merge-source branch cleanup' $A)"
+check "R30-02" "§3c Phase 3: Merge-source branch cleanup rule (INIT mirror)" "1" "$(grep -c 'Merge-source branch cleanup' $I)"
+check "R30-03" "§3c Phase 3: Sandbox install validation rule (AGENTS)" "1" "$(grep -c 'Sandbox install validation' $A)"
+check "R30-04" "§3c Phase 3: Sandbox install validation rule (INIT mirror)" "1" "$(grep -c 'Sandbox install validation' $I)"
+check "R30-05" "§3c Phase 4: Track production fail modes rule (AGENTS)" "1" "$(grep -c 'Track production fail modes' $A)"
+check "R30-06" "§3c Phase 4: Track production fail modes rule (INIT mirror)" "1" "$(grep -c 'Track production fail modes' $I)"
 
 # ============================================================
 # Category 15: Legacy Harness Health (staleness detection)
